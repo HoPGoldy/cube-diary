@@ -3,3 +3,13 @@ export interface RespData<Data = Record<string, any>> {
     message?: string
     data: Data
 }
+
+export interface DiaryConfig {
+    user: UserConfig[]
+    passwordLength: number
+}
+
+export interface UserConfig {
+    username: string
+    password: string
+}
