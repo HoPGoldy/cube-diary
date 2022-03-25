@@ -1,5 +1,6 @@
 import { readFile } from 'fs/promises'
 import { DiaryConfig } from 'types/global'
+import md5 from 'crypto-js/md5'
 
 let configCache: DiaryConfig
 
@@ -21,6 +22,14 @@ export const loadConfig = async function (): Promise<DiaryConfig | undefined> {
             ...defaultConfig,
             ...JSON.parse(userConfig.toString()),
         }
+
+        if (totalConfig.user.length <= 0) throw new Error('请指定至少一个用户')
+
+        // 把密码 md5 缓存起来供后期校验使用
+        totalConfig.user = totalConfig.user.map(user => ({
+            ...user,
+            passwordMd5: md5(user.password).toString().toUpperCase()
+        }))
 
         return totalConfig
     }

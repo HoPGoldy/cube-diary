@@ -5,6 +5,7 @@ import { Empty, Button } from 'react-vant';
 
 const ERROR_INFO: Record<string, string> = {
     NO_CONFIG: '配置项读取失败，请检查根目录下是否存在 config.json',
+    AUTH_ERROR: '鉴权失败',
     DEFAULT: '系统异常，请刷新重试'
 }
 

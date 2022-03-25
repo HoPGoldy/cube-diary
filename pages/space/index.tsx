@@ -2,8 +2,10 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import { Arrow, Like } from '@react-vant/icons';
 import { Card, Image, Button, Toast, Space, Typography, Tag } from 'react-vant';
+import { useFetch } from 'lib/request';
 
 const Home: NextPage = () => {
+  useFetch('/api/user')
   return (
     <div>
       <Head>
@@ -24,7 +26,7 @@ const Home: NextPage = () => {
       </Typography.Text>
       <Card round>
         <Card.Cover onClick={() => Toast.info('点击了Cover区域')}>
-          <Image alt="" src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/baa20698931623.5ee79b6a8ec2b.jpg" />
+          {/* <Image alt="" src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/baa20698931623.5ee79b6a8ec2b.jpg" /> */}
         </Card.Cover>
         <Card.Header
           extra={<Arrow />}
@@ -62,7 +64,7 @@ const Home: NextPage = () => {
           卡片内容区域
         </Card.Body>
         <Card.Cover onClick={() => Toast.info('点击了Cover区域')}>
-          <Image alt="" src="https://mir-s3-cdn-cf.behance.net/project_modules/max_632/274faa127009547.61390144590a7.png" />
+          {/* <Image alt="" src="https://mir-s3-cdn-cf.behance.net/project_modules/max_632/274faa127009547.61390144590a7.png" /> */}
         </Card.Cover>
       </Card>
     </Space>

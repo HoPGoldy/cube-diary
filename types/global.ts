@@ -1,7 +1,7 @@
 export interface RespData<Data = Record<string, any>> {
     success: boolean
     message?: string
-    data: Data
+    data?: Data
 }
 
 export interface DiaryConfig {
@@ -12,4 +12,5 @@ export interface DiaryConfig {
 export interface UserConfig {
     username: string
     password: string
+    passwordMd5?: string
 }
