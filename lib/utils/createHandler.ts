@@ -1,6 +1,8 @@
+import { JWTPayload } from "jose";
+import { runAuth } from "lib/auth";
 import { NextApiRequest, NextApiResponse } from "next";
 
-type RequestHandler = (req: NextApiRequest, res: NextApiResponse) => unknown
+type RequestHandler = (req: NextApiRequest, res: NextApiResponse, userAuth?: JWTPayload) => unknown
 
 interface RequestMethodMap {
     GET?: RequestHandler
@@ -17,7 +19,9 @@ export const createHandler = function (config: RequestMethodMap) {
     const allowMethods = Object.keys(config)
 
     return async (req: NextApiRequest, res: NextApiResponse) => {
-        console.log('req', req.url)
+        const userAuth = await runAuth(req, res)
+        if (!userAuth) return
+
         const requestMethod = req.method || 'GET'
 
         if (!allowMethods.includes(requestMethod)) {
@@ -27,6 +31,6 @@ export const createHandler = function (config: RequestMethodMap) {
         }
 
         const handler = config[requestMethod as (keyof typeof config)]
-        if (handler) return await handler(req, res)
+        if (handler) return await handler(req, res, userAuth)
     }
 }

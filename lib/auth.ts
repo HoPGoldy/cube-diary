@@ -2,15 +2,28 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { nanoid } from 'nanoid'
 import { SignJWT, jwtVerify, JWTPayload } from 'jose'
+import { NextApiRequest, NextApiResponse } from 'next'
 
 export const jwtSecretKey = `123321`
 
 export const USER_TOKEN_KEY = 'user-token'
 
-export enum VerifyResult {
-    Error = 1,
-    NotLogin,
-    Success
+export const runAuth = async function (req: NextApiRequest, res: NextApiResponse) {
+    if (req.url === '/api/user' && req.method === 'POST') return {}
+
+    const token = req.headers[USER_TOKEN_KEY]
+    if (!token) {
+        res.status(401).json({ success: false, message: '用户未登录' })
+        return false
+    }
+
+    const authSuccess = await verifyAuth(token)
+    if (!authSuccess) {
+        res.status(401).json({ success: false, message: '登录超时' })
+        return false
+    }
+
+    return authSuccess
 }
 
 /**
@@ -42,7 +55,7 @@ export const startSession = async function (username: string) {
         .setProtectedHeader({ alg: 'HS256' })
         .setJti(nanoid())
         .setIssuedAt()
-        .setExpirationTime('2h')
+        .setExpirationTime('1h')
         .sign(new TextEncoder().encode(jwtSecretKey))
 
     return token
