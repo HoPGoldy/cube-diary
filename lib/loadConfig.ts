@@ -1,6 +1,7 @@
 import { readFile } from 'fs/promises'
 import { DiaryConfig } from 'types/global'
 import md5 from 'crypto-js/md5'
+import { DEFAULT_BUTTON_COLOR } from './constants'
 
 let configCache: DiaryConfig
 
@@ -9,6 +10,9 @@ let configCache: DiaryConfig
  */
 const defaultConfig: DiaryConfig = {
     user: [],
+    appTitle: '日记本',
+    appSubtitle: '记录你的生活',
+    writeDiaryButtonColors: DEFAULT_BUTTON_COLOR,
     passwordLength: 6
 }
 

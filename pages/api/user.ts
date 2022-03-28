@@ -4,7 +4,6 @@ import { startSession, USER_TOKEN_KEY, verifyAuth } from 'lib/auth'
 import { getDiaryConfig } from 'lib/loadConfig'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { RespData } from 'types/global'
-import { setCookie } from 'nookies'
 import { createHandler } from 'lib/utils/createHandler'
 
 export interface LoginReqBody {

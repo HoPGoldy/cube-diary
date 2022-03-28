@@ -7,6 +7,9 @@ export interface RespData<Data = Record<string, any>> {
 export interface DiaryConfig {
     user: UserConfig[]
     passwordLength: number
+    writeDiaryButtonColors: string[]
+    appTitle: string
+    appSubtitle?: string
 }
 
 export interface UserConfig {

@@ -1,4 +1,4 @@
-import useSWR from 'swr'
+import useSWR, { SWRResponse } from 'swr'
 import qs from 'qs'
 import { RespData } from 'types/global'
 import { USER_TOKEN_KEY } from './auth'
@@ -14,9 +14,9 @@ const fetcher: typeof fetch = (input, requestInit = {}) => {
     return fetch(input, init).then(res => res.json())
 }
 
-export const useFetch = function (url: string, query = {}) {
+export const useFetch = function <D = any, E = string>(url: string, query = {}) {
     const key = url + qs.stringify(query, { addQueryPrefix: true })
-    return useSWR(key, fetcher)
+    return useSWR(key, fetcher) as unknown as SWRResponse<D, E>
 }
 
 export const post = async function <T>(url: string, body = {}): Promise<RespData<T>> {

@@ -6,10 +6,12 @@ import { USER_TOKEN_KEY } from 'lib/auth'
 
 interface Props {
     passwordLength: number
+    appTitle: string
+    appSubtitle?: string
 }
 
 const Home: NextPage<Props> = (props) => {
-    const { passwordLength } = props
+    const { passwordLength, appTitle, appSubtitle = '' } = props
 
     const onSubmit = async (password: string) => {
         // console.log('password', password, md5(password).toString().toUpperCase())
@@ -30,8 +32,13 @@ const Home: NextPage<Props> = (props) => {
     }
 
     return (
-        <div>
+        <div className="h-screen w-screen bg-white flex flex-col justify-center items-center">
+            <header className="w-screen text-center mb-36 ">
+                <div className="text-5xl font-bold">{appTitle}</div>
+                {appSubtitle && <div className="mt-4 text-xl text-gray-600">{appSubtitle}</div>}
+            </header>
             <PasswordInput
+                className="w-5/6 sm:w-1/2"
                 gutter={10}
                 info="请输入密码"
                 length={passwordLength}
@@ -48,7 +55,8 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
         redirect: { statusCode: 302, destination: '/error/NO_CONFIG' }
     }
 
-    return { props: { passwordLength: config.passwordLength } }
+    const { passwordLength, appTitle, appSubtitle  } = config
+    return { props: { passwordLength, appTitle, appSubtitle } }
 }
 
 export default Home
