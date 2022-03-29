@@ -2,6 +2,7 @@ import useSWR, { SWRResponse } from 'swr'
 import qs from 'qs'
 import { RespData } from 'types/global'
 import { USER_TOKEN_KEY } from './auth'
+import Router from 'next/router'
 
 const fetcher: typeof fetch = (input, requestInit = {}) => {
     const init = {
@@ -10,8 +11,16 @@ const fetcher: typeof fetch = (input, requestInit = {}) => {
             [USER_TOKEN_KEY]: localStorage.getItem(USER_TOKEN_KEY) || ''
         }
     }
-    
-    return fetch(input, init).then(res => res.json())
+
+    return fetch(input, init)
+        .then(res => {
+            if (res.status === 401) {
+                Router.replace('/login')
+                return res
+            }
+
+            return res.json()
+        })
 }
 
 export const useFetch = function <D = any, E = string>(url: string, query = {}) {
