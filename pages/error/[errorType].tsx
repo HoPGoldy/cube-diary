@@ -1,6 +1,6 @@
+import Link from 'components/Link';
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import Link from 'next/link'
 import { Empty, Button } from 'react-vant';
 
 const ERROR_INFO: Record<string, string> = {
@@ -23,12 +23,10 @@ const ErrorPage: NextPage = () => {
             image="error"
             description={description}
         >
-            <Link href="/" passHref>
-                <div>
-                    <Button style={{ width: 160 }} round type="primary">
-                        刷新
-                    </Button>
-                </div>
+            <Link href="/">
+                <Button style={{ width: 160 }} round type="primary">
+                    刷新
+                </Button>
             </Link>
         </Empty>
     )

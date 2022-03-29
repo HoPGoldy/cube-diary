@@ -1,27 +1,25 @@
-import { useState } from 'react'
-import { GetServerSideProps, NextPage } from 'next'
+import { useContext, useState } from 'react'
+import { NextPage } from 'next'
 import Head from 'next/head'
-import { SettingO, UnderwayO, Search, Edit } from '@react-vant/icons';
-import { Loading, Button, Toast, Space, ActionBar, Tag } from 'react-vant';
-import { useDiaryList } from 'services/diary';
-import { getDiaryConfig } from 'lib/loadConfig';
-import { DiaryItem } from 'components/DiaryItem';
-import { useRouter } from 'next/router';
-import dayjs from 'dayjs';
+import { SettingO, UnderwayO, Search } from '@react-vant/icons'
+import { Space, ActionBar } from 'react-vant'
+import { useDiaryList } from 'services/diary'
+import { DiaryItem } from 'components/DiaryItem'
+import { useRouter } from 'next/router'
+import dayjs from 'dayjs'
+import Link from 'components/Link'
+import { UserConfigContext } from '@pages/_app'
+import { PageLoading } from 'components/PageLoading'
 
-interface Props {
-    buttonColor: string
-}
-
-const DiaryList: NextPage<Props> = (props) => {
-    const { buttonColor } = props
+const DiaryList: NextPage = () => {
     const router = useRouter()
+    const { buttonColor } = useContext(UserConfigContext) || {}
     const { data, error } = useDiaryList(router.query.month)
-    const [clickDiary, setClickDiary] = useState<number | undefined>(undefined);
+    const [clickDiary, setClickDiary] = useState<number | undefined>(undefined)
 
     const renderDiaryList = () => {
         if (!data && !error) {
-            return <Loading className="mt-24" color="#3f45ff" size="48px" vertical>加载中...</Loading>
+            return <PageLoading />
         }
 
         return (
@@ -56,28 +54,15 @@ const DiaryList: NextPage<Props> = (props) => {
             {renderDiaryList()}
 
             <ActionBar>
-                <ActionBar.Icon icon={<SettingO />} text="设置" onClick={() => console.log('chat click')} />
+                <Link href="/setting">
+                    <ActionBar.Icon icon={<SettingO />} text="设置" />
+                </Link>
                 <ActionBar.Icon icon={<UnderwayO />} text="时间" onClick={() => console.log('cart click')} />
                 <ActionBar.Icon icon={<Search />} text="搜索" onClick={() => console.log('shop click')} />
                 <ActionBar.Button color={buttonColor} text="写点东西" onClick={onClickWrite} />
             </ActionBar>
         </div>
     )
-}
-
-export const getServerSideProps: GetServerSideProps<Props> = async () => {
-    const config = await getDiaryConfig()
-
-    if (!config) return {
-        redirect: { statusCode: 302, destination: '/error/NO_CONFIG' }
-    }
-
-    const { writeDiaryButtonColors } = config
-    const randIndex = Math.floor(Math.random() * (writeDiaryButtonColors?.length))
-
-    return {
-        props: { buttonColor: writeDiaryButtonColors[randIndex] }
-    }
 }
 
 export default DiaryList

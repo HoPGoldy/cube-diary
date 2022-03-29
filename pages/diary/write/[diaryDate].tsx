@@ -1,11 +1,12 @@
-import { useState, ChangeEvent, useRef } from 'react'
+import { useState, ChangeEvent, useRef, useContext } from 'react'
 import { GetServerSideProps, NextPage } from 'next'
 import Head from 'next/head'
-import { SettingO, UnderwayO, Search, Edit } from '@react-vant/icons'
-import { Field, Button, Card, Space, ActionBar, Notify } from 'react-vant'
+import { ArrowLeft, UnderwayO } from '@react-vant/icons'
+import { Card, Space, ActionBar, Notify } from 'react-vant'
 import { updateDiary } from 'services/diary'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
+import { UserConfigContext } from '@pages/_app'
 
 interface Props {
     existContent: string
@@ -15,6 +16,7 @@ const DiaryEdit: NextPage<Props> = (props) => {
     const [content, setContent] = useState(props.existContent)
     const [uploading, setUploading] = useState(false)
     const textAreaRef = useRef<HTMLTextAreaElement>(null)
+    const { buttonColor } = useContext(UserConfigContext) || {}
     const router = useRouter()
 
     const onContentChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -81,8 +83,9 @@ const DiaryEdit: NextPage<Props> = (props) => {
             </Space>
 
             <ActionBar>
+                <ActionBar.Icon icon={<ArrowLeft />} text="返回" onClick={() => router.back()} />
                 <ActionBar.Icon icon={<UnderwayO />} text="时间" onClick={onInsertDate} />
-                <ActionBar.Button loading={uploading} color="red" text="保存" onClick={onSaveDiary} />
+                <ActionBar.Button loading={uploading} color={buttonColor} text="保存" onClick={onSaveDiary} />
             </ActionBar>
         </div>
     )

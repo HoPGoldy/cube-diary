@@ -12,6 +12,10 @@ export interface DiaryConfig {
     appSubtitle?: string
 }
 
+export type FontendConfig = Omit<DiaryConfig, 'user' | 'writeDiaryButtonColors'> & {
+    buttonColor: string
+}
+
 export interface UserConfig {
     username: string
     password: string
