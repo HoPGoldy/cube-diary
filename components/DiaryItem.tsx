@@ -23,7 +23,7 @@ export const DiaryItem: FC<DiaryItemProps> = (props) => {
     if ('undone' in diary) {
         return (
             <Link href={`/diary/write/${dayjs(diary.date).format('YYYY-MM-DD')}`} passHref>
-                <div>
+                <div className="w-screen">
                     <Card round>
                         <Card.Header extra={<CommentO />} >
                             <span className="text-gray-400">{label}</span>

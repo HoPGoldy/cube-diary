@@ -15,6 +15,10 @@ export interface LoginResData {
     username: string
 }
 
+export interface UserInfo {
+    username: string
+}
+
 export default createHandler({
     POST: async (req, res: NextApiResponse<RespData<LoginResData>>) => {
         const { code } = JSON.parse(req.body) as LoginReqBody
@@ -37,12 +41,12 @@ export default createHandler({
             }
         })
     },
-    GET: async (req, res) => {
-        const resp = await verifyAuth(req.headers[USER_TOKEN_KEY])
-        console.log('resp', resp)
+    GET: async (req, res: NextApiResponse<RespData<UserInfo>>, userAuth = {}) => {
+        const username = ('username' in userAuth) ? userAuth.username : ''
+
         res.status(200).json({
             success: true,
-            data: {}
+            data: { username }
         })
     }
 })

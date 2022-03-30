@@ -5,8 +5,6 @@ import { getDiaryConfig } from 'lib/loadConfig'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { RespData } from 'types/global'
 import { createHandler } from 'lib/utils/createHandler'
-import { keyBy } from 'lodash'
-import { getMonthExistDate } from 'lib/utils/getMonthExistDate'
 
 export interface DiaryDetailQuery {
     date: string

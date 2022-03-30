@@ -1,7 +1,3 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-
-import { startSession, USER_TOKEN_KEY, verifyAuth } from 'lib/auth'
-import { getDiaryConfig } from 'lib/loadConfig'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { RespData } from 'types/global'
 import { createHandler } from 'lib/utils/createHandler'
@@ -9,7 +5,7 @@ import { keyBy } from 'lodash'
 import { getMonthExistDate } from 'lib/utils/getMonthExistDate'
 
 export interface DiaryMonthQuery {
-    month: string
+    queryMonth: string
 }
 
 export interface DiaryMonthResData {
@@ -26,12 +22,18 @@ export interface Diary {
  * 会显示成一个按钮让用户填写
  */
  export interface UndoneDiary {
+     /**
+      * 未完成的日期毫秒时间戳
+      */
     date: number
+    /**
+     * 未完成标识
+     */
     undone: true
 }
 
 export default createHandler({
-    GET: async (req, res: NextApiResponse<RespData<DiaryMonthResData>>) => {
+    GET: async (req: NextApiRequest, res: NextApiResponse<RespData<DiaryMonthResData>>) => {
         const originDiarys: Diary[] = [{
             date: 1648396800000,
             content: '在鲁迅先生家里作客人，刚开始是从法租界来到虹口，搭电车也要差不多一个钟头的工夫，所以那时候来的次数比较少。记得有一次谈到半夜了，一过十二点电车就没有的，但那天不知讲了些什么，讲到一个段落就看看旁边小长桌上的圆钟，十一点半了，十一点四十五分了，电车没有了。'
@@ -62,7 +64,7 @@ export default createHandler({
         }]
 
         const originDiaryEnums = keyBy(originDiarys, diary => diary.date)
-        const existDateList = getMonthExistDate()
+        const existDateList = getMonthExistDate(req.query.queryMonth as string)
 
         const entries: Array<Diary | UndoneDiary> = existDateList.map(date => {
             if (date.toString() in originDiaryEnums) return originDiaryEnums[date]

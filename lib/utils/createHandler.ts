@@ -1,8 +1,7 @@
-import { JWTPayload } from "jose";
-import { runAuth } from "lib/auth";
+import { MyJWTPayload, runAuth } from "lib/auth";
 import { NextApiRequest, NextApiResponse } from "next";
 
-type RequestHandler = (req: NextApiRequest, res: NextApiResponse, userAuth?: JWTPayload) => unknown
+type RequestHandler = (req: NextApiRequest, res: NextApiResponse, userAuth?: {} | MyJWTPayload) => unknown
 
 interface RequestMethodMap {
     GET?: RequestHandler

@@ -1,17 +1,18 @@
 import { useContext } from 'react'
 import { NextPage } from 'next'
 import Head from 'next/head'
-import { Card, Switch, Form, Space, ActionBar, Tag, Notify } from 'react-vant'
+import { Card, Switch, Form, Space, ActionBar, Cell, Notify, Button } from 'react-vant'
 import { useRouter } from 'next/router'
-import dayjs from 'dayjs'
 import { Statistic } from 'components/Statistic'
-import { UserConfigContext } from './_app'
-import { ArrowLeft } from '@react-vant/icons'
+import { UserConfigContext, UserInfoContext } from './_app'
+import { ManagerO, ArrowLeft } from '@react-vant/icons'
+import { USER_TOKEN_KEY } from 'lib/auth'
 
 const DiaryList: NextPage = () => {
     const router = useRouter()
     const { buttonColor } = useContext(UserConfigContext) || {}
-    
+    const { userInfo } = useContext(UserInfoContext) || {}
+
     const [form] = Form.useForm();
 
     const onFinish = () => {
@@ -21,6 +22,11 @@ const DiaryList: NextPage = () => {
     const onSaveSetting = () => {
         router.back()
         Notify.show({ type: 'success', message: '设置已保存' })
+    }
+
+    const onLogout = () => {
+        localStorage.removeItem(USER_TOKEN_KEY)
+        router.replace('/login')
     }
 
     return (
@@ -40,26 +46,33 @@ const DiaryList: NextPage = () => {
                 </Card>
 
                 <Card round>
-                    <Card.Body>
-                        <Form
-                            form={form}
-                            onFinish={onFinish}
-                        >
-                            <Form.Item name="switch" label="开关" valuePropName="checked" inputAlign="right">
-                                <Switch size={20} />
-                            </Form.Item>
-                            <Form.Item name="switch" label="开关" valuePropName="checked" inputAlign="right">
-                                <Switch size={20} />
-                            </Form.Item>
-                            <Form.Item name="switch" label="开关" valuePropName="checked" inputAlign="right">
-                                <Switch size={20} />
-                            </Form.Item>
-                        </Form>
-                    </Card.Body>
+                    <Cell title="当前登陆" icon={<ManagerO />} value={userInfo?.username} />
+                </Card>
+
+                <Card round>
+                    <Form
+                        form={form}
+                        onFinish={onFinish}
+                    >
+                        <Form.Item name="switch" label="开关" valuePropName="checked" inputAlign="right">
+                            <Switch size={20} />
+                        </Form.Item>
+                        <Form.Item name="switch" label="开关" valuePropName="checked" inputAlign="right">
+                            <Switch size={20} />
+                        </Form.Item>
+                        <Form.Item name="switch" label="开关" valuePropName="checked" inputAlign="right">
+                            <Switch size={20} />
+                        </Form.Item>
+                    </Form>
+                </Card>
+
+                <Card round onClick={onLogout}>
+                    <Cell title="登出" isLink />
                 </Card>
             </Space>
 
             <ActionBar>
+                <ActionBar.Icon icon={<ArrowLeft />} text="返回" onClick={() => router.back()} />
                 <ActionBar.Button color={buttonColor} text="保存" onClick={onSaveSetting} />
             </ActionBar>
         </div>

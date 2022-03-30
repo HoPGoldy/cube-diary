@@ -16,6 +16,10 @@ a {
     box-sizing: border-box;
 }
 
+:root {
+    --rv-font-size-md: 1rem !important;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
