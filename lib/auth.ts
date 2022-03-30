@@ -2,6 +2,8 @@ import { nanoid } from 'nanoid'
 import { SignJWT, jwtVerify, JWTPayload } from 'jose'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { errors } from 'jose'
+import { getLoki } from './loki'
+// import fs from 'fs/promises'
 
 export const jwtSecretKey = `123321`
 
@@ -12,6 +14,8 @@ export type MyJWTPayload = JWTPayload & {
 }
 
 export const runAuth = async function (req: NextApiRequest, res: NextApiResponse): Promise<MyJWTPayload | false | {}> {
+
+    const loki = await getLoki()
     if (req.url === '/api/user' && req.method === 'POST') return {}
 
     const token = req.headers[USER_TOKEN_KEY]
