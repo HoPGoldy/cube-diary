@@ -16,3 +16,5 @@ export const NUMBER_TO_CHINESE: Record<number, string> = {
     5: '六',
     6: '七'
 }
+
+export const USER_TOKEN_KEY = 'user-token'

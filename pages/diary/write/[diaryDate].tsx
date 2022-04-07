@@ -3,7 +3,7 @@ import { GetServerSideProps, NextPage } from 'next'
 import Head from 'next/head'
 import { ArrowLeft, UnderwayO } from '@react-vant/icons'
 import { Card, Space, ActionBar, Notify } from 'react-vant'
-import { updateDiary } from 'services/diary'
+import { updateDiary, useDiaryDetail } from 'services/diary'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { UserConfigContext } from '@pages/_app'
@@ -13,11 +13,11 @@ interface Props {
 }
 
 const DiaryEdit: NextPage<Props> = (props) => {
-    const [content, setContent] = useState(props.existContent)
+    const router = useRouter()
+    const { content, setContent } = useDiaryDetail(router.query.diaryDate)
     const [uploading, setUploading] = useState(false)
     const textAreaRef = useRef<HTMLTextAreaElement>(null)
     const { buttonColor } = useContext(UserConfigContext) || {}
-    const router = useRouter()
 
     const onContentChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
         setContent(e.target.value)
@@ -72,6 +72,7 @@ const DiaryEdit: NextPage<Props> = (props) => {
                     <Card.Body>
                         <textarea
                             ref={textAreaRef}
+                            placeholder="写点什么"
                             autoFocus
                             className="w-full"
                             style={{ height: 'calc(100vh - var(--rv-action-bar-height) - 116px)', resize: 'none' }}
@@ -89,14 +90,6 @@ const DiaryEdit: NextPage<Props> = (props) => {
             </ActionBar>
         </div>
     )
-}
-
-export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
-    const existContent = '中国老例，凡要排斥异己的时候，常给对手起一个诨名，——或谓之“绰号”。这也是明清以来讼师的老手段;假如要控告张三李四，倘只说姓名，本很平常，现在却道“六臂太岁张三”，“白额虎李四”，则先不问事迹，县官只见绰号，就觉得他们是恶棍了。'
-
-    return {
-        props: { existContent }
-    }
 }
 
 export default DiaryEdit

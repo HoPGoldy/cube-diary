@@ -1,8 +1,8 @@
 import useSWR, { SWRResponse } from 'swr'
 import qs from 'qs'
 import { RespData } from 'types/global'
-import { USER_TOKEN_KEY } from './auth'
 import Router from 'next/router'
+import { USER_TOKEN_KEY } from './constants'
 
 const fetcher: typeof fetch = (input, requestInit = {}) => {
     const init = {

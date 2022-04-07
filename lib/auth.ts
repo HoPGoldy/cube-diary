@@ -3,11 +3,11 @@ import { SignJWT, jwtVerify, JWTPayload } from 'jose'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { errors } from 'jose'
 import { getLoki } from './loki'
+import { USER_TOKEN_KEY } from './constants'
 // import fs from 'fs/promises'
 
 export const jwtSecretKey = `123321`
 
-export const USER_TOKEN_KEY = 'user-token'
 
 export type MyJWTPayload = JWTPayload & {
     username: string

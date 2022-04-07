@@ -12,8 +12,18 @@ export interface DiaryMonthResData {
     entries: Array<Diary | UndoneDiary>
 }
 
+/**
+ * 日记对象
+ */
 export interface Diary {
-    date: number,
+    /**
+     * 日记的日期
+     * 毫秒 UNIX 时间戳，须为每天的开始时间
+     */
+    date: number
+    /**
+     * 日记的内容
+     */
     content: string
 }
 

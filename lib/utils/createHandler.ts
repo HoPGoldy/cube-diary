@@ -1,7 +1,7 @@
 import { MyJWTPayload, runAuth } from "lib/auth";
 import { NextApiRequest, NextApiResponse } from "next";
 
-type RequestHandler = (req: NextApiRequest, res: NextApiResponse, userAuth?: {} | MyJWTPayload) => unknown
+type RequestHandler = (req: NextApiRequest, res: NextApiResponse, userAuth: MyJWTPayload) => unknown
 
 interface RequestMethodMap {
     GET?: RequestHandler
@@ -30,6 +30,6 @@ export const createHandler = function (config: RequestMethodMap) {
         }
 
         const handler = config[requestMethod as (keyof typeof config)]
-        if (handler) return await handler(req, res, userAuth)
+        if (handler) return await handler(req, res, userAuth as MyJWTPayload)
     }
 }

@@ -1,6 +1,6 @@
 import { LoginResData, UserInfo } from "@pages/api/user"
 import md5 from "crypto-js/md5"
-import { USER_TOKEN_KEY } from "lib/auth"
+import { USER_TOKEN_KEY } from "lib/constants"
 import { get, post } from "lib/request"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"

@@ -1,12 +1,12 @@
 import type { NextPage } from 'next'
 import { PasswordInput, Notify } from 'react-vant'
 import { login } from 'services/user'
-import { USER_TOKEN_KEY } from 'lib/auth'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import { useContext, useState, useRef } from 'react'
 import { UserConfigContext, UserInfoContext } from './_app'
 import { PasswordInputInstance } from 'react-vant/es/password-input/PropsType'
+import { USER_TOKEN_KEY } from 'lib/constants'
 
 const Home: NextPage = () => {
     const router = useRouter()
