@@ -43,7 +43,8 @@ const DiaryList: NextPage = () => {
                     return <DiaryItem
                         key={diary.date}
                         diary={diary}
-                        onClickBody={() => setClickDiary(clickDiary === index ? undefined : index)}
+                        // onClickBody={() => setClickDiary(clickDiary === index ? undefined : index)}
+                        onClickBody={() => onClickWrite(diary.date)}
                         showInteract={index === clickDiary}
                     />
                 })}
@@ -52,8 +53,9 @@ const DiaryList: NextPage = () => {
         )
     }
 
-    const onClickWrite = () => {
-        router.push(`/diary/write/${dayjs().format('YYYY-MM-DD')}`)
+    const onClickWrite = (datetime?: number) => {
+        const queryDate = typeof datetime === 'number' ? dayjs(datetime) : dayjs()
+        router.push(`/diary/write/${queryDate.format('YYYY-MM-DD')}`)
     }
 
     const onChoseMonth = (date: Date) => {
@@ -75,7 +77,7 @@ const DiaryList: NextPage = () => {
                 </Link>
                 <ActionBar.Icon icon={<UnderwayO />} text="时间" onClick={() => setShowPicker(true)} />
                 <ActionBar.Icon icon={<Search />} text="搜索" onClick={() => console.log('shop click')} />
-                <ActionBar.Button color={buttonColor} text="写点东西" onClick={onClickWrite} />
+                <ActionBar.Button color={buttonColor} text="写点东西" onClick={() => onClickWrite()} />
             </ActionBar>
 
             <Popup

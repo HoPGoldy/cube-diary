@@ -6,7 +6,7 @@ import { useRouter } from 'next/router'
 import { Statistic } from 'components/Statistic'
 import { UserConfigContext, UserInfoContext } from './_app'
 import { ManagerO, ArrowLeft } from '@react-vant/icons'
-import { USER_TOKEN_KEY } from 'lib/auth'
+import { USER_TOKEN_KEY } from 'lib/constants'
 
 const DiaryList: NextPage = () => {
     const router = useRouter()
