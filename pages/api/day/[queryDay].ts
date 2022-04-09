@@ -2,7 +2,7 @@
 import type { NextApiResponse } from 'next'
 import { RespData } from 'types/global'
 import { createHandler } from 'lib/utils/createHandler'
-import { getUserCollection, saveLoki } from 'lib/loki'
+import { getDiaryCollection, getUserProfile, saveLoki, updateUserProfile } from 'lib/loki'
 import dayjs from 'dayjs'
 import { Diary } from '../month/[queryMonth]'
 
@@ -17,7 +17,7 @@ export default createHandler({
         }
 
         const diaryDate = dayjs(req.query.queryDay, 'YYYY-MM-DD')
-        const collection = await getUserCollection(auth.username)
+        const collection = await getDiaryCollection(auth.username)
         const diary = collection.findOne({ date: diaryDate.valueOf() })
 
         // 没找到就返回空
@@ -44,20 +44,30 @@ export default createHandler({
         }
         const diaryDate = dayjs(req.query.queryDay, 'YYYY-MM-DD')
 
-        const collection = await getUserCollection(auth.username)
+        const collection = await getDiaryCollection(auth.username)
         const diary = collection.findOne({ date: diaryDate.valueOf() })
+        // 更新的总字数
+        let changeNumber = reqBody.content.length
 
-        // 没找到就插入
+        // 没找到就新增
         if (!diary) {
             collection.insert({ date: diaryDate.valueOf(), content: reqBody.content })
         }
         // 找到了就更新
         else {
+            changeNumber = reqBody.content.length - diary.content.length
             diary.content = reqBody.content
             collection.update(diary)
         }
 
         saveLoki()
         res.status(200).json({ success: true })
+
+        const userProfile = await getUserProfile(auth.username)
+        if (!userProfile) {
+            console.error(`${auth.username} 用户配置项保存失败`)
+            return
+        }
+        updateUserProfile({ ...userProfile, totalCount: userProfile.totalCount + changeNumber })
     }
 })

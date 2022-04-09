@@ -4,14 +4,14 @@ import { login } from 'services/user'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import { useContext, useState, useRef } from 'react'
-import { UserConfigContext, UserInfoContext } from './_app'
+import { UserConfigContext, UserProfileContext } from './_app'
 import { PasswordInputInstance } from 'react-vant/es/password-input/PropsType'
 import { USER_TOKEN_KEY } from 'lib/constants'
 
 const Home: NextPage = () => {
     const router = useRouter()
     const { passwordLength = 6, appTitle, appSubtitle = '' } = useContext(UserConfigContext) || {}
-    const { setUserInfo } = useContext(UserInfoContext) || {}
+    const { setUserProfile } = useContext(UserProfileContext) || {}
     const [password, setPassword] = useState('')
     const passwordRef = useRef<PasswordInputInstance>(null)
 
@@ -30,7 +30,7 @@ const Home: NextPage = () => {
         }
 
         localStorage.setItem(USER_TOKEN_KEY, resp?.data?.token)
-        setUserInfo && setUserInfo(resp?.data)
+        setUserProfile && setUserProfile(resp?.data)
         Notify.show({ type: 'success', message: `欢迎回来 ${resp.data.username}` })
         router.push('/')
     }

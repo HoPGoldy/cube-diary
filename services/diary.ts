@@ -4,6 +4,7 @@ import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import { Notify } from "react-vant"
 import { RespData } from "types/global"
+import { useRef } from 'react'
 
 /**
  * 查询日记列表
@@ -31,9 +32,16 @@ export const updateDiary = async function (date: string, content: string) {
  */
 export const useDiaryDetail = function (queryDate: string | string[] | undefined) {
     const [content, setContent] = useState<string>('')
+    const [contentLoading, setContentLoading] = useState(true)
+    const contentRef = useRef(content)
+
+    useEffect(() => {
+        contentRef.current = content
+    }, [content])
 
     useEffect(() => {
         const fetchUserInfo = async function () {
+            setContentLoading(true)
             const resp = await get<Diary>(`/api/day/${queryDate}`)
             if (!resp.success) {
                 Notify.show({ type: 'danger', message: resp.message })
@@ -41,10 +49,11 @@ export const useDiaryDetail = function (queryDate: string | string[] | undefined
             }
 
             setContent(resp.data?.content || '')
+            setContentLoading(false)
         }
 
         fetchUserInfo()
     }, [queryDate])
 
-    return { content, setContent }
+    return { content, contentLoading, contentRef, setContent }
 }

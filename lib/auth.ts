@@ -2,11 +2,30 @@ import { nanoid } from 'nanoid'
 import { SignJWT, jwtVerify, JWTPayload } from 'jose'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { errors } from 'jose'
-import { getLoki } from './loki'
-import { USER_TOKEN_KEY } from './constants'
-// import fs from 'fs/promises'
+import { STORAGE_PATH, USER_TOKEN_KEY } from './constants'
+import { ensureFile } from 'fs-extra'
+import { readFile, writeFile } from 'fs/promises'
 
-export const jwtSecretKey = `123321`
+let jwtSecretCache: string
+
+/**
+ * 获取 jwt 密钥
+ */
+export const getJwtSecretKey = async function () {
+    // 使用缓存
+    if (jwtSecretCache) return jwtSecretCache
+
+    // 读一下本地密钥
+    const jwtSecretPath = STORAGE_PATH + '/jwtSecret'
+    await ensureFile(jwtSecretPath)
+    const secret = await readFile(jwtSecretPath)
+    if (secret.toString().length > 0) return jwtSecretCache = secret.toString()
+
+    // 没有密钥，新建一个
+    const newJwtSecret = nanoid()
+    await writeFile(jwtSecretPath, newJwtSecret)
+    return jwtSecretCache = newJwtSecret
+}
 
 
 export type MyJWTPayload = JWTPayload & {
@@ -14,8 +33,6 @@ export type MyJWTPayload = JWTPayload & {
 }
 
 export const runAuth = async function (req: NextApiRequest, res: NextApiResponse): Promise<MyJWTPayload | false | {}> {
-
-    const loki = await getLoki()
     if (req.url === '/api/user' && req.method === 'POST') return {}
 
     const token = req.headers[USER_TOKEN_KEY]
@@ -45,7 +62,7 @@ export const verifyAuth = async function (token: string | string[] | undefined |
     const userToken = Array.isArray(token) ? token.join('') : token
 
     try {
-        const key = new TextEncoder().encode(jwtSecretKey)
+        const key = new TextEncoder().encode(await getJwtSecretKey())
         const verified = await jwtVerify(userToken, key)
         return verified.payload as MyJWTPayload
     } catch (err) {
@@ -63,8 +80,8 @@ export const startSession = async function (username: string) {
         .setProtectedHeader({ alg: 'HS256' })
         .setJti(nanoid())
         .setIssuedAt()
-        .setExpirationTime('1h')
-        .sign(new TextEncoder().encode(jwtSecretKey))
+        .setExpirationTime('1d')
+        .sign(new TextEncoder().encode(await getJwtSecretKey()))
 
     return token
 }

@@ -18,3 +18,5 @@ export const NUMBER_TO_CHINESE: Record<number, string> = {
 }
 
 export const USER_TOKEN_KEY = 'user-token'
+
+export const STORAGE_PATH = './.storage'

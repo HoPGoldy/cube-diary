@@ -1,17 +1,26 @@
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { NextPage } from 'next'
 import Head from 'next/head'
 import { Card, Switch, Form, Space, ActionBar, Cell, Notify, Button } from 'react-vant'
 import { useRouter } from 'next/router'
 import { Statistic } from 'components/Statistic'
-import { UserConfigContext, UserInfoContext } from './_app'
+import { UserConfigContext, UserProfileContext } from './_app'
 import { ManagerO, ArrowLeft } from '@react-vant/icons'
 import { USER_TOKEN_KEY } from 'lib/constants'
+import { useUserProfile } from 'services/user'
 
 const DiaryList: NextPage = () => {
     const router = useRouter()
     const { buttonColor } = useContext(UserConfigContext) || {}
-    const { userInfo } = useContext(UserInfoContext) || {}
+    // 当前缓存的用户配置
+    const { userProfile, setUserProfile } = useContext(UserProfileContext) || {}
+    // 进入页面后重新加载
+    const { userProfile: newUserProfile } = useUserProfile()
+
+    useEffect(() => {
+        if (!newUserProfile || !setUserProfile) return
+        setUserProfile(newUserProfile)
+    }, [newUserProfile])
 
     const [form] = Form.useForm();
 
@@ -39,14 +48,14 @@ const DiaryList: NextPage = () => {
                 <Card round>
                     <Card.Body>
                         <div className="flex flex-row justify-around">
-                            <Statistic label="累计日记" value={983} />
-                            <Statistic label="累计字数" value={155351} />
+                            <Statistic label="累计日记" value={userProfile?.totalDiary || 0} />
+                            <Statistic label="累计字数" value={userProfile?.totalCount || 0} />
                         </div>
                     </Card.Body>
                 </Card>
 
                 <Card round>
-                    <Cell title="当前登陆" icon={<ManagerO />} value={userInfo?.username} />
+                    <Cell title="当前登陆" icon={<ManagerO />} value={userProfile?.username} />
                 </Card>
 
                 <Card round>

@@ -2,11 +2,11 @@ import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import { ConfigProvider, Loading } from 'react-vant'
 import Head from 'next/head'
-import { useAppConfig, useUserInfo } from 'services/user'
+import { useAppConfig, useUserProfile } from 'services/user'
 import { createContext, Dispatch, SetStateAction } from 'react'
 import { FontendConfig } from 'types/global'
 import { PageLoading } from 'components/PageLoading'
-import { UserInfo } from './api/user'
+import { UserProfile } from 'types/storage'
 
 const themeVars = {
     passwordInputBackgroundColor: '#f7f8fa'
@@ -14,27 +14,27 @@ const themeVars = {
 
 export const UserConfigContext = createContext<FontendConfig | undefined>(undefined)
 
-interface IUserInfoContext {
-    userInfo: UserInfo | undefined
-    setUserInfo: Dispatch<SetStateAction<UserInfo | undefined>>;
+interface IUserProfileContext {
+    userProfile: UserProfile | undefined
+    setUserProfile: Dispatch<SetStateAction<UserProfile | undefined>>;
 }
 
-export const UserInfoContext = createContext<IUserInfoContext | undefined>(undefined)
+export const UserProfileContext = createContext<IUserProfileContext | undefined>(undefined)
 
 function MyApp({ Component, pageProps }: AppProps) {
     const config = useAppConfig()
-    const userInfo = useUserInfo()
+    const userInfo = useUserProfile()
 
     return (
         <ConfigProvider themeVars={themeVars}>
             <Head>
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <UserInfoContext.Provider value={userInfo}>
+            <UserProfileContext.Provider value={userInfo}>
                 <UserConfigContext.Provider value={config}>
                     {config ? <Component {...pageProps} /> : <PageLoading />}
                 </UserConfigContext.Provider>
-            </UserInfoContext.Provider>
+            </UserProfileContext.Provider>
         </ConfigProvider>
     )
 }

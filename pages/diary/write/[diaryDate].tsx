@@ -1,5 +1,5 @@
-import { useState, ChangeEvent, useRef, useContext, useMemo, useEffect } from 'react'
-import { GetServerSideProps, NextPage } from 'next'
+import { useState, useRef, useContext, useMemo, useEffect, MutableRefObject } from 'react'
+import { NextPage } from 'next'
 import Head from 'next/head'
 import { ArrowLeft, UnderwayO } from '@react-vant/icons'
 import { Card, Space, ActionBar, Notify } from 'react-vant'
@@ -8,12 +8,37 @@ import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { UserConfigContext } from '@pages/_app'
 import { NUMBER_TO_CHINESE } from 'lib/constants'
+import { PageLoading } from 'components/PageLoading'
 
-interface Props {
-    existContent: string
+/**
+ * 自动保存 hook
+ * 将每隔一段时间自动将内容提交到后端，并把保存结果返回出去
+ */
+const useAutoSave = function (contentRef: MutableRefObject<string>) {
+    const router = useRouter()
+    const [autoSaveTip, setAutoSaveTip] = useState('')
+
+    useEffect(() => {
+        const timer = setInterval(async () => {
+            const content = contentRef.current
+            if (!content || content.length <= 0) return
+
+            const { diaryDate } = router.query
+            const resp = await updateDiary(diaryDate as string, content)
+            if (!resp.success) {
+                setAutoSaveTip('自动保存失败')
+                return
+            }
+            setAutoSaveTip(`自动保存于 ${dayjs().format('HH:mm')}`)
+        }, 20 * 1000)
+
+        return () => clearInterval(timer)
+    }, [router.query.diaryDate])
+
+    return autoSaveTip
 }
 
-const DiaryEdit: NextPage<Props> = () => {
+const DiaryEdit: NextPage = () => {
     const router = useRouter()
 
     // 日期查询条件兜底，防止用户输入了无效的日期
@@ -24,7 +49,7 @@ const DiaryEdit: NextPage<Props> = () => {
     }, [router.query.diaryDate])
 
     // 编辑的正文内容
-    const { content, setContent } = useDiaryDetail(router.query.diaryDate)
+    const { content, contentLoading, contentRef, setContent } = useDiaryDetail(router.query.diaryDate)
     // 是否保存中
     const [uploading, setUploading] = useState(false)
     // 文本输入框引用
@@ -37,10 +62,11 @@ const DiaryEdit: NextPage<Props> = () => {
         return date.format('YYYY 年 M 月 D 日') + ` 星期${NUMBER_TO_CHINESE[date.day()]}`
     }, [router.query.diaryDate])
 
-    const onContentChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-        setContent(e.target.value)
-    }
+    const autoSaveTip = useAutoSave(contentRef)
 
+    /**
+     * 点击插入时间按钮
+     */
     const onInsertDate = () => {
         setContent(oldContent => {
             const { selectionStart = 0, selectionEnd = 0 } = textAreaRef.current || {}
@@ -52,6 +78,9 @@ const DiaryEdit: NextPage<Props> = () => {
         textAreaRef.current?.focus()
     }
 
+    /**
+     * 点击保存按钮
+     */
     const onSaveDiary = async () => {
         const { diaryDate } = router.query
         if (typeof diaryDate !== 'string') {
@@ -71,6 +100,50 @@ const DiaryEdit: NextPage<Props> = () => {
         router.push(`/diary/${dayjs(diaryDate).format('YYYYMM')}`)
     }
 
+    /**
+     * 点击返回按钮
+     */
+    const onClickCancel = async () => {
+        if (!content || content.length <= 0) {
+            router.back()
+            return
+        }
+        onSaveDiary()
+    }
+
+    /**
+     * 渲染正文区域
+     */
+    const renderContent = () => {
+        if (contentLoading) return <PageLoading />
+
+        return (
+            <textarea
+                ref={textAreaRef}
+                placeholder="写点什么"
+                autoFocus
+                className="w-full"
+                style={{ height: 'calc(100vh - var(--rv-action-bar-height) - 116px)', resize: 'none' }}
+                value={content}
+                onChange={e => setContent(e.target.value)}
+            />
+        )
+    }
+
+    const renderSaveButton = () => {
+        return (
+            <ActionBar.Button
+                loading={uploading}
+                color={buttonColor}
+                text={(<>
+                    保存
+                    <span className="ml-2 text-xs">{autoSaveTip}</span>
+                </>)}
+                onClick={onSaveDiary}
+            />
+        )
+    }
+
     return (
         <div className="min-h-screen">
             <Head>
@@ -86,23 +159,15 @@ const DiaryEdit: NextPage<Props> = () => {
 
                 <Card round>
                     <Card.Body>
-                        <textarea
-                            ref={textAreaRef}
-                            placeholder="写点什么"
-                            autoFocus
-                            className="w-full"
-                            style={{ height: 'calc(100vh - var(--rv-action-bar-height) - 116px)', resize: 'none' }}
-                            value={content}
-                            onChange={onContentChange}
-                        />
+                        {renderContent()}
                     </Card.Body>
                 </Card>
             </Space>
 
             <ActionBar>
-                <ActionBar.Icon icon={<ArrowLeft />} text="返回" onClick={() => router.back()} />
+                <ActionBar.Icon icon={<ArrowLeft />} text="返回" onClick={onClickCancel} />
                 <ActionBar.Icon icon={<UnderwayO />} text="时间" onClick={onInsertDate} />
-                <ActionBar.Button loading={uploading} color={buttonColor} text="保存" onClick={onSaveDiary} />
+                {renderSaveButton()}
             </ActionBar>
         </div>
     )

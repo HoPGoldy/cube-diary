@@ -4,7 +4,7 @@ import { createHandler } from 'lib/utils/createHandler'
 import { keyBy } from 'lodash'
 import { getMonthExistDate } from 'lib/utils/getMonthExistDate'
 import dayjs from 'dayjs'
-import { getUserCollection } from 'lib/loki'
+import { getDiaryCollection } from 'lib/loki'
 
 export interface DiaryMonthQuery {
     queryMonth: string
@@ -53,7 +53,7 @@ export default createHandler({
 
         const diaryDate = dayjs(req.query.queryMonth, 'YYYYMM')
         const queryRange = [diaryDate.startOf('M').valueOf() - 1, diaryDate.endOf('M').valueOf()]
-        const collection = await getUserCollection(auth.username)
+        const collection = await getDiaryCollection(auth.username)
         const originDiarys = collection.find({ date: { '$between': queryRange } })
 
         // 没找到就返回空
@@ -79,4 +79,3 @@ export default createHandler({
         })
     }
 })
-
