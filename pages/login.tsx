@@ -8,7 +8,7 @@ import { UserConfigContext, UserProfileContext } from './_app'
 import { PasswordInputInstance } from 'react-vant/es/password-input/PropsType'
 import { USER_TOKEN_KEY } from 'lib/constants'
 
-const Home: NextPage = () => {
+const Login: NextPage = () => {
     const router = useRouter()
     const { passwordLength = 6, appTitle, appSubtitle = '' } = useContext(UserConfigContext) || {}
     const { setUserProfile } = useContext(UserProfileContext) || {}
@@ -63,4 +63,4 @@ const Home: NextPage = () => {
     )
 }
 
-export default Home
+export default Login

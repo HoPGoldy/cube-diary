@@ -13,7 +13,7 @@ const themeVars = {
     passwordInputBackgroundColor: '#f7f8fa'
 }
 
-export const UserConfigContext = createContext<FontendConfig | undefined>(undefined)
+export const UserConfigContext = createContext<FontendConfig | false | undefined>(undefined)
 
 interface IUserProfileContext {
     userProfile: UserProfile | undefined
@@ -36,7 +36,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             </Head>
             <UserProfileContext.Provider value={userInfo}>
                 <UserConfigContext.Provider value={config}>
-                    {config ? <Component {...pageProps} /> : <PageLoading />}
+                    {config !== undefined ? <Component {...pageProps} /> : <PageLoading />}
                 </UserConfigContext.Provider>
             </UserProfileContext.Provider>
         </ConfigProvider>

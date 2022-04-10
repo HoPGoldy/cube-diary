@@ -52,13 +52,17 @@ export const useUserProfile = function () {
  */
 export const useAppConfig = function () {
     const router = useRouter()
-    const [appConfig, setAppConfig] = useState<FontendConfig>()
+    const [appConfig, setAppConfig] = useState<FontendConfig | false>()
 
     useEffect(() => {
+        // 当配置项不存在时会在每次切换页面时重新尝试获取
+        if (appConfig) return
+
         const fetchUserConfig = async function () {
             const resp = await get<FontendConfig>(`/api/appConfig`)
             if (!resp.success) {
                 router.push('/error/NO_CONFIG')
+                setAppConfig(false)
                 return
             }
 
@@ -66,7 +70,7 @@ export const useAppConfig = function () {
         }
 
         fetchUserConfig()
-    }, [])
+    }, [router.pathname])
 
     return appConfig
 }
