@@ -7,14 +7,14 @@ export const DEFAULT_BUTTON_COLOR = [
     'linear-gradient(45deg, #f43f3b, #ec008c)'
 ]
 
-export const NUMBER_TO_CHINESE: Record<number, string> = {
-    0: '一',
-    1: '二',
-    2: '三',
-    3: '四',
-    4: '五',
-    5: '六',
-    6: '七'
+export const WEEK_TO_CHINESE: Record<number, string> = {
+    0: '周日',
+    1: '周一',
+    2: '周二',
+    3: '周三',
+    4: '周四',
+    5: '周五',
+    6: '周六'
 }
 
 export const USER_TOKEN_KEY = 'user-token'

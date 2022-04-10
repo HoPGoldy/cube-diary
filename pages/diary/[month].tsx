@@ -1,15 +1,15 @@
-import { useContext, useState, useRef } from 'react'
+import { useContext, useState } from 'react'
 import { NextPage } from 'next'
 import Head from 'next/head'
 import { SettingO, UnderwayO, Search } from '@react-vant/icons'
-import { Space, ActionBar, DatetimePicker, Popup } from 'react-vant'
+import { Space, DatetimePicker, Popup } from 'react-vant'
 import { useDiaryList } from 'services/diary'
 import { DiaryItem } from 'components/DiaryItem'
 import { useRouter } from 'next/router'
 import dayjs from 'dayjs'
-import Link from 'components/Link'
 import { UserConfigContext } from '@pages/_app'
 import { PageLoading } from 'components/PageLoading'
+import { ActionButton, ActionIcon, PageAction, PageContent } from 'components/PageWithAction'
 
 const DiaryList: NextPage = () => {
     const router = useRouter()
@@ -36,7 +36,7 @@ const DiaryList: NextPage = () => {
         return (
             <Space
                 direction="vertical"
-                className="m-4"
+                className="w-full p-4 pb-0"
                 gap={16}
             >
                 {data?.data?.entries.map((diary, index) => {
@@ -48,7 +48,6 @@ const DiaryList: NextPage = () => {
                         showInteract={index === clickDiary}
                     />
                 })}
-                <div className="h-9"></div>
             </Space>
         )
     }
@@ -69,16 +68,16 @@ const DiaryList: NextPage = () => {
                 <title>日记列表</title>
             </Head>
 
-            {renderDiaryList()}
+            <PageContent>
+                {renderDiaryList()}
+            </PageContent>
 
-            <ActionBar>
-                <Link href="/setting">
-                    <ActionBar.Icon icon={<SettingO />} text="设置" />
-                </Link>
-                <ActionBar.Icon icon={<UnderwayO />} text="时间" onClick={() => setShowPicker(true)} />
-                <ActionBar.Icon icon={<Search />} text="搜索" onClick={() => console.log('shop click')} />
-                <ActionBar.Button color={buttonColor} text="写点东西" onClick={() => onClickWrite()} />
-            </ActionBar>
+            <PageAction>
+                <ActionIcon href="/setting" ><SettingO fontSize={24} /></ActionIcon>
+                <ActionIcon onClick={() => setShowPicker(true)} ><UnderwayO fontSize={24} /></ActionIcon>
+                <ActionIcon onClick={() => console.log('shop click')} ><Search fontSize={24} /></ActionIcon>
+                <ActionButton color={buttonColor} onClick={() => onClickWrite()}>写点什么</ActionButton>
+            </PageAction>
 
             <Popup
                 round
@@ -86,21 +85,20 @@ const DiaryList: NextPage = () => {
                 position="bottom"
                 onClose={() => setShowPicker(false)}
             >
-                <div style={{ padding: '0 8px' }}>
-                    <DatetimePicker
-                        title="选择要查看的月份"
-                        type="year-month"
-                        value={dateValue.value}
-                        onConfirm={onChoseMonth}
-                        onCancel={() => setShowPicker(false)}
-                        formatter={(type: string, val: string) => {
-                            if (type === 'year') return `${val} 年`
-                            if (type === 'month') return `${val} 月`
-                            return val
-                        }}
-                        maxDate={dateValue.maxDate}
-                    />
-                </div>
+                <DatetimePicker
+                    className="p-4"
+                    title="选择要查看的月份"
+                    type="year-month"
+                    value={dateValue.value}
+                    onConfirm={onChoseMonth}
+                    onCancel={() => setShowPicker(false)}
+                    formatter={(type: string, val: string) => {
+                        if (type === 'year') return `${val} 年`
+                        if (type === 'month') return `${val} 月`
+                        return val
+                    }}
+                    maxDate={dateValue.maxDate}
+                />
             </Popup>
         </div>
     )

@@ -1,14 +1,15 @@
 import { useState, useRef, useContext, useMemo, useEffect, MutableRefObject } from 'react'
 import { NextPage } from 'next'
 import Head from 'next/head'
-import { ArrowLeft, UnderwayO } from '@react-vant/icons'
-import { Card, Space, ActionBar, Notify } from 'react-vant'
+import { ArrowLeft, SettingO, UnderwayO } from '@react-vant/icons'
+import { Card, Space, ActionBar, Notify, Search } from 'react-vant'
 import { updateDiary, useDiaryDetail } from 'services/diary'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { UserConfigContext } from '@pages/_app'
-import { NUMBER_TO_CHINESE } from 'lib/constants'
+import { WEEK_TO_CHINESE } from 'lib/constants'
 import { PageLoading } from 'components/PageLoading'
+import { PageContent, PageAction, ActionIcon, ActionButton } from 'components/PageWithAction'
 
 /**
  * 自动保存 hook
@@ -54,12 +55,17 @@ const DiaryEdit: NextPage = () => {
     const [uploading, setUploading] = useState(false)
     // 文本输入框引用
     const textAreaRef = useRef<HTMLTextAreaElement>(null)
+    // 加载完成后将光标放在文章末尾
+    useEffect(() => {
+        if (contentLoading) return
+        textAreaRef.current?.setSelectionRange(contentRef.current.length, contentRef.current.length)
+    }, [contentLoading])
     // 主按钮颜色
     const { buttonColor } = useContext(UserConfigContext) || {}
     // 页面标题日期
     const pageTitle = useMemo(() => {
         const date = dayjs(router.query.diaryDate as string)
-        return date.format('YYYY 年 M 月 D 日') + ` 星期${NUMBER_TO_CHINESE[date.day()]}`
+        return date.format('YYYY 年 M 月 D 日') + ` ${WEEK_TO_CHINESE[date.day()]}`
     }, [router.query.diaryDate])
 
     const autoSaveTip = useAutoSave(contentRef)
@@ -123,7 +129,7 @@ const DiaryEdit: NextPage = () => {
                 placeholder="写点什么"
                 autoFocus
                 className="w-full"
-                style={{ height: 'calc(100vh - var(--rv-action-bar-height) - 116px)', resize: 'none' }}
+                style={{ height: 'calc(100vh - 186px)', resize: 'none' }}
                 value={content}
                 onChange={e => setContent(e.target.value)}
             />
@@ -137,7 +143,7 @@ const DiaryEdit: NextPage = () => {
                 color={buttonColor}
                 text={(<>
                     保存
-                    <span className="ml-2 text-xs">{autoSaveTip}</span>
+                    <span className="ml-4 text-xs">{autoSaveTip}</span>
                 </>)}
                 onClick={onSaveDiary}
             />
@@ -152,23 +158,38 @@ const DiaryEdit: NextPage = () => {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
-            <Space direction="vertical" gap={12} className="w-screen p-3 overflow-y-scroll">
-                <Card round>
-                    <Card.Header>{pageTitle}</Card.Header>
-                </Card>
+            <PageContent>
+                <Space direction="vertical" gap={16} className="w-screen p-4 pb-0 overflow-y-scroll">
+                    <Card round>
+                        <Card.Header>{pageTitle}</Card.Header>
+                    </Card>
 
-                <Card round>
-                    <Card.Body>
-                        {renderContent()}
-                    </Card.Body>
-                </Card>
-            </Space>
+                    <Card round>
+                        <Card.Body>
+                            {renderContent()}
+                        </Card.Body>
+                    </Card>
+                </Space>
+            </PageContent>
 
-            <ActionBar>
+            <PageAction>
+                <ActionIcon onClick={onClickCancel}>
+                    <ArrowLeft fontSize={24} />
+                </ActionIcon>
+                <ActionIcon onClick={onInsertDate}>
+                    <UnderwayO fontSize={24} />
+                </ActionIcon>
+                <ActionButton color={buttonColor} onClick={onSaveDiary}>
+                    保存
+                    <span className="ml-2 text-xs">{autoSaveTip}</span>
+                </ActionButton>
+            </PageAction>
+
+            {/* <ActionBar>
                 <ActionBar.Icon icon={<ArrowLeft />} text="返回" onClick={onClickCancel} />
                 <ActionBar.Icon icon={<UnderwayO />} text="时间" onClick={onInsertDate} />
                 {renderSaveButton()}
-            </ActionBar>
+            </ActionBar> */}
         </div>
     )
 }

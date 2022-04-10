@@ -4,7 +4,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "analyze": "cross-env ANALYZE=true next build"
   },
   "dependencies": {
     "@react-vant/icons": "^0.0.6",
@@ -19,10 +20,12 @@
     "qs": "^6.10.3",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "react-vant": "^2.0.0-alpha.20",
+    "react-markdown": "^8.0.2",
+    "react-vant": "^2.0.0-alpha.28",
     "swr": "^1.2.2"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^12.1.4",
     "@types/crypto-js": "^4.1.1",
     "@types/fs-extra": "^9.0.13",
     "@types/lodash": "^4.14.180",
@@ -31,6 +34,7 @@
     "@types/qs": "^6.9.7",
     "@types/react": "17.0.39",
     "autoprefixer": "^10.4.4",
+    "cross-env": "^7.0.3",
     "eslint": "8.8.0",
     "eslint-config-next": "12.0.10",
     "next-images": "^1.8.4",
