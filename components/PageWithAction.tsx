@@ -1,12 +1,11 @@
 import Link from 'components/Link'
 import { FC, MouseEventHandler } from 'react'
-import { ActionBar, ActionBarButtonProps, Button, ButtonProps, Card, ConfigProvider } from 'react-vant'
+import { Card, Loading } from 'react-vant'
+import { LoadingMask } from './PageLoading'
 
-interface Props {
-    label: string | number
-    value: string | number
-}
-
+/**
+ * 页面正文，会给下面的操作栏留出空间
+ */
 export const PageContent: FC = (props) => {
     return (
         <div className="w-full overflow-y-scroll" style={{ height: 'calc(100vh - 72px)'}}>
@@ -15,6 +14,11 @@ export const PageContent: FC = (props) => {
     )
 }
 
+/**
+ * 底部操作栏
+ * 为何不用 react-vant 的 ActionBar 呢，因为ActionBar 样式改起来比较麻烦
+ * 而且 fixed 的布局在一些手机浏览器上滚动时会出现抖动的问题
+ */
 export const PageAction: FC = (props) => {
     return (
         <div className="p-2 flex flex-row" style={{ height: '72px'}}>
@@ -28,6 +32,9 @@ interface ActionIconProps {
     onClick?: () => unknown
 }
 
+/**
+ * 底部操作栏中的图标
+ */
 export const ActionIcon: FC<ActionIconProps> = (props) => {
     const el = (
         <Card className="m-2 p-2 flex items-center" round onClick={props.onClick}>
@@ -42,18 +49,25 @@ export const ActionIcon: FC<ActionIconProps> = (props) => {
     )
 }
 
-type ActionButtonProps = { color?: string, onClick?: MouseEventHandler<HTMLDivElement> }
+type ActionButtonProps = {
+    color?: string,
+    loading?: boolean
+    onClick?: MouseEventHandler<HTMLDivElement>
+}
 
+/**
+ * 底部操作栏中的按钮
+ */
 export const ActionButton: FC<ActionButtonProps> = (props) => {
     const styles = { background: props.color || 'f000' }
 
     return (
         <div
-            className="m-2 p-2 flex items-center justify-center grow rounded-lg text-white"
+            className="m-2 p-2 flex items-center justify-center grow rounded-lg text-white relative"
             style={styles}
-            onClick={props.onClick}
+            onClick={props.loading ? undefined : props.onClick}
         >
-            {props.children}
+            {props.loading ? <Loading color="#fff" /> : props.children}
         </div>
     )
 }

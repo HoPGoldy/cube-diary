@@ -136,20 +136,6 @@ const DiaryEdit: NextPage = () => {
         )
     }
 
-    const renderSaveButton = () => {
-        return (
-            <ActionBar.Button
-                loading={uploading}
-                color={buttonColor}
-                text={(<>
-                    保存
-                    <span className="ml-4 text-xs">{autoSaveTip}</span>
-                </>)}
-                onClick={onSaveDiary}
-            />
-        )
-    }
-
     return (
         <div className="min-h-screen">
             <Head>
@@ -179,17 +165,11 @@ const DiaryEdit: NextPage = () => {
                 <ActionIcon onClick={onInsertDate}>
                     <UnderwayO fontSize={24} />
                 </ActionIcon>
-                <ActionButton color={buttonColor} onClick={onSaveDiary}>
+                <ActionButton color={buttonColor} onClick={onSaveDiary} loading={uploading}>
                     保存
                     <span className="ml-2 text-xs">{autoSaveTip}</span>
                 </ActionButton>
             </PageAction>
-
-            {/* <ActionBar>
-                <ActionBar.Icon icon={<ArrowLeft />} text="返回" onClick={onClickCancel} />
-                <ActionBar.Icon icon={<UnderwayO />} text="时间" onClick={onInsertDate} />
-                {renderSaveButton()}
-            </ActionBar> */}
         </div>
     )
 }
