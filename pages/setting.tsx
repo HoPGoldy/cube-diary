@@ -5,10 +5,10 @@ import { Card, Switch, Form, Space, ActionBar, Cell, Notify, Button, Search } fr
 import { useRouter } from 'next/router'
 import { Statistic } from 'components/Statistic'
 import { UserConfigContext, UserProfileContext } from './_app'
-import { ManagerO, ArrowLeft, SettingO, UnderwayO } from '@react-vant/icons'
+import { ArrowDown, ArrowUp, ManagerO, Close } from '@react-vant/icons'
 import { USER_TOKEN_KEY } from 'lib/constants'
 import { useUserProfile } from 'services/user'
-import { PageContent, PageAction, ActionIcon, ActionButton } from 'components/PageWithAction'
+import { PageContent, PageAction, ActionButton } from 'components/PageWithAction'
 
 const DiaryList: NextPage = () => {
     const router = useRouter()
@@ -23,15 +23,9 @@ const DiaryList: NextPage = () => {
         setUserProfile(newUserProfile)
     }, [newUserProfile])
 
-    const [form] = Form.useForm();
-
-    const onFinish = () => {
-
-    };
-
     const onSaveSetting = () => {
         router.back()
-        Notify.show({ type: 'success', message: '设置已保存' })
+        // Notify.show({ type: 'success', message: '设置已保存' })
     }
 
     const onLogout = () => {
@@ -60,31 +54,19 @@ const DiaryList: NextPage = () => {
                         <Cell title="当前登陆" icon={<ManagerO />} value={userProfile?.username} />
                     </Card>
 
-                    {/* <Card round>
-                        <Form
-                            form={form}
-                            onFinish={onFinish}
-                        >
-                            <Form.Item name="switch" label="开关" valuePropName="checked" inputAlign="right">
-                                <Switch size={20} />
-                            </Form.Item>
-                            <Form.Item name="switch" label="开关" valuePropName="checked" inputAlign="right">
-                                <Switch size={20} />
-                            </Form.Item>
-                            <Form.Item name="switch" label="开关" valuePropName="checked" inputAlign="right">
-                                <Switch size={20} />
-                            </Form.Item>
-                        </Form>
-                    </Card> */}
+                    <Card round>
+                        <Cell title="导入" icon={<ArrowUp />} isLink onClick={() => router.push('/import/json')} />
+                        <Cell title="导出" icon={<ArrowDown />} isLink />
+                    </Card>
 
                     <Card round onClick={onLogout}>
-                        <Cell title="登出" isLink />
+                        <Cell title="登出" icon={<Close />} isLink />
                     </Card>
                 </Space>
             </PageContent>
 
             <PageAction>
-                <ActionButton color={buttonColor} onClick={onSaveSetting}>保存并返回</ActionButton>
+                <ActionButton color={buttonColor} onClick={onSaveSetting}>返回</ActionButton>
             </PageAction>
         </div>
     )

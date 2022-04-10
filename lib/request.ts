@@ -43,3 +43,18 @@ export const post = async function <T>(url: string, body = {}): Promise<RespData
 
     return fetcher(url, config) as unknown as Promise<RespData<T>>
 }
+
+export const upload = async function <T>(url: string, body: Record<string, File | string | number> = {}): Promise<RespData<T>> {
+    const formData = new FormData()
+
+    for (const key in body) {
+        formData.append(key, body[key] as Blob)
+    }
+
+    const config: RequestInit = {
+        method: 'POST',
+        body: formData
+    }
+
+    return fetcher(url, config) as unknown as Promise<RespData<T>>
+}
