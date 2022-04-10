@@ -1,8 +1,8 @@
-import { useContext, useState } from 'react'
+import { useContext, useRef, useState } from 'react'
 import { NextPage } from 'next'
 import Head from 'next/head'
 import { SettingO, UnderwayO, Search } from '@react-vant/icons'
-import { Space, DatetimePicker, Popup } from 'react-vant'
+import { Space, DatetimePicker, Popup, DateTimePickerInstance } from 'react-vant'
 import { useDiaryList } from 'services/diary'
 import { DiaryItem } from 'components/DiaryItem'
 import { useRouter } from 'next/router'
@@ -10,6 +10,7 @@ import dayjs from 'dayjs'
 import { UserConfigContext } from '@pages/_app'
 import { PageLoading } from 'components/PageLoading'
 import { ActionButton, ActionIcon, PageAction, PageContent } from 'components/PageWithAction'
+import { PullContainer } from 'components/PullContainer'
 
 const DiaryList: NextPage = () => {
     const router = useRouter()
@@ -27,6 +28,7 @@ const DiaryList: NextPage = () => {
         value: dayjs(router.query.month as string).toDate(),
         maxDate: new Date()
     }))
+    const datePickerRef = useRef<DateTimePickerInstance>(null)
 
     const renderDiaryList = () => {
         if (!data && !error) {
@@ -34,21 +36,23 @@ const DiaryList: NextPage = () => {
         }
 
         return (
-            <Space
-                direction="vertical"
-                className="w-full p-4 pb-0"
-                gap={16}
-            >
-                {data?.data?.entries.map((diary, index) => {
-                    return <DiaryItem
-                        key={diary.date}
-                        diary={diary}
-                        // onClickBody={() => setClickDiary(clickDiary === index ? undefined : index)}
-                        onClickBody={() => onClickWrite(diary.date)}
-                        showInteract={index === clickDiary}
-                    />
-                })}
-            </Space>
+            <PullContainer>
+                <Space
+                    direction="vertical"
+                    className="w-full p-4 pb-0"
+                    gap={16}
+                >
+                    {data?.data?.entries.map((diary, index) => {
+                        return <DiaryItem
+                            key={diary.date}
+                            diary={diary}
+                            // onClickBody={() => setClickDiary(clickDiary === index ? undefined : index)}
+                            onClickBody={() => onClickWrite(diary.date)}
+                            showInteract={index === clickDiary}
+                        />
+                    })}
+                </Space>
+            </PullContainer>
         )
     }
 
@@ -57,9 +61,17 @@ const DiaryList: NextPage = () => {
         router.push(`/diary/write/${queryDate.format('YYYY-MM-DD')}`)
     }
 
-    const onChoseMonth = (date: Date) => {
-        router.push(`/diary/${dayjs(date).format('YYYYMM')}`)
-        setShowPicker(false)
+    const onChoseMonth = () => {
+        // 这里加延迟的原因是：react-vant 的值变更是在滚动结束时发生的
+        // 所以如果用户手速太快，在滚动结束之前就点击了确定，就无法获取到最新的值
+        setTimeout(() => {
+            const date = datePickerRef.current?.getPicker().getValues<string>()
+            if (!date) return
+
+            const newQueryMonth = date[0].replace(' 年', '') + date[1].replace(' 月', '')
+            router.push(`/diary/${newQueryMonth}`)
+            setShowPicker(false)
+        }, 400)
     }
 
     return (
@@ -73,10 +85,18 @@ const DiaryList: NextPage = () => {
             </PageContent>
 
             <PageAction>
-                <ActionIcon href="/setting" ><SettingO fontSize={24} /></ActionIcon>
-                <ActionIcon onClick={() => setShowPicker(true)} ><UnderwayO fontSize={24} /></ActionIcon>
-                <ActionIcon onClick={() => console.log('shop click')} ><Search fontSize={24} /></ActionIcon>
-                <ActionButton color={buttonColor} onClick={() => onClickWrite()}>写点什么</ActionButton>
+                <ActionIcon href="/setting">
+                    <SettingO fontSize={24} />
+                </ActionIcon>
+                <ActionIcon onClick={() => setShowPicker(true)}>
+                    <UnderwayO fontSize={24} />
+                </ActionIcon>
+                <ActionIcon onClick={() => console.log('shop click')}>
+                    <Search fontSize={24} />
+                </ActionIcon>
+                <ActionButton color={buttonColor} onClick={() => onClickWrite()}>
+                    写点什么
+                </ActionButton>
             </PageAction>
 
             <Popup
@@ -85,7 +105,9 @@ const DiaryList: NextPage = () => {
                 position="bottom"
                 onClose={() => setShowPicker(false)}
             >
-                <DatetimePicker
+                <DatetimePicker 
+                    ref={datePickerRef}
+                    swipeDuration={300}
                     className="p-4"
                     title="选择要查看的月份"
                     type="year-month"
