@@ -57,7 +57,6 @@ const DiaryList: NextPage = () => {
         setExample(newExample)
     }
 
-
     const onFileChange: ChangeEventHandler<HTMLInputElement> = (event) => {
         event.preventDefault()
 
@@ -67,6 +66,9 @@ const DiaryList: NextPage = () => {
         const formValues = form.getFieldsValue()
 
         upload('/api/import/json', { file: uploadFile, ...formValues })
+
+        // 覆盖掉已经上传的问题，不然第二次上传就会没反应
+        event.target.value = '';
     }
 
     return (
@@ -107,6 +109,13 @@ const DiaryList: NextPage = () => {
                         </Form>
                     </Card>
 
+                    <Card round>
+                        <Cell title="示例" value="可识别的内容" />
+                        <ReactMarkdown className="overflow-x-auto mx-4">
+                            {example}
+                        </ReactMarkdown>
+                    </Card>
+
                     <input
                         type="file"
                         ref={fileSelectRef}
@@ -115,12 +124,6 @@ const DiaryList: NextPage = () => {
                         onChange={onFileChange}
                     ></input>
 
-                    <Card round>
-                        <Cell title="示例" value="可识别的内容" />
-                        <ReactMarkdown className="overflow-x-auto mx-4">
-                            {example}
-                        </ReactMarkdown>
-                    </Card>
                 </Space>
             </PageContent>
 

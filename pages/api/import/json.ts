@@ -6,28 +6,27 @@ import { getDiaryCollection, getUserProfile, saveLoki, updateUserProfile } from 
 import dayjs from 'dayjs'
 import { Diary } from '../month/[queryMonth]'
 import { Form } from 'multiparty'
+import { parseBody } from 'lib/utils/parseBody'
 
 export default createHandler({
     /**
      * 保存日记
      */
     POST: async (req, res: NextApiResponse<RespData>, auth) => {
-        console.log('res', req.body)
-        const form = new Form()
-
-        form.parse(req, (err, fields, files) => {
-            console.log('fields, files', err, fields, files)
+        try {
+            const [fields, files] = await parseBody(req)
             res.status(200).json({ success: true })
-        })
-        
-        
+        }
+        catch (e) {
+            console.error(e)
+            res.status(200).json({ success: false, message: '啊偶，文件解析失败了' })
+        }
     }
 })
 
 export const config = {
     api: {
-        bodyParser: {
-            sizeLimit: '4mb'
-        }
+        // 要关闭 next 自带的 body 解析，不然 multiparty 就会出问题
+        bodyParser: false
     }
 }
