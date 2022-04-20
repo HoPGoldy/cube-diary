@@ -4,20 +4,25 @@ import { UserProfile } from 'types/storage'
 import { Diary } from '@pages/api/month/[queryMonth]'
 import { STORAGE_PATH } from './constants'
 
-let lokiInstance: lokijs
+/**
+ * loki 实例缓存
+ * 每个用户都会有一个实例
+ * 系统设置单独一个实例
+ */
+const lokiInstances: Record<string, lokijs> = {}
 
 /**
  * 获取全局 loki 存储实例
  */
-export const getLoki = async function (): Promise<lokijs> {
-    if (lokiInstance) return lokiInstance
+export const getLoki = async function (dbName: string): Promise<lokijs> {
+    if (lokiInstances[dbName]) return lokiInstances[dbName]
 
     await ensureDir(STORAGE_PATH)
 
     return new Promise(resolve => {
-        lokiInstance = new lokijs(STORAGE_PATH + '/db.json', {
+        lokiInstances[dbName] = new lokijs(STORAGE_PATH + `/${dbName}.json`, {
             autoload: true,
-            autoloadCallback: () => resolve(lokiInstance)
+            autoloadCallback: () => resolve(lokiInstances[dbName])
         })
     })
 }
@@ -25,11 +30,11 @@ export const getLoki = async function (): Promise<lokijs> {
 /**
  * 保存数据到本地
  */
-export const saveLoki = async function (): Promise<void> {
+export const saveLoki = async function (dbName: string): Promise<void> {
     return new Promise((resolve, reject) => {
-        if (!lokiInstance) return resolve()
+        if (!lokiInstances[dbName]) return resolve()
 
-        lokiInstance.saveDatabase(err => {
+        lokiInstances[dbName].saveDatabase(err => {
             if (err) reject(err)
             resolve()
         })
@@ -42,8 +47,8 @@ export const saveLoki = async function (): Promise<void> {
  * @param username 要获取日记的用户名
  */
 export const getDiaryCollection = async function (username: string) {
-    const loki = await getLoki()
-    const collectionName = 'diary-' + username
+    const loki = await getLoki(username)
+    const collectionName = 'diary'
     let collection = loki.getCollection<Diary>(collectionName)
     if (collection) return collection
 
@@ -55,7 +60,7 @@ export const getDiaryCollection = async function (username: string) {
  * 获取所有用户的配置集合
  */
 export const getProfileCollection = async function () {
-    const loki = await getLoki()
+    const loki = await getLoki('system')
     let collection = loki.getCollection<UserProfile>('config')
     if (collection) return collection
 
@@ -81,7 +86,7 @@ export const getUserProfile = async function (username: string): Promise<UserPro
     if (config) return config
 
     const newConfig = collection.insert(await getDefaultProfile(username))
-    saveLoki()
+    saveLoki(username)
     return newConfig
 }
 
@@ -96,5 +101,5 @@ export const updateUserProfile = async function (newConfig: UserProfile) {
     if (!userConfig) collection.insert(newConfig)
     else collection.update({ ...userConfig, ...newConfig })
 
-    saveLoki()
+    saveLoki(newConfig.username)
 }
