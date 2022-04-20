@@ -60,7 +60,7 @@ export default createHandler({
             collection.update(diary)
         }
 
-        saveLoki()
+        saveLoki(auth.username)
         res.status(200).json({ success: true })
 
         const userProfile = await getUserProfile(auth.username)

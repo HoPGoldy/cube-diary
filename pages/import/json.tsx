@@ -1,24 +1,15 @@
 import { ChangeEventHandler, useContext, useRef, useState } from 'react'
 import { NextPage } from 'next'
 import Head from 'next/head'
-import { Card, Switch, Form, Space, ActionBar, Cell, Notify, Button, Search, Checkbox, Field, Radio, Rate, Slider, Stepper, Uploader } from 'react-vant'
+import { Card, Dialog, Form, Space, Cell, Field, Radio, Notify } from 'react-vant'
 import { useRouter } from 'next/router'
-import { Statistic } from 'components/Statistic'
 import { UserConfigContext, UserProfileContext } from '../_app'
-import { ArrowDown, ArrowUp, ManagerO, Close, ArrowLeft } from '@react-vant/icons'
-import { USER_TOKEN_KEY } from 'lib/constants'
-import { useUserProfile } from 'services/user'
+import { ArrowLeft } from '@react-vant/icons'
 import { PageContent, PageAction, ActionButton, ActionIcon } from 'components/PageWithAction'
 import ReactMarkdown from 'react-markdown'
 import dayjs from 'dayjs'
 import { upload } from 'lib/request'
-
-interface JsonImportForm {
-    existOperation: string
-    dateKey: string
-    contentKey: string
-    dateFormatter: string
-}
+import { JsonImportForm, JsonImportResult } from '@pages/api/import/json'
 
 const getFormInitialValues = (): JsonImportForm => {
     return { existOperation: 'cover', dateKey: 'date', contentKey: 'content', dateFormatter: 'YYYY-MM-DD' }
@@ -39,6 +30,8 @@ const createExample = (formValues: JsonImportForm): string => {
 const DiaryList: NextPage = () => {
     const router = useRouter()
     const { buttonColor } = useContext(UserConfigContext) || {}
+    // 导入按钮是否载入中
+    const [loading, setLoading] = useState(false);
     // 当前缓存的用户配置
     const { userProfile, setUserProfile } = useContext(UserProfileContext) || {}
     const [example, setExample] = useState(() => createExample(getFormInitialValues()))
@@ -57,7 +50,7 @@ const DiaryList: NextPage = () => {
         setExample(newExample)
     }
 
-    const onFileChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+    const onFileChange: ChangeEventHandler<HTMLInputElement> = async (event) => {
         event.preventDefault()
 
         const uploadFile = event.target.files?.[0]
@@ -65,10 +58,31 @@ const DiaryList: NextPage = () => {
 
         const formValues = form.getFieldsValue()
 
-        upload('/api/import/json', { file: uploadFile, ...formValues })
-
         // 覆盖掉已经上传的问题，不然第二次上传就会没反应
         event.target.value = '';
+
+        setLoading(true)
+        const resp = await upload<JsonImportResult>('/api/import/json', { file: uploadFile, ...formValues })
+        setLoading(false)
+        if (!resp.success) {
+            Notify.show({ type: 'danger', message: resp.message })
+            return
+        }
+
+        const { existCount = 0, insertCount = 0, insertNumber = 0} = resp.data || {}
+
+        await Dialog.confirm({
+            title: '导入成功',
+            message: `共计导入 ${existCount + insertCount} 条，其中：\n`
+                + `新增 ${insertCount} 条\n`
+                + `更新 ${existCount} 条\n`
+                + `共计${insertNumber >= 0 ? '新增' : '减少'} ${insertNumber} 字`,
+            // messageAlign: 'left',
+            cancelButtonText: '继续导入',
+            confirmButtonText: '返回首页'
+        })
+
+        router.push('/')
     }
 
     return (
