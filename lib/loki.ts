@@ -101,5 +101,5 @@ export const updateUserProfile = async function (newConfig: UserProfile) {
     if (!userConfig) collection.insert(newConfig)
     else collection.update({ ...userConfig, ...newConfig })
 
-    saveLoki(newConfig.username)
+    saveLoki('system')
 }
