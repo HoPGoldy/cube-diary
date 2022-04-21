@@ -7,33 +7,20 @@ import { UserConfigContext, UserProfileContext } from '../_app'
 import { ArrowLeft } from '@react-vant/icons'
 import { PageContent, PageAction, ActionButton, ActionIcon } from 'components/PageWithAction'
 import ReactMarkdown from 'react-markdown'
-import dayjs from 'dayjs'
 import { upload } from 'lib/request'
 import { JsonImportForm, JsonImportResult } from '@pages/api/import/json'
+import { createExample } from 'lib/utils/createExample'
 
 const getFormInitialValues = (): JsonImportForm => {
     return { existOperation: 'cover', dateKey: 'date', contentKey: 'content', dateFormatter: 'YYYY-MM-DD' }
-}
-
-const createExample = (formValues: JsonImportForm): string => {
-    const newExamples = Array.from({ length: 3 }).map((_, index) => {
-        const date = dayjs().subtract(index, 'd')
-        return {
-            [formValues.dateKey || 'date']: formValues.dateFormatter ? date.format(formValues.dateFormatter) : date.valueOf(),
-            [formValues.contentKey || 'content']: `这是 ${date.format('YYYY 年 MM 月 DD 日的一篇日记')}`
-        }
-    })
-
-    return '```json\n' + JSON.stringify(newExamples, null, 2) + '\n```'
 }
 
 const DiaryList: NextPage = () => {
     const router = useRouter()
     const { buttonColor } = useContext(UserConfigContext) || {}
     // 导入按钮是否载入中
-    const [loading, setLoading] = useState(false);
-    // 当前缓存的用户配置
-    const { userProfile, setUserProfile } = useContext(UserProfileContext) || {}
+    const [loading, setLoading] = useState(false)
+    // 和用户配置项相符的示例
     const [example, setExample] = useState(() => createExample(getFormInitialValues()))
 
     const [form] = Form.useForm<JsonImportForm>()
@@ -145,7 +132,7 @@ const DiaryList: NextPage = () => {
                 <ActionIcon onClick={() => router.back()}>
                     <ArrowLeft fontSize={24} />
                 </ActionIcon>
-                <ActionButton color={buttonColor} onClick={onSelectFile}>选择文件并导入</ActionButton>
+                <ActionButton loading={loading} color={buttonColor} onClick={onSelectFile}>选择文件并导入</ActionButton>
             </PageAction>
         </div>
     )

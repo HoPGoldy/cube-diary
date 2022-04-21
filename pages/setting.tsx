@@ -56,7 +56,7 @@ const DiaryList: NextPage = () => {
 
                     <Card round>
                         <Cell title="导入" icon={<ArrowUp />} isLink onClick={() => router.push('/import/json')} />
-                        <Cell title="导出" icon={<ArrowDown />} isLink />
+                        <Cell title="导出" icon={<ArrowDown />} isLink onClick={() => router.push('/export/json')} />
                     </Card>
 
                     <Card round onClick={onLogout}>
