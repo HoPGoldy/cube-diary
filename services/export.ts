@@ -8,5 +8,5 @@ import { UserProfile } from "types/storage"
  * @param password 用户输入的密码明文
  */
 export const exportAsJson = async function (config: JsonExportForm) {
-    return await post<LoginResData & UserProfile>('/api/export/json', config)
+    return await post<Array<Record<string, string | number>>>('/api/export/json', config)
 }

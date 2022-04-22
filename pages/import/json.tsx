@@ -51,10 +51,7 @@ const DiaryList: NextPage = () => {
         setLoading(true)
         const resp = await upload<JsonImportResult>('/api/import/json', { file: uploadFile, ...formValues })
         setLoading(false)
-        if (!resp.success) {
-            Notify.show({ type: 'danger', message: resp.message })
-            return
-        }
+        if (!resp.success) return Notify.show({ type: 'danger', message: resp.message });
 
         const { existCount = 0, insertCount = 0, insertNumber = 0} = resp.data || {}
 

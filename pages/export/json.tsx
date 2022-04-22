@@ -1,7 +1,7 @@
 import { ChangeEventHandler, useContext, useRef, useState } from 'react'
 import { NextPage } from 'next'
 import Head from 'next/head'
-import { Card, Dialog, Form, Space, Cell, Field, Notify } from 'react-vant'
+import { Card, Dialog, Form, Space, Cell, Field, Notify, Radio } from 'react-vant'
 import { useRouter } from 'next/router'
 import { UserConfigContext, UserProfileContext } from '../_app'
 import { ArrowLeft } from '@react-vant/icons'
@@ -13,8 +13,15 @@ import { createExample } from 'lib/utils/createExample'
 import { JsonExportForm } from '@pages/api/export/json'
 import { exportAsJson } from 'services/export'
 
-const getFormInitialValues = (): JsonExportForm => {
+enum RangeType { Part = 1, All }
+
+type FilterForm = JsonExportForm & {
+    rangeType: RangeType
+}
+
+const getFormInitialValues = (): FilterForm => {
     return {
+        rangeType: RangeType.Part,
         dateKey: 'date',
         contentKey: 'content',
         dateFormatter: 'YYYY-MM-DD',
@@ -40,19 +47,38 @@ const DiaryList: NextPage = () => {
     const [loading, setLoading] = useState(false);
     // 和用户配置项相符的示例
     const [example, setExample] = useState(() => createExample(getFormInitialValues()))
-    // 表单实例
-    const [form] = Form.useForm<JsonExportForm>()
+    // 查询表单
+    const [formData, setFormData] = useState(() => getFormInitialValues())
 
-    const onFormValueChange = (values: Partial<JsonExportForm>, allValues: JsonExportForm) => {
+    const onFormValueChange = (values: Partial<FilterForm>, allValues: FilterForm) => {
         const newExample = createExample(allValues)
         setExample(newExample)
+        setFormData(allValues)
     }
 
     const onExport = async () => {
-        const config = form.getFieldsValue()
+        const config = { ...formData }
+        if (config.rangeType === RangeType.All) {
+            delete config.beginDate
+            delete config.endDate
+        }
+
+        setLoading(true)
         const resp = await exportAsJson(config)
-        console.log('resp', resp)
-        saveAsJson({ a: 1, b: 2, c: 3 })
+        setLoading(false)
+        if (!resp.success) return Notify.show({ type: 'danger', message: resp.message })
+
+        saveAsJson(resp.data)
+
+        await Dialog.confirm({
+            title: '导出完成',
+            message: `共计导出 ${resp.data?.length} 条`,
+            // messageAlign: 'left',
+            cancelButtonText: '继续导出',
+            confirmButtonText: '返回首页'
+        })
+
+        router.push('/')
     }
 
     return (
@@ -70,17 +96,24 @@ const DiaryList: NextPage = () => {
                     <Card round>
                         <Form
                             colon
-                            form={form}
-                            onValuesChange={onFormValueChange}
                             inputAlign="right"
+                            onValuesChange={onFormValueChange}
                             initialValues={getFormInitialValues()}
                         >
-                            <Form.Item name="beginDate" label="开始时间" customField>
-                                <DatetimePickerItem placeholder="请选择" />
+                            <Form.Item name="rangeType" label="导出范围" labelWidth="8rem">
+                                <Radio.Group direction="horizontal">
+                                    <Radio name={RangeType.All}>全部</Radio>
+                                    <Radio name={RangeType.Part}>部分</Radio>
+                                </Radio.Group>
                             </Form.Item>
-                            <Form.Item name="endDate" label="结束时间" customField>
-                                <DatetimePickerItem placeholder="请选择" />
-                            </Form.Item>
+                            {formData.rangeType === RangeType.Part && <>
+                                <Form.Item name="beginDate" label="开始时间" customField>
+                                    <DatetimePickerItem placeholder="请选择" />
+                                </Form.Item>
+                                <Form.Item name="endDate" label="结束时间" customField>
+                                    <DatetimePickerItem placeholder="请选择" />
+                                </Form.Item>
+                            </>}
                             <Form.Item name="dateKey" label="日期字段名">
                                 <Field placeholder="默认使用 date" />
                             </Form.Item>
