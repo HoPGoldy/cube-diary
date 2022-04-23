@@ -68,7 +68,10 @@ export const getProfileCollection = async function () {
     return collection
 }
 
-export const getDefaultProfile = async function (username: string): Promise<UserProfile> {
+/**
+ * 获取默认配置项
+ */
+const getDefaultProfile = async function (username: string): Promise<UserProfile> {
     const userExistDiarys = await getDiaryCollection(username)
 
     return {

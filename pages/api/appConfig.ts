@@ -1,9 +1,9 @@
-import { getDiaryConfig } from "lib/loadConfig"
+import { getAppConfig } from "lib/appConfig"
 import { NextApiRequest, NextApiResponse } from "next"
 import { FontendConfig, RespData } from "types/global"
 
 export default async function handler (req: NextApiRequest, res: NextApiResponse<RespData<FontendConfig>>) {
-    const config = await getDiaryConfig()
+    const config = await getAppConfig()
 
     if (!config) {
         res.status(302).json({ success: false })

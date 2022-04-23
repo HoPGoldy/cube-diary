@@ -15,3 +15,17 @@ export interface UserProfile {
      */
     totalDiary?: number
 }
+
+/**
+ * 每日登录记录
+ */
+export interface LoginLimit {
+    /**
+     * 对应的登录日期
+     */
+    date: number
+    /**
+     * 当日登录次数
+     */
+    count: number
+}

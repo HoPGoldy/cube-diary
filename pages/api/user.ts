@@ -1,12 +1,13 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 
 import { startSession } from 'lib/auth'
-import { getDiaryConfig } from 'lib/loadConfig'
+import { getAppConfig } from 'lib/appConfig'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { RespData } from 'types/global'
 import { createHandler } from 'lib/utils/createHandler'
 import { UserProfile } from 'types/storage'
 import { getDiaryCollection, getUserProfile } from 'lib/loki'
+import { requireLogin } from 'lib/loginLimit'
 
 export interface LoginReqBody {
     code: string
@@ -18,9 +19,16 @@ export interface LoginResData {
 
 export default createHandler({
     POST: async (req, res: NextApiResponse<RespData<LoginResData & UserProfile>>) => {
+        // 请求本次是否允许登录
+        const canLogin = await requireLogin()
+        if (!canLogin) {
+            res.status(200).json({ success: false, message: '已达到每日最大登录次数，请明日再试' })
+            return
+        }
+
         const { code } = JSON.parse(req.body) as LoginReqBody
         // 检查是否和现有密码匹配
-        const config = await getDiaryConfig()
+        const config = await getAppConfig()
         const matchedUser = config?.user.find(user => user.passwordMd5 === code)
 
         if (!matchedUser) {

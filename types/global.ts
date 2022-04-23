@@ -22,7 +22,7 @@ export interface RespData<Data = Record<string, any>> {
  * 日记全局配置
  * 适用于 .config.json
  */
-export interface DiaryConfig {
+export interface AppConfig {
     /**
      * 用户配置
      * 该数组中的用户才可以登陆
@@ -46,12 +46,17 @@ export interface DiaryConfig {
      * 登陆页面的应用副标题
      */
     appSubtitle?: string
+    /**
+     * 每日最多登录次数
+     * 防止爆破密码，默认为 30
+     */
+    loginPreDay?: number
 }
 
 /**
  * 前端可以获取的配置项
  */
-export type FontendConfig = Omit<DiaryConfig, 'user' | 'writeDiaryButtonColors'> & {
+export type FontendConfig = Omit<AppConfig, 'user' | 'writeDiaryButtonColors'> & {
     /**
      * 前端使用的按钮颜色
      */

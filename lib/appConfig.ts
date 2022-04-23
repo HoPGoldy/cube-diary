@@ -1,28 +1,29 @@
 import { readFile } from 'fs/promises'
-import { DiaryConfig } from 'types/global'
+import { AppConfig } from 'types/global'
 import md5 from 'crypto-js/md5'
 import { DEFAULT_BUTTON_COLOR } from './constants'
 
-let configCache: DiaryConfig
+let configCache: AppConfig
 
 /**
  * 默认的用户配置
  */
-const defaultConfig: DiaryConfig = {
+const defaultConfig: AppConfig = {
     user: [],
     appTitle: '日记本',
     appSubtitle: '记录你的生活',
     writeDiaryButtonColors: DEFAULT_BUTTON_COLOR,
-    passwordLength: 6
+    passwordLength: 6,
+    loginPreDay: 30
 }
 
 /**
- * 载入最新的用户配置
+ * 载入最新的应用配置
  */
-export const loadConfig = async function (): Promise<DiaryConfig | undefined> {
+export const loadConfig = async function (): Promise<AppConfig | undefined> {
     try {
         const userConfig = await readFile('./.config.json')
-        const totalConfig: DiaryConfig = {
+        const totalConfig: AppConfig = {
             ...defaultConfig,
             ...JSON.parse(userConfig.toString()),
         }
@@ -44,9 +45,9 @@ export const loadConfig = async function (): Promise<DiaryConfig | undefined> {
 }
 
 /**
- * 获取用户配置
+ * 获取应用配置
  */
-export const getDiaryConfig = async function (): Promise<DiaryConfig | undefined> {
+export const getAppConfig = async function (): Promise<AppConfig | undefined> {
     if (configCache) return configCache
     const newConfig = await loadConfig()
     if (!newConfig) return undefined
