@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { NextPage } from 'next'
 import Head from 'next/head'
 import { SettingO, UnderwayO, Search } from '@react-vant/icons'
@@ -29,6 +29,16 @@ const DiaryList: NextPage = () => {
         maxDate: new Date()
     }))
     const datePickerRef = useRef<DateTimePickerInstance>(null)
+
+    // 列表底部 div 引用
+    const listBottomRef = useRef<HTMLDivElement>(null)
+    useEffect(() => {
+        if (!data?.data?.entries || data.data.entries.length <= 0) return
+        // 到本月了才会触发滚动到底部
+        // 不然在用户往上个月切换的时候，会出现回到底部的情况，不方便重复切换操作
+        if (dayjs(router.query.month as string).month() !== new Date().getMonth()) return
+        listBottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+    }, [data])
 
     const renderDiaryList = () => {
         if (!data && !error) {
@@ -82,6 +92,7 @@ const DiaryList: NextPage = () => {
 
             <PageContent>
                 {renderDiaryList()}
+                <div ref={listBottomRef}></div>
             </PageContent>
 
             <PageAction>
