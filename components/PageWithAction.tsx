@@ -1,7 +1,8 @@
+import { Search } from '@react-vant/icons'
 import Link from 'components/Link'
-import { FC, MouseEventHandler } from 'react'
-import { Card, Loading } from 'react-vant'
-import { LoadingMask } from './PageLoading'
+import { debounce, DebouncedFunc } from 'lodash'
+import { FC, MouseEventHandler, useEffect, useRef, useState } from 'react'
+import { Card, Field, FieldInstance, Loading } from 'react-vant'
 
 /**
  * 页面正文，会给下面的操作栏留出空间
@@ -68,6 +69,56 @@ export const ActionButton: FC<ActionButtonProps> = (props) => {
             onClick={props.loading ? undefined : props.onClick}
         >
             {props.loading ? <Loading color="#fff" /> : props.children}
+        </div>
+    )
+}
+
+type ActionSearchProps = {
+    debounceWait?: number
+    autoFocus?: boolean
+    onSearch?: (value: string) => unknown
+}
+
+/**
+ * 操作栏中的搜索按钮
+ */
+export const ActionSearch: FC<ActionSearchProps> = (props) => {
+    const { onSearch, debounceWait = 500, autoFocus } = props
+
+    // 搜索内容
+    const [searchValue, setSearchValue] = useState('')
+
+    // 搜索防抖实例
+    const searchDebounce = useRef<DebouncedFunc<(newValue: string) => void>>()
+    useEffect(() => {
+        searchDebounce.current = debounce((newValue: string) => {
+            onSearch?.(newValue)
+        }, debounceWait)
+    }, [])
+
+    // 回调 - 搜索内容变化
+    const onSearchValueChange = (value: string) => {
+        setSearchValue(value)
+        searchDebounce.current?.(value)
+    }
+
+    // 自动聚焦实现，组件的 autoFocus 不好用
+    const fieldRef = useRef<FieldInstance>(null)
+    useEffect(() => {
+        autoFocus && fieldRef.current?.focus()
+    })
+
+    return (
+        <div className="m-2 flex items-center justify-center grow rounded-lg text-white relative">
+            <Field
+                ref={fieldRef}
+                style={{ height: '40px' }}
+                value={searchValue}
+                onChange={onSearchValueChange}
+                rightIcon={<Search />}
+                placeholder="搜索内容"
+                onClickRightIcon={() => onSearch?.(searchValue)}
+            />
         </div>
     )
 }

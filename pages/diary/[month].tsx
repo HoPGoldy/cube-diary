@@ -91,7 +91,7 @@ const DiaryList: NextPage = () => {
                 <ActionIcon onClick={() => setShowPicker(true)}>
                     <UnderwayO fontSize={24} />
                 </ActionIcon>
-                <ActionIcon onClick={() => console.log('shop click')}>
+                <ActionIcon href="/search">
                     <Search fontSize={24} />
                 </ActionIcon>
                 <ActionButton color={buttonColor} onClick={() => onClickWrite()}>

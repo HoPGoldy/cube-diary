@@ -10,16 +10,21 @@ import Link from 'next/link'
 import ReactMarkdown from 'react-markdown'
 
 export type DiaryItemProps = {
+    className?: string
     diary: Diary | UndoneDiary
-    onClickBody: () => unknown
-    showInteract: boolean
+    onClickBody?: () => unknown
+    showInteract?: boolean
+    /**
+     * 左上角日期格式化字符串
+     */
+    dateFormatter?: string
 } & CardProps
 
 export const DiaryItem: FC<DiaryItemProps> = (props) => {
-    const { diary, onClickBody, showInteract } = props
+    const { diary, onClickBody, showInteract = false, dateFormatter = 'MM 月 DD 日' } = props
 
     const date = dayjs(diary.date)
-    const label = `${date.format('MM 月 DD 日')} ${WEEK_TO_CHINESE[date.day()]}`
+    const label = `${date.format(dateFormatter)} ${WEEK_TO_CHINESE[date.day()]}`
 
     if ('undone' in diary) {
         return (
