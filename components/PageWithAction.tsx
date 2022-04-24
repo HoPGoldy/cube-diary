@@ -106,7 +106,7 @@ export const ActionSearch: FC<ActionSearchProps> = (props) => {
     const fieldRef = useRef<FieldInstance>(null)
     useEffect(() => {
         autoFocus && fieldRef.current?.focus()
-    })
+    }, []);
 
     return (
         <div className="m-2 flex items-center justify-center grow rounded-lg text-white relative">
