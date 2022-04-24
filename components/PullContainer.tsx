@@ -33,8 +33,18 @@ export const PullContainer: FC = function (props) {
     }
 
     return (
-        <PullRefresh loosingText="释放查看上个月日记" pullingText="释放查看上个月日记" onRefresh={goToPrevious}>
-            <PullupRefresh loosingText="释放查看下个月日记" pullingText="释放查看下个月日记" onRefresh={goToNext}>
+        <PullRefresh
+            loosingText="释放查看上个月日记"
+            pullingText="上个月"
+            pullDistance="150"
+            onRefresh={goToPrevious}
+        >
+            <PullupRefresh
+                loosingText="释放查看下个月日记"
+                pullingText="下个月"
+                pullDistance="150"
+                onRefresh={goToNext}
+            >
                 {props.children}
             </PullupRefresh>
         </PullRefresh>

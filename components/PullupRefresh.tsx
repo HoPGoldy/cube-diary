@@ -5,7 +5,7 @@ import { Loading, hooks } from 'react-vant';
 
 /**
  * ##### 注意，本文件来自于 react-vant 的 PullRefresh #####
- * 由于 react-vant 只提供了
+ * 由于 react-vant 只提供了下拉刷新 pullRefresh，所以这里改造一下，做一个上拉刷新组件
  */
 
 const { useTouch, useEventListener, useSetState, useUpdateEffect } = hooks
@@ -103,7 +103,7 @@ export const PullupRefresh: React.FC<PullRefreshProps> = (props) => {
     };
 
     const setStatus = (distance: number, isLoading?: boolean) => {
-        const pullDistance = +(props.pullDistance || props.headHeight || 0);
+        const pullDistance = -(props.pullDistance || props.headHeight || 0);
         const newState = { distance } as typeof state;
 
         if (isLoading) {
