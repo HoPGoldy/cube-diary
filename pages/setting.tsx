@@ -1,7 +1,7 @@
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { NextPage } from 'next'
 import Head from 'next/head'
-import { Card, Switch, Form, Space, ActionBar, Cell, Notify, Button, Search } from 'react-vant'
+import { Card, Space, Cell } from 'react-vant'
 import { useRouter } from 'next/router'
 import { Statistic } from 'components/Statistic'
 import { UserConfigContext, UserProfileContext } from './_app'
@@ -9,6 +9,7 @@ import { ArrowDown, ArrowUp, ManagerO, Close } from '@react-vant/icons'
 import { USER_TOKEN_KEY } from 'lib/constants'
 import { useUserProfile } from 'services/user'
 import { PageContent, PageAction, ActionButton } from 'components/PageWithAction'
+import { refreshCount } from 'services/setting'
 
 const DiaryList: NextPage = () => {
     const router = useRouter()
@@ -33,6 +34,16 @@ const DiaryList: NextPage = () => {
         router.replace('/login')
     }
 
+    /**
+     * 刷新字数统计
+     */
+    const onRefreshCount = async () => {
+        if (!userProfile) return
+
+        const resp = await refreshCount()
+        setUserProfile?.({ ...userProfile, totalCount: resp.data || 0 })
+    }
+
     return (
         <div className="min-h-screen">
             <Head>
@@ -43,7 +54,7 @@ const DiaryList: NextPage = () => {
                 <Space direction="vertical" gap={16} className="w-screen p-4 overflow-y-scroll">
                     <Card round>
                         <Card.Body>
-                            <div className="flex flex-row justify-around">
+                            <div className="flex flex-row justify-around" onClick={onRefreshCount}>
                                 <Statistic label="累计日记" value={userProfile?.totalDiary || 0} />
                                 <Statistic label="累计字数" value={userProfile?.totalCount || 0} />
                             </div>

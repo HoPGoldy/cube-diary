@@ -7,7 +7,6 @@ import { STORAGE_PATH } from './constants'
 /**
  * loki 实例缓存
  * 每个用户都会有一个实例
- * 系统设置单独一个实例
  */
 const lokiInstances: Record<string, lokijs> = {}
 
@@ -57,18 +56,6 @@ export const getDiaryCollection = async function (username: string) {
 }
 
 /**
- * 获取所有用户的配置集合
- */
-export const getProfileCollection = async function () {
-    const loki = await getLoki('system')
-    let collection = loki.getCollection<UserProfile>('config')
-    if (collection) return collection
-
-    collection = loki.addCollection<UserProfile>('config', { unique: ['username'] })
-    return collection
-}
-
-/**
  * 获取默认配置项
  */
 const getDefaultProfile = async function (username: string): Promise<UserProfile> {
@@ -83,12 +70,17 @@ const getDefaultProfile = async function (username: string): Promise<UserProfile
 /**
  * 获取指定用户的配置项
  */
-export const getUserProfile = async function (username: string): Promise<UserProfile | undefined> {
-    const collection = await getProfileCollection()
+export const getUserProfile = async function (username: string): Promise<UserProfile> {
+    const loki = await getLoki(username)
+    const collectionName = 'profile'
+    let collection = loki.getCollection<UserProfile>(collectionName)
+    if (!collection) collection = loki.addCollection<UserProfile>(collectionName, { unique: ['username'] })
+
     const config = collection.findOne({ username })
     if (config) return config
 
-    const newConfig = collection.insert(await getDefaultProfile(username))
+    const newConfig = await getDefaultProfile(username)
+    collection.insert(newConfig)
     saveLoki(username)
     return newConfig
 }
@@ -98,7 +90,11 @@ export const getUserProfile = async function (username: string): Promise<UserPro
  * 要更新的用户名包含在配置项里
  */
 export const updateUserProfile = async function (newConfig: UserProfile) {
-    const collection = await getProfileCollection()
+    const loki = await getLoki(newConfig.username)
+    const collectionName = 'profile'
+    let collection = loki.getCollection<UserProfile>(collectionName)
+    if (!collection) collection = loki.addCollection<UserProfile>(collectionName, { unique: ['username'] })
+
     const userConfig = collection.findOne({ username: newConfig.username })
 
     if (!userConfig) collection.insert(newConfig)
