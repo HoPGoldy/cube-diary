@@ -2,7 +2,7 @@
 
 import { startSession } from 'lib/auth'
 import { getAppConfig } from 'lib/appConfig'
-import type { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiResponse } from 'next'
 import { RespData } from 'types/global'
 import { createHandler } from 'lib/utils/createHandler'
 import { UserProfile } from 'types/storage'

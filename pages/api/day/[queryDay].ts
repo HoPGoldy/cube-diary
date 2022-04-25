@@ -5,6 +5,7 @@ import { createHandler } from 'lib/utils/createHandler'
 import { getDiaryCollection, getUserProfile, saveLoki, updateUserProfile } from 'lib/loki'
 import dayjs from 'dayjs'
 import { Diary } from '../month/[queryMonth]'
+import { callBackupSchedule } from 'lib/backup'
 
 export default createHandler({
     /**
@@ -63,11 +64,18 @@ export default createHandler({
         saveLoki(auth.username)
         res.status(200).json({ success: true })
 
+        // 更新总字数缓存
         const userProfile = await getUserProfile(auth.username)
         if (!userProfile) {
             console.error(`${auth.username} 用户配置项保存失败`)
             return
         }
-        updateUserProfile({ ...userProfile, totalCount: userProfile.totalCount + changeNumber })
+        updateUserProfile({
+            ...userProfile,
+            totalCount: userProfile.totalCount + changeNumber
+        })
+
+        // 有内容保存后唤起备份进程
+        callBackupSchedule()
     }
 })

@@ -1,12 +1,13 @@
 import lokijs from 'lokijs'
 import { ensureDir } from 'fs-extra'
-import { UserProfile } from 'types/storage'
+import { BackupDetail, UserProfileStorage } from 'types/storage'
 import { Diary } from '@pages/api/month/[queryMonth]'
 import { STORAGE_PATH } from './constants'
 
 /**
  * loki 实例缓存
  * 每个用户都会有一个实例
+ * 备份数据管理单独一个实例
  */
 const lokiInstances: Record<string, lokijs> = {}
 
@@ -58,7 +59,7 @@ export const getDiaryCollection = async function (username: string) {
 /**
  * 获取默认配置项
  */
-const getDefaultProfile = async function (username: string): Promise<UserProfile> {
+const getDefaultProfile = async function (username: string): Promise<UserProfileStorage> {
     const userExistDiarys = await getDiaryCollection(username)
 
     return {
@@ -70,18 +71,17 @@ const getDefaultProfile = async function (username: string): Promise<UserProfile
 /**
  * 获取指定用户的配置项
  */
-export const getUserProfile = async function (username: string): Promise<UserProfile> {
+export const getUserProfile = async function (username: string): Promise<UserProfileStorage> {
     const loki = await getLoki(username)
     const collectionName = 'profile'
-    let collection = loki.getCollection<UserProfile>(collectionName)
-    if (!collection) collection = loki.addCollection<UserProfile>(collectionName, { unique: ['username'] })
+    let collection = loki.getCollection<UserProfileStorage>(collectionName)
+    if (!collection) collection = loki.addCollection<UserProfileStorage>(collectionName, { unique: ['username'] })
 
     const config = collection.findOne({ username })
     if (config) return config
 
     const newConfig = await getDefaultProfile(username)
     collection.insert(newConfig)
-    saveLoki(username)
     return newConfig
 }
 
@@ -89,11 +89,11 @@ export const getUserProfile = async function (username: string): Promise<UserPro
  * 更新指定用户的配置项
  * 要更新的用户名包含在配置项里
  */
-export const updateUserProfile = async function (newConfig: UserProfile) {
+export const updateUserProfile = async function (newConfig: UserProfileStorage) {
     const loki = await getLoki(newConfig.username)
     const collectionName = 'profile'
-    let collection = loki.getCollection<UserProfile>(collectionName)
-    if (!collection) collection = loki.addCollection<UserProfile>(collectionName, { unique: ['username'] })
+    let collection = loki.getCollection<UserProfileStorage>(collectionName)
+    if (!collection) collection = loki.addCollection<UserProfileStorage>(collectionName, { unique: ['username'] })
 
     const userConfig = collection.findOne({ username: newConfig.username })
 
@@ -101,4 +101,15 @@ export const updateUserProfile = async function (newConfig: UserProfile) {
     else collection.update({ ...userConfig, ...newConfig })
 
     saveLoki('system')
+}
+
+/**
+ * 获取指定用户的备份数据集合
+ */
+export const getBackupCollection = async function (username: string) {
+    const loki = await getLoki('backup')
+    let collection = loki.getCollection<BackupDetail>(username)
+    if (collection) return collection
+
+    return loki.addCollection<BackupDetail>(username, { unique: ['date'] })
 }

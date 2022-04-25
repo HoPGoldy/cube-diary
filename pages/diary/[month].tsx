@@ -37,7 +37,7 @@ const DiaryList: NextPage = () => {
         // 到本月了才会触发滚动到底部
         // 不然在用户往上个月切换的时候，会出现回到底部的情况，不方便重复切换操作
         if (dayjs(router.query.month as string).month() !== new Date().getMonth()) return
-        listBottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+        listBottomRef.current?.scrollIntoView()
     }, [data])
 
     const renderDiaryList = () => {
