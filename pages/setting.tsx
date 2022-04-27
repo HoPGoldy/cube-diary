@@ -5,7 +5,7 @@ import { Card, Space, Cell } from 'react-vant'
 import { useRouter } from 'next/router'
 import { Statistic } from 'components/Statistic'
 import { UserConfigContext, UserProfileContext } from './_app'
-import { ArrowDown, ArrowUp, ManagerO, Close } from '@react-vant/icons'
+import { ArrowDown, ArrowUp, ManagerO, Close, DesktopO } from '@react-vant/icons'
 import { USER_TOKEN_KEY } from 'lib/constants'
 import { useUserProfile } from 'services/user'
 import { PageContent, PageAction, ActionButton } from 'components/PageWithAction'
@@ -68,6 +68,7 @@ const DiaryList: NextPage = () => {
                     <Card round>
                         <Cell title="导入" icon={<ArrowUp />} isLink onClick={() => router.push('/import/json')} />
                         <Cell title="导出" icon={<ArrowDown />} isLink onClick={() => router.push('/export/json')} />
+                        <Cell title="备份" icon={<DesktopO />} isLink onClick={() => router.push('/backup')} />
                     </Card>
 
                     <Card round onClick={onLogout}>

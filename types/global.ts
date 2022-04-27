@@ -51,6 +51,17 @@ export interface AppConfig {
      * 防止爆破密码，默认为 30
      */
     loginPreDay?: number
+    /**
+     * 备份调度器
+     * 默认为 0 4 * * *
+     * 即每日凌晨四点整进行备份
+     */
+    backupScheduler: string
+    /**
+     * 最大备份个数
+     * 默认为 10 个，备份数量超过该值后最旧的备份将被删除
+     */
+    maxBackup: number
 }
 
 /**

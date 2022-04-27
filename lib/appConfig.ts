@@ -14,7 +14,9 @@ const defaultConfig: AppConfig = {
     appSubtitle: '记录你的生活',
     writeDiaryButtonColors: DEFAULT_BUTTON_COLOR,
     passwordLength: 6,
-    loginPreDay: 30
+    loginPreDay: 30,
+    backupScheduler: '0 4 * * *',
+    maxBackup: 10
 }
 
 /**
