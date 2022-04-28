@@ -1,7 +1,8 @@
+import { UserConfigContext } from '@pages/_app'
 import { Search } from '@react-vant/icons'
 import Link from 'components/Link'
 import { debounce, DebouncedFunc } from 'lodash'
-import { FC, MouseEventHandler, useEffect, useRef, useState } from 'react'
+import { FC, MouseEventHandler, useContext, useEffect, useRef, useState } from 'react'
 import { Card, Field, FieldInstance, Loading } from 'react-vant'
 
 /**
@@ -9,7 +10,7 @@ import { Card, Field, FieldInstance, Loading } from 'react-vant'
  */
 export const PageContent: FC = (props) => {
     return (
-        <div className="w-full overflow-y-scroll" style={{ height: 'calc(100vh - 72px)'}}>
+        <div className="w-full overflow-y-scroll relative" style={{ height: 'calc(100vh - 72px)'}}>
             {props.children}
         </div>
     )
@@ -60,7 +61,8 @@ type ActionButtonProps = {
  * 底部操作栏中的按钮
  */
 export const ActionButton: FC<ActionButtonProps> = (props) => {
-    const styles = { background: props.color || 'f000' }
+    const { buttonColor } = useContext(UserConfigContext) || {}
+    const styles = { background: props.color || buttonColor || 'f000' }
 
     return (
         <div

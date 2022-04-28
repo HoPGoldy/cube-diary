@@ -1,12 +1,11 @@
-import { useState, useRef, useContext, useMemo, useEffect, MutableRefObject } from 'react'
+import { useState, useRef, useMemo, useEffect, MutableRefObject } from 'react'
 import { NextPage } from 'next'
 import Head from 'next/head'
-import { ArrowLeft, SettingO, UnderwayO } from '@react-vant/icons'
-import { Card, Space, ActionBar, Notify, Search } from 'react-vant'
+import { ArrowLeft, UnderwayO } from '@react-vant/icons'
+import { Card, Space, Notify } from 'react-vant'
 import { updateDiary, useDiaryDetail } from 'services/diary'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
-import { UserConfigContext } from '@pages/_app'
 import { WEEK_TO_CHINESE } from 'lib/constants'
 import { PageLoading } from 'components/PageLoading'
 import { PageContent, PageAction, ActionIcon, ActionButton } from 'components/PageWithAction'
@@ -60,8 +59,6 @@ const DiaryEdit: NextPage = () => {
         if (contentLoading) return
         textAreaRef.current?.setSelectionRange(contentRef.current.length, contentRef.current.length)
     }, [contentLoading])
-    // 主按钮颜色
-    const { buttonColor } = useContext(UserConfigContext) || {}
     // 页面标题日期
     const pageTitle = useMemo(() => {
         const date = dayjs(router.query.diaryDate as string)
@@ -165,7 +162,7 @@ const DiaryEdit: NextPage = () => {
                 <ActionIcon onClick={onInsertDate}>
                     <UnderwayO fontSize={24} />
                 </ActionIcon>
-                <ActionButton color={buttonColor} onClick={onSaveDiary} loading={uploading}>
+                <ActionButton onClick={onSaveDiary} loading={uploading}>
                     保存
                     <span className="ml-2 text-xs">{autoSaveTip}</span>
                 </ActionButton>

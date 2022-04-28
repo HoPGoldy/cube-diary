@@ -1,11 +1,11 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect } from 'react'
 import { NextPage } from 'next'
 import Head from 'next/head'
 import { Card, Space, Cell } from 'react-vant'
 import { useRouter } from 'next/router'
 import { Statistic } from 'components/Statistic'
-import { UserConfigContext, UserProfileContext } from './_app'
-import { ArrowDown, ArrowUp, ManagerO, Close, DesktopO } from '@react-vant/icons'
+import { UserProfileContext } from './_app'
+import { ArrowDown, ArrowUp, ManagerO, Close, DesktopO, LikeO } from '@react-vant/icons'
 import { USER_TOKEN_KEY } from 'lib/constants'
 import { useUserProfile } from 'services/user'
 import { PageContent, PageAction, ActionButton } from 'components/PageWithAction'
@@ -13,7 +13,6 @@ import { refreshCount } from 'services/setting'
 
 const DiaryList: NextPage = () => {
     const router = useRouter()
-    const { buttonColor } = useContext(UserConfigContext) || {}
     // 当前缓存的用户配置
     const { userProfile, setUserProfile } = useContext(UserProfileContext) || {}
     // 进入页面后重新加载
@@ -69,6 +68,7 @@ const DiaryList: NextPage = () => {
                         <Cell title="导入" icon={<ArrowUp />} isLink onClick={() => router.push('/import/json')} />
                         <Cell title="导出" icon={<ArrowDown />} isLink onClick={() => router.push('/export/json')} />
                         <Cell title="备份" icon={<DesktopO />} isLink onClick={() => router.push('/backup')} />
+                        <Cell title="关于" icon={<LikeO />} isLink onClick={() => router.push('/about')} />
                     </Card>
 
                     <Card round onClick={onLogout}>
@@ -78,7 +78,7 @@ const DiaryList: NextPage = () => {
             </PageContent>
 
             <PageAction>
-                <ActionButton color={buttonColor} onClick={onSaveSetting}>返回</ActionButton>
+                <ActionButton onClick={onSaveSetting}>返回</ActionButton>
             </PageAction>
         </div>
     )

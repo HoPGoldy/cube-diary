@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { NextPage } from 'next'
 import Head from 'next/head'
 import { SettingO, UnderwayO, Search } from '@react-vant/icons'
@@ -7,15 +7,12 @@ import { useDiaryList } from 'services/diary'
 import { DiaryItem } from 'components/DiaryItem'
 import { useRouter } from 'next/router'
 import dayjs from 'dayjs'
-import { UserConfigContext } from '@pages/_app'
 import { PageLoading } from 'components/PageLoading'
 import { ActionButton, ActionIcon, PageAction, PageContent } from 'components/PageWithAction'
 import { PullContainer } from 'components/PullContainer'
 
 const DiaryList: NextPage = () => {
     const router = useRouter()
-    // 获取按钮颜色
-    const { buttonColor } = useContext(UserConfigContext) || {}
     // 获取日记列表
     const { data, error } = useDiaryList(router.query.month)
     // 当前点击了哪条日记
@@ -105,7 +102,7 @@ const DiaryList: NextPage = () => {
                 <ActionIcon href="/search">
                     <Search fontSize={24} />
                 </ActionIcon>
-                <ActionButton color={buttonColor} onClick={() => onClickWrite()}>
+                <ActionButton onClick={() => onClickWrite()}>
                     写点什么
                 </ActionButton>
             </PageAction>

@@ -1,9 +1,8 @@
-import { ChangeEventHandler, useContext, useEffect, useRef, useState } from 'react'
+import { ChangeEventHandler, useRef, useState } from 'react'
 import { NextPage } from 'next'
 import Head from 'next/head'
 import { Card, Dialog, Form, Space, Cell, Field, Radio, Notify } from 'react-vant'
 import { useRouter } from 'next/router'
-import { UserConfigContext, UserProfileContext } from '../_app'
 import { ArrowLeft } from '@react-vant/icons'
 import { PageContent, PageAction, ActionButton, ActionIcon } from 'components/PageWithAction'
 import ReactMarkdown from 'react-markdown'
@@ -17,7 +16,6 @@ const getFormInitialValues = (): JsonImportForm => {
 
 const DiaryList: NextPage = () => {
     const router = useRouter()
-    const { buttonColor } = useContext(UserConfigContext) || {}
     // 导入按钮是否载入中
     const [loading, setLoading] = useState(false)
     // 和用户配置项相符的示例
@@ -134,7 +132,7 @@ const DiaryList: NextPage = () => {
                 <ActionIcon onClick={() => router.back()}>
                     <ArrowLeft fontSize={24} />
                 </ActionIcon>
-                <ActionButton loading={loading} color={buttonColor} onClick={onSelectFile}>选择文件并导入</ActionButton>
+                <ActionButton loading={loading} onClick={onSelectFile}>选择文件并导入</ActionButton>
             </PageAction>
         </div>
     )

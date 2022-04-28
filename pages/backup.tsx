@@ -1,9 +1,7 @@
-import { useContext } from 'react'
 import { NextPage } from 'next'
 import Head from 'next/head'
 import { Card, Dialog, Space, Cell, Notify } from 'react-vant'
 import { useRouter } from 'next/router'
-import { UserConfigContext } from './_app'
 import { PageContent, PageAction, ActionButton } from 'components/PageWithAction'
 import { useBackupList, rollbackTo } from 'services/backup'
 import { PageLoading } from 'components/PageLoading'
@@ -12,7 +10,6 @@ import dayjs from 'dayjs'
 
 const DiaryList: NextPage = () => {
     const router = useRouter()
-    const { buttonColor } = useContext(UserConfigContext) || {}
     const { data, error, mutate } = useBackupList()
 
     const confirmRollback = async (item: BackupDetail) => {
@@ -84,7 +81,7 @@ const DiaryList: NextPage = () => {
             </PageContent>
 
             <PageAction>
-                <ActionButton color={buttonColor} onClick={() => router.back()}>返回</ActionButton>
+                <ActionButton onClick={() => router.back()}>返回</ActionButton>
             </PageAction>
         </div>
     )

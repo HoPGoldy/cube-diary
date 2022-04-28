@@ -1,9 +1,8 @@
-import { ChangeEventHandler, useContext, useRef, useState } from 'react'
+import { useState } from 'react'
 import { NextPage } from 'next'
 import Head from 'next/head'
 import { Card, Dialog, Form, Space, Cell, Field, Notify, Radio } from 'react-vant'
 import { useRouter } from 'next/router'
-import { UserConfigContext, UserProfileContext } from '../_app'
 import { ArrowLeft } from '@react-vant/icons'
 import { PageContent, PageAction, ActionButton, ActionIcon } from 'components/PageWithAction'
 import ReactMarkdown from 'react-markdown'
@@ -42,7 +41,6 @@ const saveAsJson = (data: any, fileName = 'data.json') => {
 
 const DiaryList: NextPage = () => {
     const router = useRouter()
-    const { buttonColor } = useContext(UserConfigContext) || {}
     // 导入按钮是否载入中
     const [loading, setLoading] = useState(false);
     // 和用户配置项相符的示例
@@ -139,7 +137,7 @@ const DiaryList: NextPage = () => {
                 <ActionIcon onClick={() => router.back()}>
                     <ArrowLeft fontSize={24} />
                 </ActionIcon>
-                <ActionButton loading={loading} color={buttonColor} onClick={onExport}>导出</ActionButton>
+                <ActionButton loading={loading} onClick={onExport}>导出</ActionButton>
             </PageAction>
         </div>
     )
