@@ -18,13 +18,14 @@ export const callBackupSchedule = async () => {
     if (!config) return
     const { user, backupScheduler, maxBackup } = config
 
-    console.log('启动备份')
-    backupSchedule = scheduleJob(backupScheduler, () => {
-        user.map(async user => {
-            await createBackup(user.username, '定时备份')
-            await clearOldBackup(user.username, maxBackup)
-            saveLoki('backup')
-        })
+    // console.log('启动备份')
+    backupSchedule = scheduleJob(backupScheduler, async () => {
+        for (const { username } of user) {
+            await createBackup(username, '定时备份')
+            await clearOldBackup(username, maxBackup)
+        }
+        saveLoki('backup')
+        // console.log('保存备份数据')
     })
 }
 
@@ -33,7 +34,7 @@ const getBackupPath = function (username: string) {
 }
 
 /**
- * 执行具体用户的备份工作
+ * 给指定用户创建备份
  */
 export const createBackup = async function (username: string, backupTitle: string) {
     const backupPath = getBackupPath(username)
@@ -46,9 +47,9 @@ export const createBackup = async function (username: string, backupTitle: strin
     // 执行备份
     const backupName = dayjs().valueOf()
 
-    const testDistPath = path.resolve(backupPath, backupName.toString())
+    const backupFilePath = path.resolve(backupPath, backupName.toString())
     const userStorage = await getLoki(username)
-    writeFile(testDistPath, userStorage.serializeDestructured())
+    writeFile(backupFilePath, userStorage.serialize())
 
     // 添加数据库信息
     const backupCollection = await getBackupCollection(username)
@@ -62,24 +63,18 @@ export const createBackup = async function (username: string, backupTitle: strin
  * 清除某个用户的陈旧备份
  */
 const clearOldBackup = async function (username: string, maxBackup: number) {
-    const backupPath = getBackupPath(username)
-    await ensureDir(backupPath)
+    const backupCollection = await getBackupCollection(username)
+    if (backupCollection.count() <= maxBackup) return
 
-    const backupItems = await readdir(backupPath)
-    if (backupItems.length <= maxBackup) return
+    const oldsetBackupDate = backupCollection.min('date')
 
-    // 获取最旧的备份日期
-    const unixDates = backupItems.map(item => Number(path.parse(item).name))
-    const minDate = Math.min(...unixDates)
-
-    // 删除日期最早的备份
-    const removeBackupPath = path.resolve(backupPath, minDate.toString())
+    // 删除备份文件
+    const removeBackupPath = path.resolve(getBackupPath(username), oldsetBackupDate.toString())
     await remove(removeBackupPath)
-    console.log('删除陈旧备份', removeBackupPath)
+    // console.log('删除陈旧备份', removeBackupPath)
 
     // 删除数据库信息
-    const backupCollection = await getBackupCollection(username)
-    backupCollection.findAndRemove({ date: minDate })
+    backupCollection.findAndRemove({ date: oldsetBackupDate })
 }
 
 /**
@@ -109,12 +104,18 @@ export const rollback = async function (username: string, backupDate: string) {
     const backupContent = await readFile(dbPath)
     if (!backupContent) return false
 
+    // 恢复备份
     const userStorage = await getLoki(username)
-    userStorage.deserializeDestructured(backupContent.toString())
+    userStorage.loadJSON(backupContent.toString())
     saveLoki(username)
 
+    // 把恢复时间更新到备份信息
     const backupCollection = await getBackupCollection(username)
-    backupCollection.findAndRemove({ date: +backupDate })
+    const backupItem = backupCollection.findOne({ date: Number(backupDate) })
+    if (backupItem) {
+        backupItem.rollbackDate = dayjs().valueOf()
+        backupCollection.update(backupItem)
+    }
     saveLoki('backup')
 
     return true

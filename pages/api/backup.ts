@@ -27,9 +27,10 @@ export default createHandler({
             res.status(200).json({ success: false, message: '请填写回滚目标 rollbackDate' })
             return
         }
+        const rollbackDate = reqBody.rollbackDate.toString()
 
         // 确保有对应的备份文件
-        if (!await hasBackupFile(auth.username, reqBody.rollbackDate)) {
+        if (!await hasBackupFile(auth.username, rollbackDate)) {
             res.status(200).json({ success: false, message: '没有找到对应的备份文件' })
             // 清除对应的记录
             const collectioon = await getBackupCollection(auth.username)
@@ -39,7 +40,7 @@ export default createHandler({
         }
 
         await createBackup(auth.username, '回滚备份')
-        const rollbackSuccess = await rollback(auth.username, reqBody.rollbackDate)
+        const rollbackSuccess = await rollback(auth.username, rollbackDate)
 
         res.status(200).json({ success: rollbackSuccess })
     },

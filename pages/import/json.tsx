@@ -1,4 +1,4 @@
-import { ChangeEventHandler, useContext, useRef, useState } from 'react'
+import { ChangeEventHandler, useContext, useEffect, useRef, useState } from 'react'
 import { NextPage } from 'next'
 import Head from 'next/head'
 import { Card, Dialog, Form, Space, Cell, Field, Radio, Notify } from 'react-vant'
@@ -25,7 +25,6 @@ const DiaryList: NextPage = () => {
 
     const [form] = Form.useForm<JsonImportForm>()
 
-    
     const fileSelectRef = useRef<HTMLInputElement>(null)
 
     const onSelectFile = () => {
@@ -56,11 +55,17 @@ const DiaryList: NextPage = () => {
         const { existCount = 0, insertCount = 0, insertNumber = 0} = resp.data || {}
 
         await Dialog.confirm({
-            title: '导入成功',
-            message: `共计导入 ${existCount + insertCount} 条，其中：\n`
-                + `新增 ${insertCount} 条\n`
-                + `更新 ${existCount} 条\n`
-                + `共计${insertNumber >= 0 ? '新增' : '减少'} ${insertNumber} 字`,
+            title: <b>导入成功</b>,
+            message: (
+                <div className="text-left">
+                    <div className="pb-4">
+                        共计导入 {existCount + insertCount} 条，{insertNumber >= 0 ? '新增' : '减少'} {insertNumber} 字，其中：
+                    </div>
+                    <li>新增 {insertCount} 条</li>
+                    <li>更新 {existCount} 条</li>
+                    <div className="pt-4">可通过备份管理中的 “导入备份” 恢复到导入前的状态</div>
+                </div>
+            ),
             // messageAlign: 'left',
             cancelButtonText: '继续导入',
             confirmButtonText: '返回首页'

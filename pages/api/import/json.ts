@@ -5,9 +5,9 @@ import { createHandler } from 'lib/utils/createHandler'
 import { getDiaryCollection, getUserProfile, saveLoki, updateUserProfile } from 'lib/loki'
 import dayjs from 'dayjs'
 import { Diary } from '../month/[queryMonth]'
-import { Form } from 'multiparty'
-import { parseBody, pickFields } from 'lib/utils/parseBody'
+import { parseBody } from 'lib/utils/parseBody'
 import { readFile } from 'fs/promises'
+import { createBackup } from 'lib/backup'
 
 /**
  * json 导入配置项
@@ -81,9 +81,8 @@ const formatDiary = (fields: JsonImportForm, jsonContent: any, res: NextApiRespo
 const updateDiary = async (
     fields: JsonImportForm,
     standardDiarys: Diary[],
-    username: string,
-    res: NextApiResponse<RespData<JsonImportResult>>
-) => {
+    username: string
+): Promise<JsonImportResult> => {
     const userCollection = await getDiaryCollection(username)
 
     const result: JsonImportResult = {
@@ -98,10 +97,12 @@ const updateDiary = async (
 
         // 如果有的话就根据用户指定的规则写入内容
         if (existDiary) {
+            // 覆盖
             if (fields.existOperation === 'cover') {
                 result.insertNumber += (newDiary.content.length - existDiary.content.length)
                 existDiary.content = newDiary.content
             }
+            // 合并
             else {
                 result.insertNumber += newDiary.content.length
                 existDiary.content += newDiary.content
@@ -116,17 +117,23 @@ const updateDiary = async (
         result.insertCount += 1
     }
 
-    res.status(200).json({ success: true, data: result })
+    return result
+}
 
-    saveLoki(username)
-
+/**
+ * 把导入的内容字数统计一下保存起来
+ */
+const updateDiaryNumber = async (username: string, importResult: JsonImportResult) => {
     const userProfile = await getUserProfile(username)
     if (!userProfile) {
         console.error(`${username} 用户配置项保存失败`)
         return
     }
-    updateUserProfile({ ...userProfile, totalCount: userProfile.totalCount + result.insertNumber })
 
+    updateUserProfile({
+        ...userProfile,
+        totalCount: userProfile.totalCount + importResult.insertNumber
+    })
 }
 
 export default createHandler({
@@ -143,7 +150,16 @@ export default createHandler({
             const standardDiarys = formatDiary(fields, jsonContent, res)
             if (!standardDiarys) return
 
-            await updateDiary(fields, standardDiarys, auth.username, res)
+            // 先备份一下
+            await createBackup(auth.username, '导入备份')
+
+            // 导入完了更新下总字数
+            const importResult = await updateDiary(fields, standardDiarys, auth.username)
+            res.status(200).json({ success: true, data: importResult })
+
+            await updateDiaryNumber(auth.username, importResult)
+            saveLoki(auth.username)
+            saveLoki('backup')
         }
         catch (e) {
             console.error(e)

@@ -23,17 +23,20 @@ const DiaryList: NextPage = () => {
         });
 
         const resp = await rollbackTo(item.date)
-        console.log('resp', resp)
         if (!resp.success) {
             mutate()
             Notify.show({ type: 'warning', message: resp.message })
             return
         }
+
+        Notify.show({ type: 'success', message: '恢复成功' })
+        router.push('/')
     }
 
     const renderBackupItem = (item: BackupDetail) => {
         return (
             <Cell
+                titleClass={item.rollbackDate ? 'text-gray-400 font-bold' : 'font-bold'}
                 valueClass="min-w-[50%] py-1"
                 title={item.title}
                 key={item.date}

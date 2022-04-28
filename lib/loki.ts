@@ -59,13 +59,8 @@ export const getDiaryCollection = async function (username: string) {
 /**
  * 获取默认配置项
  */
-const getDefaultProfile = async function (username: string): Promise<UserProfileStorage> {
-    const userExistDiarys = await getDiaryCollection(username)
-
-    return {
-        username,
-        totalCount: userExistDiarys.data.reduce((pre, cur) => pre + cur.content.length, 0)
-    }
+const getDefaultProfile = function (username: string): UserProfileStorage {
+    return { username, totalCount: 0 }
 }
 
 /**
@@ -80,7 +75,7 @@ export const getUserProfile = async function (username: string): Promise<UserPro
     const config = collection.findOne({ username })
     if (config) return config
 
-    const newConfig = await getDefaultProfile(username)
+    const newConfig = getDefaultProfile(username)
     collection.insert(newConfig)
     return newConfig
 }
@@ -100,7 +95,7 @@ export const updateUserProfile = async function (newConfig: UserProfileStorage) 
     if (!userConfig) collection.insert(newConfig)
     else collection.update({ ...userConfig, ...newConfig })
 
-    saveLoki('system')
+    saveLoki(newConfig.username)
 }
 
 /**

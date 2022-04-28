@@ -45,4 +45,9 @@ export interface BackupDetail {
      * 备份日期 unix 毫秒时间戳
      */
     date: number
+    /**
+     * 该备份被执行恢复的时间
+     * 为空代表没有恢复过
+     */
+    rollbackDate?: number
 }
