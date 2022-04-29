@@ -33,7 +33,7 @@ export type MyJWTPayload = JWTPayload & {
 }
 
 export const runAuth = async function (req: NextApiRequest, res: NextApiResponse): Promise<MyJWTPayload | false | {}> {
-    if (req.url === '/api/user' && req.method === 'POST') return {}
+    if (req.url === '/api/login' && req.method === 'POST') return {}
 
     const token = req.headers[USER_TOKEN_KEY]
     if (!token) {

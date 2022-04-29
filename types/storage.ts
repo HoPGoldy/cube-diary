@@ -10,6 +10,10 @@ export interface UserProfileStorage {
      * 该用户已经写了多少字
      */
     totalCount: number
+    /**
+     * 是否启用黑夜模式
+     */
+    darkTheme: boolean
 }
 
 export type UserProfile = UserProfileStorage & {

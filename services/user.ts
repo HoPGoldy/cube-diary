@@ -1,4 +1,4 @@
-import { LoginResData } from "@pages/api/user"
+import { LoginResData } from "@pages/api/login"
 import md5 from "crypto-js/md5"
 import { USER_TOKEN_KEY } from "lib/constants"
 import { get, post } from "lib/request"
@@ -12,7 +12,7 @@ import { UserProfile } from "types/storage"
  * @param password 用户输入的密码明文
  */
 export const login = async function (password: string) {
-    return await post<LoginResData & UserProfile>('/api/user', {
+    return await post<LoginResData & UserProfile>('/api/login', {
         code: md5(password).toString().toUpperCase()
     })
 }
@@ -32,7 +32,7 @@ export const useUserProfile = function () {
         }
 
         const fetchUserInfo = async function () {
-            const resp = await get<UserProfile>(`/api/user`)
+            const resp = await get<UserProfile>(`/api/profile`)
             if (!resp.success) {
                 router.replace('/login')
                 return
@@ -43,6 +43,14 @@ export const useUserProfile = function () {
 
         fetchUserInfo()
     }, [])
+
+    // 黑夜模式更新后保存到本地
+    useEffect(() => {
+        if (!localStorage) return
+
+        if (userProfile?.darkTheme) localStorage.setItem('dark', 'on')
+        else localStorage.removeItem('dark')
+    }, [userProfile?.darkTheme])
 
     return { userProfile, setUserProfile }
 }
@@ -73,4 +81,11 @@ export const useAppConfig = function () {
     }, [router.pathname])
 
     return appConfig
+}
+
+/**
+ * 更新用户配置项
+ */
+export const updateUserProfile = async (profile: Partial<UserProfile>) => {
+    return await post('/api/profile', profile)
 }

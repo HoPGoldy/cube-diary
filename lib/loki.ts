@@ -60,7 +60,7 @@ export const getDiaryCollection = async function (username: string) {
  * 获取默认配置项
  */
 const getDefaultProfile = function (username: string): UserProfileStorage {
-    return { username, totalCount: 0 }
+    return { username, totalCount: 0, darkTheme: false }
 }
 
 /**

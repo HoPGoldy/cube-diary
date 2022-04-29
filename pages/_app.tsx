@@ -9,8 +9,16 @@ import { PageLoading } from 'components/PageLoading'
 import { UserProfile } from 'types/storage'
 // import Script from 'next/script'
 
-const themeVars = {
+const lightTheme = {
     passwordInputBackgroundColor: '#f7f8fa'
+}
+
+const darkTheme = {
+    backgroundColor: '#0f172a',
+    cardColor: '#9CA3AF',
+    cardBackgroundColor: '#1e293b',
+    cellTextColor: '#9CA3AF',
+    cellBackgroundColor: '#1e293b'
 }
 
 export const UserConfigContext = createContext<FontendConfig | false | undefined>(undefined)
@@ -27,7 +35,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     const userInfo = useUserProfile()
 
     return (
-        <ConfigProvider themeVars={themeVars}>
+        <ConfigProvider themeVars={userInfo.userProfile?.darkTheme ? darkTheme : lightTheme}>
             {/* <Script src="https://cdn.bootcss.com/vConsole/3.2.0/vconsole.min.js" strategy="lazyOnload" onLoad={() => {
                 new VConsole()
             }} /> */}
@@ -36,7 +44,9 @@ function MyApp({ Component, pageProps }: AppProps) {
             </Head>
             <UserProfileContext.Provider value={userInfo}>
                 <UserConfigContext.Provider value={config}>
-                    {config !== undefined ? <Component {...pageProps} /> : <PageLoading />}
+                    <div style={{ backgroundColor: 'var(--rv-background-color)'}}>
+                        {config !== undefined ? <Component {...pageProps} /> : <PageLoading />}
+                    </div>
                 </UserConfigContext.Provider>
             </UserProfileContext.Provider>
         </ConfigProvider>

@@ -56,21 +56,5 @@ export default createHandler({
                 totalDiary: userDiarys.data.length
             }
         })
-    },
-    GET: async (req, res: NextApiResponse<RespData<UserProfile>>, auth) => {
-        const userProfile = await getUserProfile(auth.username)
-        const userDiarys = await getDiaryCollection(auth.username)
-
-        if (!userProfile) {
-            return res.status(200).json({
-                success: false,
-                message: '无法获取用户配置信息'
-            })
-        }
-
-        res.status(200).json({
-            success: true,
-            data: { ...userProfile, totalDiary: userDiarys.data.length }
-        })
     }
 })

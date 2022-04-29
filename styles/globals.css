@@ -1,6 +1,6 @@
 html,
 body {
-    background-color: #f7f8fa;
+    background-color: var(--rv-background-color);
     padding: 0;
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
@@ -19,6 +19,7 @@ a {
 :root {
     --rv-font-size-md: 1rem !important;
     --rv-button-round-border-radius: 8px !important;
+    /* --rv-background-color: #f7f8fa !important; */
 }
 
 @tailwind base;

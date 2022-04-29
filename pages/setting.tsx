@@ -1,13 +1,13 @@
 import { useContext, useEffect } from 'react'
 import { NextPage } from 'next'
 import Head from 'next/head'
-import { Card, Space, Cell } from 'react-vant'
+import { Card, Space, Cell, Switch } from 'react-vant'
 import { useRouter } from 'next/router'
 import { Statistic } from 'components/Statistic'
 import { UserProfileContext } from './_app'
-import { ArrowDown, ArrowUp, ManagerO, Close, DesktopO, LikeO } from '@react-vant/icons'
+import { ArrowDown, ArrowUp, ManagerO, Close, DesktopO, LikeO, StarO } from '@react-vant/icons'
 import { USER_TOKEN_KEY } from 'lib/constants'
-import { useUserProfile } from 'services/user'
+import { updateUserProfile, useUserProfile } from 'services/user'
 import { PageContent, PageAction, ActionButton } from 'components/PageWithAction'
 import { refreshCount } from 'services/setting'
 
@@ -43,6 +43,14 @@ const DiaryList: NextPage = () => {
         setUserProfile?.({ ...userProfile, totalCount: resp.data || 0 })
     }
 
+    const onSwitchDark = (checked: boolean) => {
+        console.log('checked', checked)
+        if (!userProfile) return
+
+        setUserProfile?.({ ...userProfile, darkTheme: checked })
+        updateUserProfile({ darkTheme: checked })
+    }
+
     return (
         <div className="min-h-screen">
             <Head>
@@ -68,6 +76,13 @@ const DiaryList: NextPage = () => {
                         <Cell title="导入" icon={<ArrowUp />} isLink onClick={() => router.push('/import/json')} />
                         <Cell title="导出" icon={<ArrowDown />} isLink onClick={() => router.push('/export/json')} />
                         <Cell title="备份" icon={<DesktopO />} isLink onClick={() => router.push('/backup')} />
+                        <Cell title="黑夜模式" icon={<StarO />} 
+                            rightIcon={<Switch
+                                size={24}
+                                defaultChecked={userProfile?.darkTheme}
+                                onChange={onSwitchDark}
+                            />}
+                        />
                         <Cell title="关于" icon={<LikeO />} isLink onClick={() => router.push('/about')} />
                     </Card>
 
