@@ -125,7 +125,7 @@ const DiaryEdit: NextPage = () => {
                 ref={textAreaRef}
                 placeholder="写点什么"
                 autoFocus
-                className="w-full"
+                className="w-full bg-cardBackground"
                 style={{ height: 'calc(100vh - 186px)', resize: 'none' }}
                 value={content}
                 onChange={e => setContent(e.target.value)}
@@ -142,7 +142,7 @@ const DiaryEdit: NextPage = () => {
             </Head>
 
             <PageContent>
-                <Space direction="vertical" gap={16} className="w-screen p-4 pb-0 overflow-y-scroll">
+                <Space direction="vertical" gap={16} className="w-screen p-4 pb-0 overflow-y-scroll text-mainColor">
                     <Card round>
                         <Card.Header>{pageTitle}</Card.Header>
                     </Card>

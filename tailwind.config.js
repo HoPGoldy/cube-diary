@@ -4,7 +4,12 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        mainColor: "var(--rv-diary-main-color)",
+        cardBackground: "var(--rv-card-background-color)"
+      },
+    },
   },
   corePlugins: {
     preflight: false,

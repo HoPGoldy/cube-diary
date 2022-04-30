@@ -10,15 +10,23 @@ import { UserProfile } from 'types/storage'
 // import Script from 'next/script'
 
 const lightTheme = {
-    passwordInputBackgroundColor: '#f7f8fa'
+    passwordInputBackgroundColor: '#f7f8fa',
+    diaryMainColor: '#000'
 }
 
 const darkTheme = {
-    backgroundColor: '#0f172a',
-    cardColor: '#9CA3AF',
-    cardBackgroundColor: '#1e293b',
-    cellTextColor: '#9CA3AF',
-    cellBackgroundColor: '#1e293b'
+    backgroundColor: 'var(--rv-diary-background-color)',
+    cardColor: 'var(--rv-diary-main-color)',
+    cardHeaderColor: 'var(--rv-diary-main-color)',
+    cardBackgroundColor: 'var(--rv-diary-card-background-color)',
+    cellTextColor: 'var(--rv-diary-main-color)',
+    cellBackgroundColor: 'var(--rv-diary-card-background-color)',
+    fieldInputTextColor: "var(--rv-diary-main-color)",
+    // pickerBackgroundColor: "#1e293b",
+    pickerBackgroundColor: "var(--rv-black)",
+    diaryMainColor: '#9CA3AF',
+    diaryCardBackgroundColor: '#1E293B',
+    diaryBackgroundColor: '#0F172A'
 }
 
 export const UserConfigContext = createContext<FontendConfig | false | undefined>(undefined)

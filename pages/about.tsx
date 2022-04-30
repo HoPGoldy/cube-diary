@@ -34,7 +34,7 @@ const DiaryList: NextPage = () => {
                         </a>
                     </Card>
                 </Space>
-                <div className="text-center absolute w-full bottom-0">
+                <div className="text-center absolute w-full bottom-0 text-mainColor">
                     Powered by 💗 Yuzizi
                 </div>
             </PageContent>
