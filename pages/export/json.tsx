@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { NextPage } from 'next'
 import Head from 'next/head'
 import { Card, Dialog, Form, Space, Cell, Field, Notify, Radio } from 'react-vant'
@@ -69,9 +69,9 @@ const DiaryList: NextPage = () => {
         saveAsJson(resp.data)
 
         await Dialog.confirm({
-            title: '导出完成',
+            title: <b>导出完成</b>,
             message: `共计导出 ${resp.data?.length} 条`,
-            // messageAlign: 'left',
+            className: 'text-mainColor',
             cancelButtonText: '继续导出',
             confirmButtonText: '返回首页'
         })

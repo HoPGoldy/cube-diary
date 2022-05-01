@@ -66,7 +66,7 @@ export const ActionButton: FC<ActionButtonProps> = (props) => {
 
     return (
         <div
-            className="m-2 p-2 flex items-center justify-center grow rounded-lg text-mainColor relative"
+            className="m-2 p-2 flex items-center justify-center grow rounded-lg text-white relative"
             style={styles}
             onClick={props.loading ? undefined : props.onClick}
         >

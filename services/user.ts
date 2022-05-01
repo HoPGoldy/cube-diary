@@ -25,6 +25,14 @@ export const useUserProfile = function () {
     const [userProfile, setUserProfile] = useState<UserProfile>()
 
     useEffect(() => {
+        setUserProfile({
+            username: '加载中...',
+            totalCount: 0,
+            darkTheme: (window.localStorage && window.localStorage.getItem('dark')) ? true : false
+        })
+    }, [])
+    
+    useEffect(() => {
         const userToken = localStorage.getItem(USER_TOKEN_KEY)
         if (!userToken) {
             router.replace('/login')

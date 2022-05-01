@@ -64,7 +64,7 @@ const DiaryList: NextPage = () => {
                     <div className="pt-4">可通过备份管理中的 “导入备份” 恢复到导入前的状态</div>
                 </div>
             ),
-            // messageAlign: 'left',
+            className: 'text-mainColor',
             cancelButtonText: '继续导入',
             confirmButtonText: '返回首页'
         })

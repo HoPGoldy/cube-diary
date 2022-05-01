@@ -23,11 +23,6 @@ const DiaryList: NextPage = () => {
         setUserProfile(newUserProfile)
     }, [newUserProfile])
 
-    const onSaveSetting = () => {
-        router.back()
-        // Notify.show({ type: 'success', message: '设置已保存' })
-    }
-
     const onLogout = () => {
         localStorage.removeItem(USER_TOKEN_KEY)
         router.replace('/login')
@@ -44,7 +39,6 @@ const DiaryList: NextPage = () => {
     }
 
     const onSwitchDark = (checked: boolean) => {
-        console.log('checked', checked)
         if (!userProfile) return
 
         setUserProfile?.({ ...userProfile, darkTheme: checked })
@@ -93,7 +87,7 @@ const DiaryList: NextPage = () => {
             </PageContent>
 
             <PageAction>
-                <ActionButton onClick={onSaveSetting}>返回</ActionButton>
+                <ActionButton onClick={() => router.back()}>返回</ActionButton>
             </PageAction>
         </div>
     )

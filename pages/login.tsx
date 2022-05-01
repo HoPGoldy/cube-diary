@@ -42,13 +42,13 @@ const Login: NextPage = () => {
     }
 
     return (
-        <div className="h-screen w-screen bg-white flex flex-col justify-center items-center">
+        <div className="h-screen w-screen bg-background flex flex-col justify-center items-center">
             <Head>
                 <title>日记登陆</title>
             </Head>
             <header className="w-screen text-center mb-36 ">
-                <div className="text-5xl font-bold">{appTitle}</div>
-                {appSubtitle && <div className="mt-4 text-xl text-gray-600">{appSubtitle}</div>}
+                <div className="text-5xl font-bold text-mainColor">{appTitle}</div>
+                {appSubtitle && <div className="mt-4 text-xl text-mainColor">{appSubtitle}</div>}
             </header>
             <PasswordInput
                 ref={passwordRef}

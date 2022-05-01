@@ -5,7 +5,7 @@ import { Loading } from 'react-vant'
  * 用于页面的加载状态
  */
 export const PageLoading: FC = () => {
-    return <Loading className="my-24" color="#3f45ff" size="36px" vertical>加载中...</Loading>
+    return <Loading className="my-24" color="var(--rv-blue)" size="36px" vertical>加载中...</Loading>
 }
 
 /**
@@ -22,7 +22,7 @@ export const LoadingMask: FC<{ className?: string }> = (props) => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        color: 'var(--rv-picker-loading-icon-color)',
+        color: 'var(--rv-blue)',
         backgroundColor: 'var(--rv-picker-loading-mask-color)'
     }} className={props.className} />
 }

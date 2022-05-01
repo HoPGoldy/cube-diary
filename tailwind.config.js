@@ -6,8 +6,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        mainColor: "var(--rv-diary-main-color)",
-        cardBackground: "var(--rv-card-background-color)"
+        mainColor: "var(--rv-black)",
+        cardBackground: "var(--rv-white)",
+        background: "var(--rv-gray-1)"
       },
     },
   },

@@ -14,7 +14,8 @@ const DiaryList: NextPage = () => {
 
     const confirmRollback = async (item: BackupDetail) => {
         await Dialog.confirm({
-            title: '备份恢复',
+            title: <b>备份恢复</b>,
+            className: 'text-mainColor',
             message: `确定要恢复于 ${dayjs(item.date).format('YYYY-MM-DD HH:mm')} 创建的${item.title}吗？`
              + `\n\n恢复前将创建回滚备份，可随时通过该备份还原当前状态。`,
         });
