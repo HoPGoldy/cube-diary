@@ -38,6 +38,7 @@ export const PullContainer: FC = function (props) {
             pullingText="上个月"
             pullDistance="150"
             onRefresh={goToPrevious}
+            className="h-full"
         >
             <PullupRefresh
                 loosingText="释放查看下个月日记"

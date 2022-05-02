@@ -55,7 +55,6 @@ function MyApp({ Component, pageProps }: AppProps) {
     useEffect(() => {
         document.documentElement.setAttribute('data-theme', userInfo.userProfile?.darkTheme ? 'dark' : '')
     }, [userInfo.userProfile?.darkTheme])
-    
 
     return (
         <ConfigProvider themeVars={userInfo.userProfile?.darkTheme ? darkTheme : lightTheme}>

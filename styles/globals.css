@@ -22,6 +22,7 @@ a {
   --rv-button-round-border-radius: 8px !important;
 }
 
+/* 黑夜模式的变量配置 */
 :root[data-theme="dark"] {
   --rv-white: #1E293B;
   --rv-black: #9CA3AF;
@@ -37,7 +38,9 @@ a {
 @tailwind utilities;
 
 :root[data-theme="dark"] .rv-picker__mask {
-  background-image: linear-gradient(180deg, hsl(217deg 33% 17% / 90%), hsl(217deg 33% 17% / 40%)), linear-gradient(0deg, hsl(217deg 33% 17% / 90%), hsl(217deg 33% 17% / 40%))
+  background-image:
+    linear-gradient(180deg, hsl(217deg 33% 17% / 90%), hsl(217deg 33% 17% / 40%)),
+    linear-gradient(0deg, hsl(217deg 33% 17% / 90%), hsl(217deg 33% 17% / 40%));
 }
 
 /*
