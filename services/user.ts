@@ -3,6 +3,7 @@ import md5 from "crypto-js/md5"
 import { USER_TOKEN_KEY } from "lib/constants"
 import { get, post } from "lib/request"
 import { useRouter } from "next/router"
+import { parseCookies } from "nookies"
 import { useEffect, useState } from "react"
 import { FontendConfig } from "types/global"
 import { UserProfile } from "types/storage"
@@ -28,12 +29,12 @@ export const useUserProfile = function () {
         setUserProfile({
             username: '加载中...',
             totalCount: 0,
-            darkTheme: (window.localStorage && window.localStorage.getItem('dark')) ? true : false
+            darkTheme: localStorage.getItem('dark') ? true : false
         })
     }, [])
-    
+
     useEffect(() => {
-        const userToken = localStorage.getItem(USER_TOKEN_KEY)
+        const userToken = parseCookies()[USER_TOKEN_KEY]
         if (!userToken) {
             router.replace('/login')
             return
@@ -54,8 +55,6 @@ export const useUserProfile = function () {
 
     // 黑夜模式更新后保存到本地
     useEffect(() => {
-        if (!localStorage) return
-
         if (userProfile?.darkTheme) localStorage.setItem('dark', 'on')
         else localStorage.removeItem('dark')
     }, [userProfile?.darkTheme])

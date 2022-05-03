@@ -8,6 +8,8 @@ import { createHandler } from 'lib/utils/createHandler'
 import { UserProfile } from 'types/storage'
 import { getDiaryCollection, getUserProfile } from 'lib/loki'
 import { requireLogin } from 'lib/loginLimit'
+import nookies from 'nookies'
+import { USER_TOKEN_KEY } from 'lib/constants'
 
 export interface LoginReqBody {
     code: string
@@ -40,6 +42,11 @@ export default createHandler({
         const token = await startSession(matchedUser.username)
         const userProfile = await getUserProfile(matchedUser.username)
         const userDiarys = await getDiaryCollection(matchedUser.username)
+
+        nookies.set({ res }, USER_TOKEN_KEY, token, {
+            maxAge: 2 * 60 * 60,
+            path: '/'
+        })
 
         if (!userProfile) {
             return res.status(200).json({

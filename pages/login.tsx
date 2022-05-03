@@ -29,7 +29,6 @@ const Login: NextPage = () => {
             return
         }
 
-        localStorage.setItem(USER_TOKEN_KEY, resp?.data?.token)
         setUserProfile && setUserProfile(resp?.data)
         Notify.show({ type: 'success', message: `欢迎回来 ${resp.data.username}` })
         router.push('/')

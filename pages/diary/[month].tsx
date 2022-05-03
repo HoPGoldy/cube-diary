@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { NextPage } from 'next'
+import { GetServerSideProps, NextPage } from 'next'
 import Head from 'next/head'
 import { SettingO, UnderwayO, Search } from '@react-vant/icons'
 import { Space } from 'react-vant'
@@ -11,6 +11,9 @@ import { PageLoading } from 'components/PageLoading'
 import { ActionButton, ActionIcon, PageAction, PageContent } from 'components/PageWithAction'
 import { PullContainer } from 'components/PullContainer'
 import { MonthPicker } from 'components/MonthPicker'
+import nookies from 'nookies'
+import { USER_TOKEN_KEY } from 'lib/constants'
+import { verifyAuth } from 'lib/auth'
 
 const DiaryList: NextPage = () => {
     const router = useRouter()

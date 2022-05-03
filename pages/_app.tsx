@@ -1,5 +1,5 @@
 import '../styles/globals.css'
-import type { AppProps } from 'next/app'
+import type { AppContext, AppProps } from 'next/app'
 import { ConfigProvider } from 'react-vant'
 import Head from 'next/head'
 import { useAppConfig, useUserProfile } from 'services/user'
@@ -7,6 +7,10 @@ import { createContext, Dispatch, SetStateAction, useEffect } from 'react'
 import { FontendConfig } from 'types/global'
 import { PageLoading } from 'components/PageLoading'
 import { UserProfile } from 'types/storage'
+import App from "next/app"
+import nookies from 'nookies'
+import { USER_TOKEN_KEY } from 'lib/constants'
+import { verifyAuth } from 'lib/auth'
 // import Script from 'next/script'
 
 const lightTheme = {

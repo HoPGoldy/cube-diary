@@ -5,12 +5,7 @@ import Router from 'next/router'
 import { USER_TOKEN_KEY } from './constants'
 
 const fetcher: typeof fetch = (input, requestInit = {}) => {
-    const init = {
-        ...requestInit,
-        headers: {
-            [USER_TOKEN_KEY]: localStorage.getItem(USER_TOKEN_KEY) || ''
-        }
-    }
+    const init = { ...requestInit }
 
     return fetch(input, init)
         .then(res => {

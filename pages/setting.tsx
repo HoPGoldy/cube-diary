@@ -10,6 +10,7 @@ import { USER_TOKEN_KEY } from 'lib/constants'
 import { updateUserProfile, useUserProfile } from 'services/user'
 import { PageContent, PageAction, ActionButton } from 'components/PageWithAction'
 import { refreshCount } from 'services/setting'
+import { destroyCookie } from 'nookies'
 
 const DiaryList: NextPage = () => {
     const router = useRouter()
@@ -24,7 +25,7 @@ const DiaryList: NextPage = () => {
     }, [newUserProfile])
 
     const onLogout = () => {
-        localStorage.removeItem(USER_TOKEN_KEY)
+        destroyCookie(null, USER_TOKEN_KEY)
         router.replace('/login')
     }
 

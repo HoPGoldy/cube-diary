@@ -5,6 +5,7 @@ import { errors } from 'jose'
 import { STORAGE_PATH, USER_TOKEN_KEY } from './constants'
 import { ensureFile } from 'fs-extra'
 import { readFile, writeFile } from 'fs/promises'
+import nookies from 'nookies'
 
 let jwtSecretCache: string
 
@@ -35,7 +36,7 @@ export type MyJWTPayload = JWTPayload & {
 export const runAuth = async function (req: NextApiRequest, res: NextApiResponse): Promise<MyJWTPayload | false | {}> {
     if (req.url === '/api/login' && req.method === 'POST') return {}
 
-    const token = req.headers[USER_TOKEN_KEY]
+    const token = nookies.get({ req })[USER_TOKEN_KEY]
     if (!token) {
         res.status(401).json({ success: false, message: '用户未登录' })
         return false
