@@ -243,7 +243,7 @@ export const PullupRefresh: React.FC<PullRefreshProps> = (props) => {
     );
 
     return (
-        <div ref={root} className="rv-pull-refresh h-full" style={props.style}>
+        <div ref={root} className="rv-pull-refresh min-h-full" style={props.style}>
             <div
                 ref={track}
                 className="rv-pull-refresh__track"

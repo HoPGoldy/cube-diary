@@ -1,6 +1,5 @@
 import dayjs from 'dayjs'
-import { copy, ensureDir, pathExists, readFile, remove, writeFile } from 'fs-extra'
-import { readdir } from 'fs/promises'
+import { ensureDir, pathExists, readFile, remove, writeFile } from 'fs-extra'
 import { scheduleJob, Job } from 'node-schedule'
 import path from 'path'
 import { getAppConfig } from './appConfig'

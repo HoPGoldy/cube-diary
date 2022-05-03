@@ -22,6 +22,10 @@ a {
   --rv-button-round-border-radius: 8px !important;
 }
 
+::-webkit-scrollbar {
+  display: none;
+}
+
 /* 黑夜模式的变量配置 */
 :root[data-theme="dark"] {
   --rv-white: #1E293B;

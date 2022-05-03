@@ -53,7 +53,7 @@ export interface AppConfig {
     loginPreDay?: number
     /**
      * 备份调度器
-     * 默认为 0 4 * * *
+     * 默认为 0 0 4 * * *
      * 即每日凌晨四点整进行备份
      */
     backupScheduler: string
