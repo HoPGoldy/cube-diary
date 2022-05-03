@@ -28,14 +28,14 @@ type ValueToArray<T> = {
     [Key in keyof T]: Array<T[Key]>
 }
 
-export const parseBody = async function <T = Record<string, string[]>>(req: IncomingMessage): Promise<[T, File[]]> {
+export const parseBody = async function <T = Record<string, string[]>>(req: IncomingMessage): Promise<[T, Record<string, File>]> {
     return new Promise((resolve, reject) => {
         const form = new Form()
 
         form.parse(req, (err, fields, files) => {
             if (err) return reject(err)
             
-            resolve([pickFields(fields), files.file])
+            resolve([pickFields(fields), pickFields(files)])
         })
     })
 }

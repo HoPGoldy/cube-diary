@@ -55,3 +55,21 @@ export interface BackupDetail {
      */
     rollbackDate?: number
 }
+
+/**
+ * 附件信息详情
+ */
+export interface AccessoryDetail {
+    /**
+     * 文件的 md5 校验码
+     */
+    md5: string
+    /**
+     * 文件名，用于查找到文件实际存放位置
+     */
+    name: string
+    /**
+     * 文件类型
+     */
+    type: string
+}

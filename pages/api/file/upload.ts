@@ -2,12 +2,17 @@
 import type { NextApiResponse } from 'next'
 import { RespData } from 'types/global'
 import { createHandler } from 'lib/utils/createHandler'
-import { getDiaryCollection, getUserProfile, saveLoki, updateUserProfile } from 'lib/loki'
+import { getAccessoryCollection, getDiaryCollection, getUserProfile, saveLoki, updateUserProfile } from 'lib/loki'
 import dayjs from 'dayjs'
 import { Diary } from '../month/[queryMonth]'
 import { parseBody } from 'lib/utils/parseBody'
 import { readFile } from 'fs/promises'
 import { createBackup } from 'lib/backup'
+import { ensureDir, move } from 'fs-extra'
+import { STORAGE_PATH } from 'lib/constants'
+import path from 'path'
+import { AccessoryDetail } from 'types/storage'
+import md5 from 'crypto-js/md5'
 
 /**
  * json 导入配置项
@@ -138,28 +143,34 @@ const updateDiaryNumber = async (username: string, importResult: JsonImportResul
 
 export default createHandler({
     /**
-     * 保存日记
+     * 保存图片
      */
-    POST: async (req, res: NextApiResponse<RespData<JsonImportResult>>, auth) => {
+    POST: async (req, res: NextApiResponse<RespData>, auth) => {
         try {
             const [fields, files] = await parseBody<JsonImportForm>(req)
+            // console.log('fields, files', fields, files)
 
-            const jsonFile = await readFile(files.file?.path)
-            const jsonContent = JSON.parse(jsonFile.toString())
+            const storagePapth = path.resolve(STORAGE_PATH, 'file', auth.username)
+            await ensureDir(storagePapth)
 
-            const standardDiarys = formatDiary(fields, jsonContent, res)
-            if (!standardDiarys) return
+            const saveResult: AccessoryDetail[] = []
+            const accessoryCollection = await getAccessoryCollection(auth.username)
 
-            // 先备份一下
-            await createBackup(auth.username, '导入备份')
+            for (const fileName in files) {
+                const file = files[fileName]
+                const fileMd5 = md5((await readFile(file.path)).toString()).toString()
+                console.log('fileMd5', fileMd5)
+                const fileDetail = accessoryCollection.findOne({ md5: fileMd5 })
+                // 已经有相同文件了，直接使用原始内容
+                if (fileDetail) {
+                    saveResult.push(fileDetail)
+                    continue
+                }
+                console.log('fileDetail', fileDetail)
+                await move(file.path, path.resolve(storagePapth, fileName))
+            }
 
-            // 导入完了更新下总字数
-            const importResult = await updateDiary(fields, standardDiarys, auth.username)
-            res.status(200).json({ success: true, data: importResult })
-
-            await updateDiaryNumber(auth.username, importResult)
-            saveLoki(auth.username)
-            saveLoki('backup')
+            res.status(200).json({ success: true })
         }
         catch (e) {
             console.error(e)

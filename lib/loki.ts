@@ -1,6 +1,6 @@
 import lokijs from 'lokijs'
 import { ensureDir } from 'fs-extra'
-import { BackupDetail, UserProfileStorage } from 'types/storage'
+import { AccessoryDetail, BackupDetail, UserProfileStorage } from 'types/storage'
 import { Diary } from '@pages/api/month/[queryMonth]'
 import { STORAGE_PATH } from './constants'
 
@@ -53,6 +53,21 @@ export const getDiaryCollection = async function (username: string) {
     if (collection) return collection
 
     collection = loki.addCollection<Diary>(collectionName, { unique: ['date'] })
+    return collection
+}
+
+/**
+ * 获取指定用户的附件集合
+ *
+ * @param username 要获取附件的用户名
+ */
+export const getAccessoryCollection = async function (username: string) {
+    const loki = await getLoki(username)
+    const collectionName = 'accessory'
+    let collection = loki.getCollection<AccessoryDetail>(collectionName)
+    if (collection) return collection
+
+    collection = loki.addCollection<AccessoryDetail>(collectionName, { unique: ['md5'] })
     return collection
 }
 

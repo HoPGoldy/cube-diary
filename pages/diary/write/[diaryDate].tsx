@@ -1,7 +1,7 @@
 import { useState, useRef, useMemo, useEffect, MutableRefObject } from 'react'
 import { NextPage } from 'next'
 import Head from 'next/head'
-import { ArrowLeft, UnderwayO } from '@react-vant/icons'
+import { ArrowLeft, PhotoO, UnderwayO } from '@react-vant/icons'
 import { Card, Space, Notify } from 'react-vant'
 import { updateDiary, useDiaryDetail } from 'services/diary'
 import dayjs from 'dayjs'
@@ -9,6 +9,7 @@ import { useRouter } from 'next/router'
 import { WEEK_TO_CHINESE } from 'lib/constants'
 import { PageLoading } from 'components/PageLoading'
 import { PageContent, PageAction, ActionIcon, ActionButton } from 'components/PageWithAction'
+import { EditUploader } from 'components/EditUploader'
 
 /**
  * 自动保存 hook
@@ -54,6 +55,8 @@ const DiaryEdit: NextPage = () => {
     const [uploading, setUploading] = useState(false)
     // 文本输入框引用
     const textAreaRef = useRef<HTMLTextAreaElement>(null)
+    // 是否展示附件上传弹出框
+    const [showUploader, setShowUploader] = useState(false)
     // 加载完成后将光标放在文章末尾
     useEffect(() => {
         if (contentLoading) return
@@ -162,11 +165,16 @@ const DiaryEdit: NextPage = () => {
                 <ActionIcon onClick={onInsertDate}>
                     <UnderwayO fontSize={24} />
                 </ActionIcon>
+                <ActionIcon onClick={() => setShowUploader(true)}>
+                    <PhotoO fontSize={24} />
+                </ActionIcon>
                 <ActionButton onClick={onSaveDiary} loading={uploading}>
                     保存
                     <span className="ml-2 text-xs">{autoSaveTip}</span>
                 </ActionButton>
             </PageAction>
+
+            <EditUploader visible={showUploader} onClose={() => setShowUploader(false)} />
         </div>
     )
 }
