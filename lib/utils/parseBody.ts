@@ -1,7 +1,7 @@
 import { IncomingHttpHeaders, IncomingMessage } from "http"
 import { Form } from 'multiparty'
 
-interface File {
+export interface File {
     /**
      * same as name - the field name for this file
      */

@@ -1,43 +1,122 @@
 import { upload } from 'lib/request'
-import { FC, MouseEvent, useState } from 'react'
-import { Popup, Uploader, UploaderFileListItem } from 'react-vant'
-import { UploaderAfterRead } from 'react-vant/es/uploader/PropsType'
+import { forwardRef, MouseEvent, useImperativeHandle, useState } from 'react'
+import { Notify, Popup, Uploader, UploaderFileListItem } from 'react-vant'
+import { AccessoryUploadResult } from 'types/accessory'
+
+export type Accessory = AccessoryUploadResult & UploaderFileListItem
 
 interface Props {
-    defaultFiles?: UploaderFileListItem[]
+    defaultFiles?: Accessory[]
     visible: boolean
+    onInsert: (accessorys: Accessory[]) => unknown
     onClose: () => unknown
 }
 
-export const EditUploader: FC<Props> = (props) => {
-    const { visible, defaultFiles, onClose } = props
+export interface EditUploaderRef {
+    getFiles: () => Accessory[]
+    setFiles: (newFiles: Accessory[]) => void
+}
 
-    const [files, setFiles] = useState<UploaderFileListItem[]>(defaultFiles || []);
+/**
+ * 判断一个附件是否包含 id 等相关信息
+ */
+const isAccessory = (file: Partial<Accessory>): file is Accessory => {
+    const hasProp = file.id !== undefined && file.name !== undefined && file.url !== undefined
+    if (!hasProp) console.error('未通过 isAccessory 检查', file)
+    return hasProp
+}
 
-    const onInsert = (item: UploaderFileListItem, event: MouseEvent) => {
-        event.stopPropagation()
-        console.log('item', item)
+export const EditUploader = forwardRef<EditUploaderRef, Props>((props, ref) => {
+    const { visible, defaultFiles, onClose, onInsert } = props
+
+    const [files, setFiles] = useState<Accessory[]>(defaultFiles || []);
+
+    const innerOnInsert = (items: Partial<Accessory>[], event?: MouseEvent) => {
+        event?.stopPropagation()
+        onInsert(items.filter(isAccessory))
     }
 
-    const onUploadFile: UploaderAfterRead = async (items, detail) => {
-        console.log('detail', detail)
-        console.log('items', items)
-        const formData: Record<string, File> = {}
+    /**
+     * 单个日记内不允许上传同名文件
+     */
+    const beforeRead = (file: File | File[]) => {
+        const newFiles = Array.isArray(file) ? file : [file];
+        const existFileNames = files.map(file => file.file?.name);
 
-        if (Array.isArray(items)) {
-            items.forEach(item => {
-                if (!item.file) return
-                formData[item.file.name] = item.file
+        return new Promise<File[]>((resolve) => {
+            const passFiles = newFiles.filter((f) => {
+                if (existFileNames.includes(f.name)) {
+                    Notify.show({ type: 'warning', message: `不可上传同名文件 ${f.name}` })
+                    return false;
+                }
+                return true;
+            });
+            resolve(passFiles);
+        });
+    }
+
+    /**
+     * 将文件上传至服务器
+     */
+    const onUploadFile = async (items: UploaderFileListItem) => {
+        const newItems = Array.isArray(items) ? items : [items]
+        const formData: Record<string, File> = {}
+        newItems.forEach(item => {
+            if (!item.file) return
+            formData[item.file.name] = item.file
+        })
+
+        setFiles([...files, ...newItems.map(item => ({ ...item, status: 'uploading' }))])
+
+        try {
+            const resp = await upload<Accessory[]>('/api/file/upload', formData)
+            if (!resp.success) {
+                Notify.show({ type: 'warning', message: '上传失败' })
+                return
+            }
+
+            let newFiles: Accessory[] = []
+            setFiles(oldFiles => {
+                newFiles = oldFiles.map(f => {
+                    const matchedFile = (resp.data || []).find(r => r.name === f.file?.name)
+                    if (!matchedFile) return f
+                    return { ...f, ...matchedFile, status: matchedFile.success ? 'done' : 'failed' }
+                })
+
+                return newFiles
+            })
+
+            innerOnInsert(newFiles)
+            onClose()
+        }
+        catch (e) {
+            console.error(e)
+            const failedItemNames = newItems.map(item => item.file?.name)
+
+            setFiles(oldFiles => {
+                const newFiles = oldFiles.map(f => {
+                    if (!failedItemNames.includes(f.file?.name)) return f
+                    return { ...f, status: 'failed' }
+                })
+
+                return newFiles
             })
         }
-        else {
-            if (items.file) formData[items.file.name] = items.file
-        }
-
-        const resp = await upload('/api/file/upload', formData)
-        console.log('resp', resp)
-        
     }
+
+    /**
+     * 删除一个文件
+     */
+    const onDeleteFile = (file: UploaderFileListItem, detail: { index: number }) => {
+        const newFiles = [...files]
+        newFiles.splice(detail.index, 1)
+        setFiles(newFiles)
+    }
+
+    useImperativeHandle(ref, () => ({
+        getFiles: () => [...files],
+        setFiles
+    }), [files])
 
     return (
         <Popup
@@ -52,19 +131,18 @@ export const EditUploader: FC<Props> = (props) => {
                 <Uploader
                     multiple
                     value={files}
-                    onChange={setFiles}
+                    beforeRead={beforeRead}
                     afterRead={onUploadFile}
-                    previewCoverRender={(item) => {
-                        return (
-                            <div
-                                className="absolute bottom-0 w-full text-white text-center bg-gray-700"
-                                onClick={(e) => onInsert(item, e)}
-                            >填入</div>
-                        );
-                    }}
+                    onDelete={onDeleteFile}
+                    previewCoverRender={(item) => (
+                        <div
+                            className="absolute bottom-0 w-full text-white text-center bg-gray-700"
+                            onClick={(e) => innerOnInsert([item], e)}
+                        >填入</div>
+                    )}
                 >
                 </Uploader>
             </div>
         </Popup>
     )
-}
+})

@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { RespData } from 'types/global'
 import { createHandler } from 'lib/utils/createHandler'
 import { getDiaryCollection } from 'lib/loki'
-import { Diary } from './month/[queryMonth]'
+import { Diary } from 'types/diary'
 
 /**
  * 日记搜索筛选项

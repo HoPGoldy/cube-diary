@@ -12,7 +12,7 @@ import { PageContent, PageAction, ActionButton } from 'components/PageWithAction
 import { refreshCount } from 'services/setting'
 import { destroyCookie } from 'nookies'
 
-const DiaryList: NextPage = () => {
+const Setting: NextPage = () => {
     const router = useRouter()
     // 当前缓存的用户配置
     const { userProfile, setUserProfile } = useContext(UserProfileContext) || {}
@@ -94,4 +94,4 @@ const DiaryList: NextPage = () => {
     )
 }
 
-export default DiaryList
+export default Setting

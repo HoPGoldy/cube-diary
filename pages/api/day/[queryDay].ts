@@ -2,16 +2,18 @@
 import type { NextApiResponse } from 'next'
 import { RespData } from 'types/global'
 import { createHandler } from 'lib/utils/createHandler'
-import { getDiaryCollection, getUserProfile, saveLoki, updateUserProfile } from 'lib/loki'
+import { getAccessoryCollection, getDiaryCollection, getUserProfile, saveLoki, updateUserProfile } from 'lib/loki'
 import dayjs from 'dayjs'
-import { Diary } from '../month/[queryMonth]'
 import { callBackupSchedule } from 'lib/backup'
+import { DiaryDetail, DiaryStorage } from 'types/diary'
+import { AccessoryDetail } from 'types/accessory'
+import { getAccessoryUrl } from '../file/upload'
 
 export default createHandler({
     /**
      * 获取日记详情
      */
-    GET: async (req, res: NextApiResponse<RespData<Diary>>, auth) => {
+    GET: async (req, res: NextApiResponse<RespData<DiaryDetail>>, auth) => {
         if (!req.query.queryDay || typeof req.query.queryDay === 'object') {
             res.status(200).json({ success: false, message: '未指定日记日期' })
             return
@@ -27,7 +29,27 @@ export default createHandler({
             return
         }
 
-        res.status(200).json({ success: true, data: diary })
+        // 把附件信息插入进来
+        const accessorys: AccessoryDetail[] = []
+        if (diary.accessoryIds) {
+            const accessoryCollection = await getAccessoryCollection(auth.username)
+            diary.accessoryIds.forEach(id => {
+                const accessory = accessoryCollection.get(Number(id))
+                if (accessory) accessorys.push({
+                    name: accessory.name,
+                    url: getAccessoryUrl(accessory.$loki),
+                    id: accessory.$loki,
+                })
+            })
+        }
+
+        const data: DiaryDetail = {
+            date: diary.date,
+            content: diary.content,
+            accessorys
+        }
+
+        res.status(200).json({ success: true, data })
     },
     /**
      * 保存日记
@@ -52,12 +74,27 @@ export default createHandler({
 
         // 没找到就新增
         if (!diary) {
-            collection.insert({ date: diaryDate.valueOf(), content: reqBody.content })
+            const newDiaryItem: DiaryStorage = { date: diaryDate.valueOf(), content: reqBody.content }
+
+            // 有附件的话就一块存起来
+            if ('accessoryIds' in reqBody) {
+                newDiaryItem.accessoryIds = reqBody.accessoryIds
+            }
+
+            collection.insert(newDiaryItem)
         }
         // 找到了就更新
         else {
             changeNumber = reqBody.content.length - diary.content.length
             diary.content = reqBody.content
+
+            // 有附件的话就一块存起来
+            if ('accessoryIds' in reqBody) {
+                diary.accessoryIds = reqBody.accessoryIds
+            }
+            // 没有就删掉
+            else delete diary.accessoryIds
+
             collection.update(diary)
         }
 

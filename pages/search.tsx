@@ -10,7 +10,7 @@ import { PageLoading } from 'components/PageLoading'
 import { ActionIcon, ActionSearch, PageAction, PageContent } from 'components/PageWithAction'
 import { useDiarySearch } from 'services/search'
 
-const DiaryList: NextPage = () => {
+const SearchList: NextPage = () => {
     const router = useRouter()
     // 搜索内容
     const [searchValue, setSearchValue] = useState('')
@@ -52,7 +52,6 @@ const DiaryList: NextPage = () => {
                             className="p-4"
                             key={diary.date}
                             diary={diary}
-                            onClickBody={() => onClickWrite(diary.date)}
                         />
                     })}
                 </Space>
@@ -88,4 +87,4 @@ const DiaryList: NextPage = () => {
     )
 }
 
-export default DiaryList
+export default SearchList

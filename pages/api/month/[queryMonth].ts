@@ -5,43 +5,10 @@ import { keyBy } from 'lodash'
 import { getMonthExistDate } from 'lib/utils/getMonthExistDate'
 import dayjs from 'dayjs'
 import { getDiaryCollection } from 'lib/loki'
-
-export interface DiaryMonthQuery {
-    queryMonth: string
-}
+import { Diary, UndoneDiary } from 'types/diary'
 
 export interface DiaryMonthResData {
     entries: Array<Diary | UndoneDiary>
-}
-
-/**
- * 日记对象
- */
-export interface Diary {
-    /**
-     * 日记的日期
-     * 毫秒 UNIX 时间戳，须为每天的开始时间
-     */
-    date: number
-    /**
-     * 日记的内容
-     */
-    content: string
-}
-
-/**
- * 未完成的日记
- * 会显示成一个按钮让用户填写
- */
- export interface UndoneDiary {
-     /**
-      * 未完成的日期毫秒时间戳
-      */
-    date: number
-    /**
-     * 未完成标识
-     */
-    undone: true
 }
 
 export default createHandler({

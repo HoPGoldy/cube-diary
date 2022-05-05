@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { GetServerSideProps, NextPage } from 'next'
+import { NextPage } from 'next'
 import Head from 'next/head'
 import { SettingO, UnderwayO, Search } from '@react-vant/icons'
 import { Space } from 'react-vant'
@@ -11,16 +11,12 @@ import { PageLoading } from 'components/PageLoading'
 import { ActionButton, ActionIcon, PageAction, PageContent } from 'components/PageWithAction'
 import { PullContainer } from 'components/PullContainer'
 import { MonthPicker } from 'components/MonthPicker'
-import nookies from 'nookies'
-import { USER_TOKEN_KEY } from 'lib/constants'
-import { verifyAuth } from 'lib/auth'
+import { getDiaryWriteUrl } from 'lib/utils/getDiaryWriteUrl'
 
 const DiaryList: NextPage = () => {
     const router = useRouter()
     // 获取日记列表
     const { data, error } = useDiaryList(router.query.month)
-    // 当前点击了哪条日记
-    const [clickDiary, setClickDiary] = useState<number | undefined>(undefined)
     // 是否展示日期选择框
     const [showPicker, setShowPicker] = useState(false)
 
@@ -46,14 +42,8 @@ const DiaryList: NextPage = () => {
                     className="w-full p-4 pb-0"
                     gap={16}
                 >
-                    {data?.data?.entries.map((diary, index) => {
-                        return <DiaryItem
-                            key={diary.date}
-                            diary={diary}
-                            // onClickBody={() => setClickDiary(clickDiary === index ? undefined : index)}
-                            onClickBody={() => onClickWrite(diary.date)}
-                            showInteract={index === clickDiary}
-                        />
+                    {data?.data?.entries.map(diary => {
+                        return <DiaryItem key={diary.date} diary={diary} />
                     })}
                 </Space>
             </PullContainer>
@@ -61,8 +51,7 @@ const DiaryList: NextPage = () => {
     }
 
     const onClickWrite = (datetime?: number) => {
-        const queryDate = typeof datetime === 'number' ? dayjs(datetime) : dayjs()
-        router.push(`/diary/write/${queryDate.format('YYYY-MM-DD')}`)
+        router.push(getDiaryWriteUrl(datetime))
     }
 
     return (

@@ -37,7 +37,7 @@ export interface AppConfig {
      * 应用中确认按钮的颜色
      * 将在数组中随机挑选
      */
-    writeDiaryButtonColors: string[]
+    mainButtonColors: string[]
     /**
      * 登陆页面的应用标题
      */
@@ -67,7 +67,7 @@ export interface AppConfig {
 /**
  * 前端可以获取的配置项
  */
-export type FontendConfig = Omit<AppConfig, 'user' | 'writeDiaryButtonColors'> & {
+export type FontendConfig = Omit<AppConfig, 'user' | 'mainButtonColors'> & {
     /**
      * 前端使用的按钮颜色
      */

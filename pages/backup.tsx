@@ -8,7 +8,7 @@ import { PageLoading } from 'components/PageLoading'
 import { BackupDetail } from 'types/storage'
 import dayjs from 'dayjs'
 
-const DiaryList: NextPage = () => {
+const BackupList: NextPage = () => {
     const router = useRouter()
     const { data, error, mutate } = useBackupList()
 
@@ -88,4 +88,4 @@ const DiaryList: NextPage = () => {
     )
 }
 
-export default DiaryList
+export default BackupList

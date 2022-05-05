@@ -1,8 +1,9 @@
 import lokijs from 'lokijs'
 import { ensureDir } from 'fs-extra'
-import { AccessoryDetail, BackupDetail, UserProfileStorage } from 'types/storage'
-import { Diary } from '@pages/api/month/[queryMonth]'
+import { BackupDetail, UserProfileStorage } from 'types/storage'
 import { STORAGE_PATH } from './constants'
+import { AccessoryStorage } from 'types/accessory'
+import { DiaryStorage } from 'types/diary'
 
 /**
  * loki 实例缓存
@@ -20,9 +21,12 @@ export const getLoki = async function (dbName: string): Promise<lokijs> {
     await ensureDir(STORAGE_PATH)
 
     return new Promise(resolve => {
-        lokiInstances[dbName] = new lokijs(STORAGE_PATH + `/${dbName}.json`, {
+        const newLoki = new lokijs(STORAGE_PATH + `/${dbName}.json`, {
             autoload: true,
-            autoloadCallback: () => resolve(lokiInstances[dbName])
+            autoloadCallback: () => {
+                lokiInstances[dbName] = newLoki
+                resolve(newLoki)
+            }
         })
     })
 }
@@ -49,10 +53,10 @@ export const saveLoki = async function (dbName: string): Promise<void> {
 export const getDiaryCollection = async function (username: string) {
     const loki = await getLoki(username)
     const collectionName = 'diary'
-    let collection = loki.getCollection<Diary>(collectionName)
+    let collection = loki.getCollection<DiaryStorage>(collectionName)
     if (collection) return collection
 
-    collection = loki.addCollection<Diary>(collectionName, { unique: ['date'] })
+    collection = loki.addCollection<DiaryStorage>(collectionName, { unique: ['date'] })
     return collection
 }
 
@@ -64,10 +68,10 @@ export const getDiaryCollection = async function (username: string) {
 export const getAccessoryCollection = async function (username: string) {
     const loki = await getLoki(username)
     const collectionName = 'accessory'
-    let collection = loki.getCollection<AccessoryDetail>(collectionName)
+    let collection = loki.getCollection<AccessoryStorage>(collectionName)
     if (collection) return collection
 
-    collection = loki.addCollection<AccessoryDetail>(collectionName, { unique: ['md5'] })
+    collection = loki.addCollection<AccessoryStorage>(collectionName, { unique: ['md5'] })
     return collection
 }
 

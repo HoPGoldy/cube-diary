@@ -2,8 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { RespData } from 'types/global'
 import { createHandler } from 'lib/utils/createHandler'
 import { BackupDetail, UserProfile } from 'types/storage'
-import { createBackup, getBackupInfo, hasBackupFile, rollback } from 'lib/backup'
-import { getBackupCollection, getDiaryCollection, getUserProfile, saveLoki, updateUserProfile } from 'lib/loki'
+import { getDiaryCollection, getUserProfile, saveLoki, updateUserProfile } from 'lib/loki'
 
 /**
  * 备份返回结果

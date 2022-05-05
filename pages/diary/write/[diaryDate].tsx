@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo, useEffect, MutableRefObject } from 'react'
+import { useState, useRef, useMemo, useEffect, RefObject } from 'react'
 import { NextPage } from 'next'
 import Head from 'next/head'
 import { ArrowLeft, PhotoO, UnderwayO } from '@react-vant/icons'
@@ -9,13 +9,13 @@ import { useRouter } from 'next/router'
 import { WEEK_TO_CHINESE } from 'lib/constants'
 import { PageLoading } from 'components/PageLoading'
 import { PageContent, PageAction, ActionIcon, ActionButton } from 'components/PageWithAction'
-import { EditUploader } from 'components/EditUploader'
+import { Accessory, EditUploader, EditUploaderRef } from 'components/EditUploader'
 
 /**
  * 自动保存 hook
  * 将每隔一段时间自动将内容提交到后端，并把保存结果返回出去
  */
-const useAutoSave = function (contentRef: MutableRefObject<string>) {
+const useAutoSave = function (contentRef: RefObject<string>, uploaderRef: RefObject<EditUploaderRef>) {
     const router = useRouter()
     const [autoSaveTip, setAutoSaveTip] = useState('')
 
@@ -25,7 +25,8 @@ const useAutoSave = function (contentRef: MutableRefObject<string>) {
             if (!content || content.length <= 0) return
 
             const { diaryDate } = router.query
-            const resp = await updateDiary(diaryDate as string, content)
+            const accessorys = uploaderRef.current?.getFiles()
+            const resp = await updateDiary(diaryDate as string, content, accessorys)
             if (!resp.success) {
                 setAutoSaveTip('自动保存失败')
                 return
@@ -50,25 +51,32 @@ const DiaryEdit: NextPage = () => {
     }, [router.query.diaryDate])
 
     // 编辑的正文内容
-    const { content, contentLoading, contentRef, setContent } = useDiaryDetail(router.query.diaryDate)
+    const { content, contentLoading, contentRef, accessoryRef, setContent } = useDiaryDetail(router.query.diaryDate)
     // 是否保存中
     const [uploading, setUploading] = useState(false)
     // 文本输入框引用
     const textAreaRef = useRef<HTMLTextAreaElement>(null)
+    // 附件组件引用
+    const uploaderRef = useRef<EditUploaderRef>(null)
     // 是否展示附件上传弹出框
     const [showUploader, setShowUploader] = useState(false)
+
     // 加载完成后将光标放在文章末尾
     useEffect(() => {
         if (contentLoading) return
         textAreaRef.current?.setSelectionRange(contentRef.current.length, contentRef.current.length)
+
+        const newFiles = accessoryRef.current.map(f => ({ ...f, isImage: true }))
+        uploaderRef.current?.setFiles(newFiles)
     }, [contentLoading])
+
     // 页面标题日期
     const pageTitle = useMemo(() => {
         const date = dayjs(router.query.diaryDate as string)
         return date.format('YYYY 年 M 月 D 日') + ` ${WEEK_TO_CHINESE[date.day()]}`
     }, [router.query.diaryDate])
 
-    const autoSaveTip = useAutoSave(contentRef)
+    const autoSaveTip = useAutoSave(contentRef, uploaderRef)
 
     /**
      * 点击插入时间按钮
@@ -85,6 +93,22 @@ const DiaryEdit: NextPage = () => {
     }
 
     /**
+     * 插入图片
+     */
+    const onInsertPhoto = (accessorys: Accessory[]) => {
+        setContent(oldContent => {
+            const { selectionStart = 0, selectionEnd = 0 } = textAreaRef.current || {}
+            // 把所有新图片转换为 markdown 图片字符串
+            const newInsertContent = accessorys.map(f => `\n![${f.name.split('.')[0]}](${f.url})\n`).join('') + '\n'
+            const newContent = oldContent.slice(0, selectionStart) + newInsertContent + oldContent.slice(selectionEnd)
+            return newContent
+        })
+
+        setShowUploader(false)
+        textAreaRef.current?.focus()
+    }
+
+    /**
      * 点击保存按钮
      */
     const onSaveDiary = async () => {
@@ -94,8 +118,10 @@ const DiaryEdit: NextPage = () => {
             return
         }
 
+        const accessorys = uploaderRef.current?.getFiles()
+
         setUploading(true)
-        const resp = await updateDiary(diaryDate, content)
+        const resp = await updateDiary(diaryDate, content, accessorys)
         setUploading(false)
         if (!resp.success) {
             Notify.show({ type: 'danger', message: resp.message })
@@ -174,7 +200,12 @@ const DiaryEdit: NextPage = () => {
                 </ActionButton>
             </PageAction>
 
-            <EditUploader visible={showUploader} onClose={() => setShowUploader(false)} />
+            <EditUploader
+                ref={uploaderRef}
+                visible={showUploader}
+                onClose={() => setShowUploader(false)}
+                onInsert={onInsertPhoto}
+            />
         </div>
     )
 }

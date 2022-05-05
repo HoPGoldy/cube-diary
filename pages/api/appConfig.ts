@@ -10,9 +10,9 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
         return
     }
 
-    const { writeDiaryButtonColors, user, ...otherConfig } = config
-    const randIndex = Math.floor(Math.random() * (writeDiaryButtonColors?.length))
-    const buttonColor = writeDiaryButtonColors[randIndex]
+    const { mainButtonColors, user, ...otherConfig } = config
+    const randIndex = Math.floor(Math.random() * (mainButtonColors?.length))
+    const buttonColor = mainButtonColors[randIndex]
 
     res.status(200).json({ success: true, data: { ...otherConfig, buttonColor } })
 }

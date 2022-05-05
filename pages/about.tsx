@@ -4,7 +4,7 @@ import { Card, Space, Cell } from 'react-vant'
 import { useRouter } from 'next/router'
 import { PageContent, PageAction, ActionButton } from 'components/PageWithAction'
 
-const DiaryList: NextPage = () => {
+const About: NextPage = () => {
     const router = useRouter()
 
     return (
@@ -46,4 +46,4 @@ const DiaryList: NextPage = () => {
     )
 }
 
-export default DiaryList
+export default About
