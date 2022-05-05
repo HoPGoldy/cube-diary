@@ -1,8 +1,8 @@
-import { Diary } from "@pages/api/month/[queryMonth]"
 import { get } from "lib/request"
 import { useEffect, useState } from "react"
 import { Notify } from "react-vant"
 import { DiarySearchQuery, DiarySearchResData } from "@pages/api/search"
+import { Diary } from "types/diary"
 
 /**
  * 搜索日记

@@ -1,10 +1,10 @@
-import { Diary, DiaryMonthResData } from "@pages/api/month/[queryMonth]"
 import { get, post, useFetch } from "lib/request"
 import { useEffect, useState } from "react"
 import { Notify } from "react-vant"
 import { RespData } from "types/global"
 import { useRef } from 'react'
 import { BackupResData } from "@pages/api/backup"
+import { Diary } from "types/diary"
 
 /**
  * 查询现存备份

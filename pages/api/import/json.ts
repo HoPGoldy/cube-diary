@@ -4,10 +4,10 @@ import { RespData } from 'types/global'
 import { createHandler } from 'lib/utils/createHandler'
 import { getDiaryCollection, getUserProfile, saveLoki, updateUserProfile } from 'lib/loki'
 import dayjs from 'dayjs'
-import { Diary } from '../month/[queryMonth]'
 import { parseBody } from 'lib/utils/parseBody'
 import { readFile } from 'fs/promises'
 import { createBackup } from 'lib/backup'
+import { Diary } from 'types/diary'
 
 /**
  * json 导入配置项
