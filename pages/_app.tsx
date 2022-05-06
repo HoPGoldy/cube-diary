@@ -1,4 +1,5 @@
 import '../styles/globals.css'
+import '../styles/tailwind.css'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import { useAppConfig, useUserProfile } from 'services/user'
@@ -7,6 +8,7 @@ import { FontendConfig } from 'types/global'
 import { PageLoading } from 'components/PageLoading'
 import { UserProfile } from 'types/storage'
 import Script from 'next/script'
+
 export const UserConfigContext = createContext<FontendConfig | false | undefined>(undefined)
 
 interface IUserProfileContext {
