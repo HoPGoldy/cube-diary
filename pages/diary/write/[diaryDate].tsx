@@ -99,7 +99,7 @@ const DiaryEdit: NextPage = () => {
         setContent(oldContent => {
             const { selectionStart = 0, selectionEnd = 0 } = textAreaRef.current || {}
             // 把所有新图片转换为 markdown 图片字符串
-            const newInsertContent = accessorys.map(f => `\n![${f.name.split('.')[0]}](${f.url})\n`).join('') + '\n'
+            const newInsertContent = '\n' + accessorys.map(f => `\n![${f.name.split('.')[0]}](${f.url})\n`).join('') + '\n'
             const newContent = oldContent.slice(0, selectionStart) + newInsertContent + oldContent.slice(selectionEnd)
             return newContent
         })

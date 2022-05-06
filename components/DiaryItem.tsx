@@ -31,7 +31,7 @@ export const DiaryItem: FC<DiaryItemProps> = (props) => {
 
     const onClickBody = (e: MouseEvent<Element>) => {
         if (!isImage(e.target)) return
-        ImagePreview.open({ images: [e.target.currentSrc] })
+        ImagePreview.open({ images: [e.target.currentSrc], showIndex: false })
     }
 
     const date = dayjs(diary.date)
