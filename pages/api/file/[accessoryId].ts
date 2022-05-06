@@ -20,8 +20,15 @@ export default createHandler({
             return
         }
 
+        res.setHeader('Etag', accessory.md5).setHeader('Content-Type', accessory.type || 'image/jpg')
+        // 有些原图可能会比较大，这里 md5 一致就继续使用缓存
+        if(req.headers['if-none-match'] === accessory.md5){
+            res.status(304).end()
+            return 
+        }
+
         const filePath = path.resolve(STORAGE_PATH, 'file', auth.username, `${accessory.md5}.${accessory.name}`)
         const file = await readFile(filePath)
-        res.setHeader('Content-Type', accessory.type || 'image/jpg').status(200).end(file)
+        res.status(200).end(file)
     }
 })
