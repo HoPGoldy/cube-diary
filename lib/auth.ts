@@ -2,7 +2,7 @@ import { nanoid } from 'nanoid'
 import { SignJWT, jwtVerify, JWTPayload } from 'jose'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { errors } from 'jose'
-import { STORAGE_PATH, USER_TOKEN_KEY } from './constants'
+import { JWT_SECRET_PATH, USER_TOKEN_KEY } from './constants'
 import { ensureFile } from 'fs-extra'
 import { readFile, writeFile } from 'fs/promises'
 import nookies from 'nookies'
@@ -11,20 +11,20 @@ let jwtSecretCache: string
 
 /**
  * 获取 jwt 密钥
+ * 会在 .storage 下创建密钥
  */
 export const getJwtSecretKey = async function () {
     // 使用缓存
     if (jwtSecretCache) return jwtSecretCache
 
     // 读一下本地密钥
-    const jwtSecretPath = STORAGE_PATH + '/jwtSecret'
-    await ensureFile(jwtSecretPath)
-    const secret = await readFile(jwtSecretPath)
+    await ensureFile(JWT_SECRET_PATH)
+    const secret = await readFile(JWT_SECRET_PATH)
     if (secret.toString().length > 0) return jwtSecretCache = secret.toString()
 
     // 没有密钥，新建一个
     const newJwtSecret = nanoid()
-    await writeFile(jwtSecretPath, newJwtSecret)
+    await writeFile(JWT_SECRET_PATH, newJwtSecret)
     return jwtSecretCache = newJwtSecret
 }
 
@@ -33,6 +33,9 @@ export type MyJWTPayload = JWTPayload & {
     username: string
 }
 
+/**
+ * 判断指定请求是否登陆过
+ */
 export const runAuth = async function (req: NextApiRequest, res: NextApiResponse): Promise<MyJWTPayload | false | {}> {
     if (req.url === '/api/login' && req.method === 'POST') return {}
 

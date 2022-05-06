@@ -5,6 +5,10 @@ interface Props {
     value: string | number
 }
 
+/**
+ * 一个简单的数据展示组件
+ * 用于显示日记条数和总字数
+ */
 export const Statistic: FC<Props> = (props) => {
     return (
         <div>

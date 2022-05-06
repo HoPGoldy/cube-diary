@@ -1,6 +1,6 @@
 import lokijs from 'lokijs'
 import { ensureDir } from 'fs-extra'
-import { BackupDetail, UserProfileStorage } from 'types/storage'
+import { BackupDetail, UserProfileStorage } from 'types/user'
 import { STORAGE_PATH } from './constants'
 import { AccessoryStorage } from 'types/accessory'
 import { DiaryStorage } from 'types/diary'

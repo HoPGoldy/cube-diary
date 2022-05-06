@@ -25,6 +25,9 @@ export interface DiarySearchResData {
 }
 
 export default createHandler({
+    /**
+     * 搜索日记
+     */
     GET: async (req: NextApiRequest, res: NextApiResponse<RespData<DiarySearchResData>>, auth) => {
         const { keywords, pageIndex = 1, pageSize = 10, desc } = req.query as unknown as DiarySearchQuery
         if (!req.query.keywords) {

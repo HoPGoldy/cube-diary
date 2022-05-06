@@ -8,6 +8,9 @@ interface Props {
     onClose: () => unknown
 }
 
+/**
+ * 日记列表下的日期选择弹窗
+ */
 export const MonthPicker: FC<Props> = (props) => {
     const { visible, onClose } = props
 

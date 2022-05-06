@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { RespData } from 'types/global'
 import { createHandler } from 'lib/utils/createHandler'
-import { BackupDetail } from 'types/storage'
+import { BackupDetail } from 'types/user'
 import { createBackup, getBackupInfo, hasBackupFile, rollback } from 'lib/backup'
 import { getBackupCollection, saveLoki } from 'lib/loki'
 
@@ -13,6 +13,9 @@ export interface BackupResData {
 }
 
 export default createHandler({
+    /**
+     * 获取备份列表
+     */
     GET: async (req: NextApiRequest, res: NextApiResponse<RespData<BackupResData>>, auth) => {
         const backupList = await getBackupInfo(auth.username)
 
@@ -21,6 +24,9 @@ export default createHandler({
             data: { entries: backupList || [] }
         })
     },
+    /**
+     * 回滚到指定备份
+     */
     POST: async (req: NextApiRequest, res: NextApiResponse<RespData<BackupResData>>, auth) => {
         const reqBody = JSON.parse(req.body)
         if (!('rollbackDate' in reqBody)) {

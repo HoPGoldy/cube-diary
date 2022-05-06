@@ -6,14 +6,34 @@ import { AccessoryUploadResult } from 'types/accessory'
 export type Accessory = AccessoryUploadResult & UploaderFileListItem
 
 interface Props {
+    /**
+     * 默认展示的附件
+     */
     defaultFiles?: Accessory[]
+    /**
+     * 是否显示弹出窗
+     * 该组件位于弹出层中
+     */
     visible: boolean
+    /**
+     * 将图片插入正文
+     * 会在上传完成和点击“填入”按钮后触发
+     */
     onInsert: (accessorys: Accessory[]) => unknown
+    /**
+     * 弹出层关闭
+     */
     onClose: () => unknown
 }
 
 export interface EditUploaderRef {
+    /**
+     * 获取当前包含的附件列表
+     */
     getFiles: () => Accessory[]
+    /**
+     * 设置当前的附件列表
+     */
     setFiles: (newFiles: Accessory[]) => void
 }
 
@@ -26,6 +46,9 @@ const isAccessory = (file: Partial<Accessory>): file is Accessory => {
     return hasProp
 }
 
+/**
+ * 日记编辑页面附件上传组件
+ */
 export const EditUploader = forwardRef<EditUploaderRef, Props>((props, ref) => {
     const { visible, defaultFiles, onClose, onInsert } = props
 

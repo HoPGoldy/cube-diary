@@ -34,7 +34,7 @@ export interface JsonExportForm {
 
 export default createHandler({
     /**
-     * 保存日记
+     * 导出日记列表
      */
     POST: async (req, res: NextApiResponse<RespData<Record<string, string | number>[]>>, auth) => {
         const body = JSON.parse(req.body) as JsonExportForm

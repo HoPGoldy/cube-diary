@@ -4,9 +4,8 @@ import { login } from 'services/user'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import { useContext, useState, useRef } from 'react'
-import { UserConfigContext, UserProfileContext } from './_app'
 import { PasswordInputInstance } from 'react-vant/es/password-input/PropsType'
-import { USER_TOKEN_KEY } from 'lib/constants'
+import { UserConfigContext, UserProfileContext } from 'components/ContextContainer'
 
 const Login: NextPage = () => {
     const router = useRouter()

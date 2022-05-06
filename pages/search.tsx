@@ -59,11 +59,6 @@ const SearchList: NextPage = () => {
         )
     }
 
-    const onClickWrite = (datetime?: number) => {
-        const queryDate = typeof datetime === 'number' ? dayjs(datetime) : dayjs()
-        router.push(`/diary/write/${queryDate.format('YYYY-MM-DD')}`)
-    }
-
     return (
         <div className="min-h-screen">
             <Head>

@@ -12,6 +12,9 @@ export interface DiaryMonthResData {
 }
 
 export default createHandler({
+    /**
+     * 获取日记列表
+     */
     GET: async (req: NextApiRequest, res: NextApiResponse<RespData<DiaryMonthResData>>, auth) => {
         if (!req.query.queryMonth || typeof req.query.queryMonth === 'object') {
             res.status(200).json({ success: false, message: '未指定日记月份' })

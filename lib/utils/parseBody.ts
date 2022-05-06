@@ -28,6 +28,9 @@ type ValueToArray<T> = {
     [Key in keyof T]: Array<T[Key]>
 }
 
+/**
+ * 使用 multiparty 解析 multipart/form-data 的请求
+ */
 export const parseBody = async function <T = Record<string, string[]>>(req: IncomingMessage): Promise<[T, Record<string, File>]> {
     return new Promise((resolve, reject) => {
         const form = new Form()
@@ -40,6 +43,9 @@ export const parseBody = async function <T = Record<string, string[]>>(req: Inco
     })
 }
 
+/**
+ * formdata 解析后几乎都为数组格式，所以这里把不是数组的挑出来
+ */
 export const pickFields = function <T extends Record<string, any>>(fields: ValueToArray<T>): T {
     const result: Record<string, any[]> = {}
     Object.keys(fields).forEach(key => {

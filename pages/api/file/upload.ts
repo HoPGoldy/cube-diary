@@ -15,6 +15,13 @@ export const getAccessoryUrl = (accessoryId: string | number) => {
     return `/api/file/${accessoryId}`
 }
 
+/**
+ * 将文件保存到本地并注册到 loki
+ * 
+ * @param file 文件对象
+ * @param storagePath 保存路径
+ * @param collection 附件数据集
+ */
 const saveAccessory = async (file: File, storagePath: string, collection: Collection<AccessoryStorage>): Promise<AccessoryUploadResult> => {
     const fileName = file.originalFilename
     const fileMd5 = md5(fileName + (await readFile(file.path)).toString()).toString()

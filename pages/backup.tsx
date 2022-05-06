@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import { PageContent, PageAction, ActionButton } from 'components/PageWithAction'
 import { useBackupList, rollbackTo } from 'services/backup'
 import { PageLoading } from 'components/PageLoading'
-import { BackupDetail } from 'types/storage'
+import { BackupDetail } from 'types/user'
 import dayjs from 'dayjs'
 
 const BackupList: NextPage = () => {

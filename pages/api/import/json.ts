@@ -50,6 +50,13 @@ export interface JsonImportResult {
     existCount: number
 }
 
+/**
+ * 按照提供的配置项将日记格式化成本应用需要的格式
+ * 
+ * @param fields 导入配置项
+ * @param jsonContent 提供的 json 内容
+ * @param res 响应实例
+ */
 const formatDiary = (fields: JsonImportForm, jsonContent: any, res: NextApiResponse<RespData<JsonImportResult>>) => {
     const standardDiarys: Diary[] = []
 
@@ -138,7 +145,7 @@ const updateDiaryNumber = async (username: string, importResult: JsonImportResul
 
 export default createHandler({
     /**
-     * 保存日记
+     * 导入日记列表
      */
     POST: async (req, res: NextApiResponse<RespData<JsonImportResult>>, auth) => {
         try {

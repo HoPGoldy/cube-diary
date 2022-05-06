@@ -1,21 +1,17 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { RespData } from 'types/global'
 import { createHandler } from 'lib/utils/createHandler'
-import { BackupDetail, UserProfile } from 'types/storage'
+import { UserProfile } from 'types/user'
 import { getDiaryCollection, getUserProfile, saveLoki, updateUserProfile } from 'lib/loki'
-
-/**
- * 备份返回结果
- */
-export interface BackupResData {
-    entries: Array<BackupDetail>
-}
 
 export interface ProfileUpdateReqBody {
     darkTheme: boolean
 }
 
 export default createHandler({
+    /**
+     * 获取当前登陆用户配置项
+     */
     GET: async (req, res: NextApiResponse<RespData<UserProfile>>, auth) => {
         const userProfile = await getUserProfile(auth.username)
         const userDiarys = await getDiaryCollection(auth.username)
@@ -32,6 +28,9 @@ export default createHandler({
             data: { ...userProfile, totalDiary: userDiarys.data.length }
         })
     },
+    /**
+     * 更新当前登陆用户配置项
+     */
     POST: async (req: NextApiRequest, res: NextApiResponse<RespData>, auth) => {
         const reqBody = JSON.parse(req.body) as ProfileUpdateReqBody
 

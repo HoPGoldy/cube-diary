@@ -1,23 +1,9 @@
 import { readFile } from 'fs/promises'
-import { AppConfig } from 'types/global'
 import md5 from 'crypto-js/md5'
-import { DEFAULT_BUTTON_COLOR } from './constants'
+import { DEFAULT_CONFIG } from './constants'
+import { AppConfig } from 'types/appConfig'
 
 let configCache: AppConfig
-
-/**
- * 默认的用户配置
- */
-const defaultConfig: AppConfig = {
-    user: [],
-    appTitle: '日记本',
-    appSubtitle: '记录你的生活',
-    mainButtonColors: DEFAULT_BUTTON_COLOR,
-    passwordLength: 6,
-    loginPreDay: 30,
-    backupScheduler: '0 4 * * *',
-    maxBackup: 10
-}
 
 /**
  * 载入最新的应用配置
@@ -26,7 +12,7 @@ export const loadConfig = async function (): Promise<AppConfig | undefined> {
     try {
         const userConfig = await readFile('./.config.json')
         const totalConfig: AppConfig = {
-            ...defaultConfig,
+            ...DEFAULT_CONFIG,
             ...JSON.parse(userConfig.toString()),
         }
 

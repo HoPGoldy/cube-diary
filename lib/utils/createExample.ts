@@ -19,7 +19,7 @@ export interface ExampleForm {
 }
 
 /**
- * 为导入导出为 json 创建示例
+ * 为导入导出 json 创建示例
  */
 export const createExample = (formValues: ExampleForm): string => {
     const newExamples = Array.from({ length: 3 }).map((_, index) => {

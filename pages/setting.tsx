@@ -4,13 +4,13 @@ import Head from 'next/head'
 import { Card, Space, Cell, Switch } from 'react-vant'
 import { useRouter } from 'next/router'
 import { Statistic } from 'components/Statistic'
-import { UserProfileContext } from './_app'
 import { ArrowDown, ArrowUp, ManagerO, Close, DesktopO, LikeO, StarO } from '@react-vant/icons'
 import { USER_TOKEN_KEY } from 'lib/constants'
 import { updateUserProfile, useUserProfile } from 'services/user'
 import { PageContent, PageAction, ActionButton } from 'components/PageWithAction'
 import { refreshCount } from 'services/setting'
 import { destroyCookie } from 'nookies'
+import { UserProfileContext } from 'components/ContextContainer'
 
 const Setting: NextPage = () => {
     const router = useRouter()

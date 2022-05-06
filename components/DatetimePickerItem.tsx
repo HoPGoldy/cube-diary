@@ -8,6 +8,9 @@ export type CustomItemProps = {
     placeholder?: string;
 } & FormItemProps;
 
+/**
+ * 字段 Cell 占位 + 弹出框 + 日期选择器组件
+ */
 export const DatetimePickerItem = function (props: CustomItemProps) {
     const { value, onChange, ...fieldProps } = props;
     const [visible, setVisible] = useState(false);

@@ -1,7 +1,11 @@
 import { getAppConfig } from "lib/appConfig"
 import { NextApiRequest, NextApiResponse } from "next"
-import { FontendConfig, RespData } from "types/global"
+import { FontendConfig } from "types/appConfig"
+import { RespData } from "types/global"
 
+/**
+ * 获取应用配置项
+ */
 export default async function handler (req: NextApiRequest, res: NextApiResponse<RespData<FontendConfig>>) {
     const config = await getAppConfig()
 

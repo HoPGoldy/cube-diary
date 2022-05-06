@@ -1,9 +1,9 @@
-import { UserConfigContext } from '@pages/_app'
 import { Search } from '@react-vant/icons'
 import Link from 'components/Link'
 import { debounce, DebouncedFunc } from 'lodash'
 import { FC, MouseEventHandler, useContext, useEffect, useRef, useState } from 'react'
 import { Card, Field, FieldInstance, Loading } from 'react-vant'
+import { UserConfigContext } from './ContextContainer'
 
 /**
  * 页面正文，会给下面的操作栏留出空间
@@ -76,8 +76,17 @@ export const ActionButton: FC<ActionButtonProps> = (props) => {
 }
 
 type ActionSearchProps = {
+    /**
+     * 搜索的节流事件，单位毫秒
+     */
     debounceWait?: number
+    /**
+     * 是否自动聚焦输入框
+     */
     autoFocus?: boolean
+    /**
+     * 触发搜索事件，会受到 debounceWait 的影响
+     */
     onSearch?: (value: string) => unknown
 }
 

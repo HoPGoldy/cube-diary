@@ -1,5 +1,5 @@
 import dayjs from "dayjs"
-import { LoginLimit } from "types/storage"
+import { LoginLimit } from "types/user"
 import { getAppConfig } from "./appConfig"
 import { getLoki } from "./loki"
 

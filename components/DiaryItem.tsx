@@ -26,6 +26,9 @@ const isImage = (target: EventTarget): target is HTMLImageElement => {
     return tagName === 'IMG'
 }
 
+/**
+ * 日记列表项
+ */
 export const DiaryItem: FC<DiaryItemProps> = (props) => {
     const { diary, dateFormatter = 'MM 月 DD 日' } = props
 

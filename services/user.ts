@@ -5,8 +5,8 @@ import { get, post } from "lib/request"
 import { useRouter } from "next/router"
 import { parseCookies } from "nookies"
 import { useEffect, useState } from "react"
-import { FontendConfig } from "types/global"
-import { UserProfile } from "types/storage"
+import { FontendConfig } from "types/appConfig"
+import { UserProfile } from "types/user"
 
 /**
  * 用户登陆

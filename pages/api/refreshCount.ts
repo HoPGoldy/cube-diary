@@ -4,6 +4,9 @@ import { createHandler } from 'lib/utils/createHandler'
 import { getDiaryCollection, getUserProfile, updateUserProfile } from 'lib/loki'
 
 export default createHandler({
+    /**
+     * 刷新日记总字数
+     */
     POST: async (req: NextApiRequest, res: NextApiResponse<RespData<number>>, auth) => {
         const collection = await getDiaryCollection(auth.username)
         const totalCount = collection.data.reduce((pre, cur) => pre + cur.content.length, 0)
