@@ -13,9 +13,11 @@
 - 🔨 支持多用户密码登陆及自定义配置
 - 🌙 黑夜模式
 
-[![功能预览](https://s1.ax1x.com/2022/05/11/OdpYdg.gif)](https://s1.ax1x.com/2022/05/11/OdpYdg.gif)
-[![图片上传](https://s1.ax1x.com/2022/05/11/OdptoQ.gif)](https://s1.ax1x.com/2022/05/11/OdptoQ.gif)
-[![导入导出备份](https://s1.ax1x.com/2022/05/11/Odp8L8.gif)](https://s1.ax1x.com/2022/05/11/Odp8L8.gif)
+<div style="display: flex;">
+    <img src="https://s1.ax1x.com/2022/05/11/OdpYdg.gif" width="200" title="预览"/>
+    <img src="https://s1.ax1x.com/2022/05/11/OdptoQ.gif" width="200" title="图片上传"/>
+    <img src="https://s1.ax1x.com/2022/05/11/Odp8L8.gif" width="200" title="导入导出备份"/>
+</div>
 
 ## 部署
 
@@ -44,7 +46,7 @@ yarn start
 
 在 `user` 中创建多个用户后重启服务即可：
 
-```json
+```js
 {
     "user": [{
         "username": "user1",
@@ -60,7 +62,7 @@ yarn start
 
 在 .config.json 也可以对应用进行自定义，例如可以通过 `appTitle` 来修改应用标题、使用 `passwordLength` 来修改登陆密码长度：
 
-```json
+```js
 {
     "user": [/** ... */],
     // 修改登录页标题
