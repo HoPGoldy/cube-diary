@@ -1,5 +1,5 @@
 {
-  "name": "hoho-diary",
+  "name": "cube-diary",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

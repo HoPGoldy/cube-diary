@@ -1,41 +1,77 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## cube-diary
 
-## Getting Started
+一个简单扁平的移动端在线日记本。基于 nextjs / typescript / vant。
 
-First, run the development server:
+## 特性
+
+- 🚫 无广告、无收费、不托管，自己的数据自己掌握
+- 📮 自定义 JSON 导入导出
+- 📦 可靠的备份功能：定时备份、导入备份、回滚备份
+- 🎨 支持图片上传
+- 📖 支持 Markdown 编辑
+- 👓 支持正序 / 倒序搜索
+- 🔨 支持多用户密码登陆及自定义配置
+- 🌙 黑夜模式
+
+[![功能预览](https://s1.ax1x.com/2022/05/11/OdpYdg.gif)](https://s1.ax1x.com/2022/05/11/OdpYdg.gif)
+[![图片上传](https://s1.ax1x.com/2022/05/11/OdptoQ.gif)](https://s1.ax1x.com/2022/05/11/OdptoQ.gif)
+[![导入导出备份](https://s1.ax1x.com/2022/05/11/Odp8L8.gif)](https://s1.ax1x.com/2022/05/11/Odp8L8.gif)
+
+## 部署
+
+*请确保已安装了 node 16+*
 
 ```bash
-npm run dev
-# or
-yarn dev
+# 安装依赖
+yarn install
+# 打包项目
+yarn build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+打包完成后 **将根目录下的 .config.example.json 重命名为 .config.json**，然后修改其中的 `user.username` 和 `user.password`（password 默认应为 6 位）。
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+修改完成后启动服务即可：
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+```bash
+yarn start
+```
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+服务将默认开启在端口 3000 上，可以通过 `yarn start --port=3549` 修改端口。
 
-## Learn More
+## 多用户 & 自定义应用配置
 
-To learn more about Next.js, take a look at the following resources:
+可以通过修改 .config.json 来自定义应用配置。
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+在 `user` 中创建多个用户后重启服务即可：
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+```json
+{
+    "user": [{
+        "username": "user1",
+        "password": "123456"
+    }, {
+        "username": "user2",
+        "password": "654321"
+    }]
+}
+```
 
-## Deploy on Vercel
+输入密码即可登陆对应的用户，注意，用户数据是和 `user.username` 绑定的，所以可以修改密码，但是不要修改用户名。
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+在 .config.json 也可以对应用进行自定义，例如可以通过 `appTitle` 来修改应用标题、使用 `passwordLength` 来修改登陆密码长度：
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```json
+{
+    "user": [/** ... */],
+    // 修改登录页标题
+    "appTitle": "我的日记",
+    // 将密码长度修改为 8 位
+    "passwordLength": 8
+}
+```
 
-## 参考
+更详细的配置项见 [types\appConfig.ts](types\appConfig.ts)。
 
-- [nextjs](https://nextjs.org/docs/getting-started)
-- [simple login](https://dev.to/mgranados/how-to-build-a-simple-login-with-nextjs-and-react-hooks-255)
-- [react-vant](https://3lang3.github.io/react-vant/#/zh-CN/button)
-- [react-spring](https://react-spring.io/basics)
+## 数据迁移
+
+所有数据均保存在应用目录下的 `.storage` 文件夹里，所以直接将其打包然后复制到其他地方即可。

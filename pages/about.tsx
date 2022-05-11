@@ -26,11 +26,11 @@ const About: NextPage = () => {
                     </Card>
 
                     <Card round>
-                        <a href="mailto:hopgoldy@gmail.com?&subject=hoho-diary 相关">
+                        <a href="mailto:hopgoldy@gmail.com?&subject=cube-diary 相关">
                             <Cell title="联系我" value="hopgoldy@gmail.com" />
                         </a>
-                        <a href='https://github.com/HoPGoldy/hoho-diary' target="_blank" rel="noreferrer">
-                            <Cell title="开源地址" value="github hoho-diary" />
+                        <a href='https://github.com/HoPGoldy/cube-diary' target="_blank" rel="noreferrer">
+                            <Cell title="开源地址" value="github cube-diary" />
                         </a>
                     </Card>
                 </Space>
