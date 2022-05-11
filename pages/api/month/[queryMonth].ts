@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { RespData } from 'types/global'
 import { createHandler } from 'lib/utils/createHandler'
-import { keyBy } from 'lodash'
+import keyBy from 'lodash/keyBy'
 import { getMonthExistDate } from 'lib/utils/getMonthExistDate'
 import dayjs from 'dayjs'
 import { getDiaryCollection } from 'lib/loki'
