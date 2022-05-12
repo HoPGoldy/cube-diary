@@ -72,8 +72,15 @@ yarn start
 }
 ```
 
-更详细的配置项见 [types\appConfig.ts](types\appConfig.ts)。
+更详细的配置项见 [types\appConfig.ts](https://github.com/HoPGoldy/cube-diary/blob/master/types/appConfig.ts#L6)。
 
 ## 数据迁移
 
 所有数据均保存在应用目录下的 `.storage` 文件夹里，所以直接将其打包然后复制到其他地方即可。
+
+## 贡献
+
+本项目系本人自用开发，如果你觉得有些功能不够完善，欢迎 PR / issue。
+## 许可
+
+本项目源码基于 GPL v3 许可开源，[点此](https://github.com/HoPGoldy/cube-diary/blob/master/LICENSE) 查看更多信息。
