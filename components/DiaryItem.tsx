@@ -65,7 +65,7 @@ export const DiaryItem: FC<DiaryItemProps> = (props) => {
             </Card.Header>
 
             <Card.Body onClick={onClickBody}>
-                <ReactMarkdown>{diary.content}</ReactMarkdown>
+                <ReactMarkdown className='prose'>{diary.content}</ReactMarkdown>
             </Card.Body>
         </Card>
     )

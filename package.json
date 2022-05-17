@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@react-vant/icons": "^0.0.6",
+    "@tailwindcss/typography": "^0.5.2",
     "crypto-js": "^4.1.1",
     "dayjs": "^1.11.0",
     "fs-extra": "^10.0.1",
