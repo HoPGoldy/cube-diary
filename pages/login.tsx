@@ -52,6 +52,7 @@ const Login: NextPage = () => {
                 ref={passwordRef}
                 className="w-5/6 sm:w-1/2 md:w-1/4"
                 gutter={10}
+                autoFocus
                 info="请输入密码"
                 length={passwordLength}
                 value={password}
