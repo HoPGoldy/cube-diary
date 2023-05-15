@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "module": "commonjs",
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noEmit": false
+  },
+  "include": ["./src/**/*.ts"],
+  "exclude": ["./src/client"]
+}

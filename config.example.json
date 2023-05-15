@@ -1,0 +1,33 @@
+{
+    // 页面主按钮的默认配色
+    "DEFAULT_COLOR": [
+        {
+            "primaryColor": "#0081ff",
+            "buttonColor": "linear-gradient(45deg, #0081ff, #1cbbb4)"
+        },
+        {
+            "primaryColor": "#9000ff",
+            "buttonColor": "linear-gradient(45deg, #9000ff, #5e00ff)"
+        },
+        {
+            "primaryColor": "#ec008c",
+            "buttonColor": "linear-gradient(45deg, #ec008c, #6739b6)"
+        },
+        {
+            "primaryColor": "#39b54a",
+            "buttonColor": "linear-gradient(45deg, #39b54a, #8dc63f)"
+        },
+        {
+            "primaryColor": "#ff9700",
+            "buttonColor": "linear-gradient(45deg, #ff9700, #ed1c24)"
+        },
+        {
+            "primaryColor": "#f43f3b",
+            "buttonColor": "linear-gradient(45deg, #f43f3b, #ec008c)"
+        }
+    ],
+    // 应用的名称，会显示在登录页和主页中
+    "APP_NAME": "方块日记",
+    // 登录页的副标题
+    "LOGIN_SUBTITLE": "记录你的生活"
+}
