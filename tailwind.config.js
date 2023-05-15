@@ -1,18 +1,30 @@
+/* eslint-disable no-undef */
+// eslint-disable-next-line no-undef
 module.exports = {
-  content: [
-    "./pages/**/*.{js,ts,jsx,tsx}",
-    "./components/**/*.{js,ts,jsx,tsx}",
-  ],
-  theme: {
-    extend: {
-      colors: {
-        mainColor: "var(--rv-black)",
-        cardBackground: "var(--rv-white)",
-        background: "var(--rv-gray-1)"
-      },
+    darkMode: ['class', '[data-theme="dark"]'],
+    content: [
+        './src/**/*.{js,ts,jsx,tsx,html}'
+    ],
+    corePlugins: {
+        preflight: false,
     },
-  },
-  plugins: [
-    require('@tailwindcss/typography')
-  ],
+    theme: {
+        extend: {
+            colors: {
+                'antd-dark': '#141414',
+            },
+            height: {
+                'bottombar': 'var(--cube-diary-bottombar-height)',
+                'page-content': 'calc(100% - var(--cube-diary-bottombar-height) - 1rem)'
+            },
+            transitionProperty: {
+                'w': 'width',
+                'h': 'height',
+                'spacing': 'margin, padding',
+            }
+        }
+    },
+    plugins: [
+        require('@tailwindcss/typography')
+    ],
 }

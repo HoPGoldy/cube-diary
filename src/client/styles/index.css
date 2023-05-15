@@ -1,0 +1,75 @@
+@import './reset.css';
+@import './transition.css';
+
+/* md 文档里的附件图标 */
+.icon {
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.15em;
+    fill: currentColor;
+    overflow: hidden;
+}
+
+html, body, #root {
+    height: 100%;
+    margin: 0;
+    /* overflow: hidden; */
+}
+
+body {
+    @apply bg-white dark:bg-antd-dark text-base transition-colors;
+}
+
+.bytemd-fullscreen.bytemd {
+    z-index: 1;
+}
+
+:root {
+    /* 移动端的底部操作栏高度 */
+    --cube-diary-bottombar-height: 40px;
+    --color-border-secondary: #d1d5db;
+}
+
+:root[data-theme="dark"] {
+    --color-border-secondary: #525252;
+}
+
+/** 处理一些不支持暗色模式的第三方样式 **/
+[data-theme="dark"] .bytemd,
+[data-theme="dark"] .bytemd img,
+[data-theme="dark"] code,
+[data-theme="dark"] .bytemd .bytemd-link-box {
+    filter: invert(0.9) hue-rotate(180deg);
+}
+
+/** 让 bytemd 的编辑器高度自适应 **/
+.bytemd {
+    height: 100% !important;
+}
+
+/** 加上这个类，就可以隐藏滚动条 **/
+.noscrollbar::-webkit-scrollbar {
+    width: 0 !important;
+    height: 0 !important;
+}
+
+.ant-drawer-body {
+    @apply !p-2 !pb-0;
+}
+
+.ant-btn-primary:not(.keep-antd-style) {
+    background: var(--cube-diary-primary-button-color) !important;
+    border: none;
+}
+
+.ant-btn-primary:disabled {
+    color: rgba(0, 0, 0, 0.5) !important;
+}
+
+.ant-breadcrumb ol {
+    flex-wrap: nowrap !important;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
