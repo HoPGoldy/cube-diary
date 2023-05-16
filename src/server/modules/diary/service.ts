@@ -1,7 +1,8 @@
 import { DatabaseAccessor } from '@/server/lib/sqlite'
 import dayjs from 'dayjs'
 import { keyBy } from 'lodash'
-import { DiaryQueryResp, DiaryUpdateReqData } from '@/types/diary'
+import { DiaryQueryResp, DiaryUpdateReqData, SearchDiaryReqData, SearchDiaryResp } from '@/types/diary'
+import { PAGE_SIZE } from '@/config'
 
 interface Props {
     db: DatabaseAccessor
@@ -71,8 +72,32 @@ export const createDiaryService = (props: Props) => {
         return { code: 200 }
     }
 
+    const serachDiary = async (reqData: SearchDiaryReqData, userId: number) => {
+        const { page = 1, colors = [], keyword, desc = true } = reqData
+        const query = db.diary().select().where('createUserId', userId)
+
+        if (colors.length > 0) {
+            query.whereIn('color', colors)
+        }
+
+        if (keyword) {
+            query.andWhereLike('content', `%${keyword}%`)
+        }
+
+        const { count: total } = await query.clone().count('id as count').first() as any
+
+        const result = await query
+            .orderBy('date', desc ? 'desc' : 'asc')
+            .limit(PAGE_SIZE)
+            .offset((page - 1) * PAGE_SIZE)
+
+        const data: SearchDiaryResp = { total, rows: result }
+
+        return { code: 200, data }
+    }
+
     return {
-        getMonthList, getDetail, updateDetail
+        getMonthList, getDetail, updateDetail, serachDiary
     }
 }
 

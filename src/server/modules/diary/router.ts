@@ -5,7 +5,7 @@ import { TagService } from './service'
 import { validate } from '@/server/utils'
 import Joi from 'joi'
 import { getJwtPayload } from '@/server/lib/auth'
-import { DiaryUpdateReqData } from '@/types/diary'
+import { DiaryUpdateReqData, SearchDiaryReqData } from '@/types/diary'
 
 interface Props {
     service: TagService
@@ -50,6 +50,25 @@ export const createDiaryRouter = (props: Props) => {
         if (!payload) return
 
         const resp = await service.updateDetail(body, payload.userId)
+        response(ctx, resp)
+    })
+
+    const searchDiaryShema = Joi.object<SearchDiaryReqData>({
+        keyword: Joi.string().allow(''),
+        colors: Joi.array().items(Joi.string()).allow(null),
+        desc: Joi.boolean().allow(null),
+        page: Joi.number().allow(null),
+    })
+
+    // 查询日记
+    router.post('/search', async ctx => {
+        const query = validate(ctx, searchDiaryShema)
+        if (!query) return
+
+        const payload = getJwtPayload(ctx)
+        if (!payload) return
+
+        const resp = await service.serachDiary(query, payload.userId)
         response(ctx, resp)
     })
 
