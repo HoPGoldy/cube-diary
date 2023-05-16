@@ -1,7 +1,7 @@
 import { DatabaseAccessor } from '@/server/lib/sqlite'
 import dayjs from 'dayjs'
 import { keyBy } from 'lodash'
-import { Diary, DiaryQueryResp } from '@/types/diary'
+import { DiaryQueryResp, DiaryUpdateReqData } from '@/types/diary'
 
 interface Props {
     db: DatabaseAccessor
@@ -57,21 +57,22 @@ export const createDiaryService = (props: Props) => {
             .andWhere('date', date)
             .first()
 
-        return { code: 200, data: detail }
+        return { code: 200, data: detail || { content: '', color: '' } }
     }
 
-    const addDetail = async (detail: Diary, userId: number) => {
-        await db.diary().insert({ ...detail, createUserId: userId })
-        return { code: 200 }
-    }
+    const updateDetail = async (detail: DiaryUpdateReqData, userId: number) => {
+        const oldArticle = await db.diary().select('content', 'color').where('date', detail.date).andWhere('createUserId', userId).first()
+        if (!oldArticle) {
+            await db.diary().insert({ ...detail, createUserId: userId })
+            return { code: 200 }
+        }
 
-    const updateDetail = async (detail: Diary, userId: number) => {
-        await db.diary().update(detail).where('date', detail.date).andWhere('createUserId', userId)
+        await db.diary().update({ ...oldArticle, ...detail }).where('date', detail.date).andWhere('createUserId', userId)
         return { code: 200 }
     }
 
     return {
-        getMonthList, getDetail, addDetail, updateDetail
+        getMonthList, getDetail, updateDetail
     }
 }
 

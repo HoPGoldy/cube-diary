@@ -9,26 +9,43 @@ interface Props {
   onClose: () => void
 }
 
-const MARK_COLORS: string[] = [
-    '#ef4444', '#f97316', '#f59e0b', '#eab308', '#84cc16', '#22c55e', '#10b981', '#14b8a6',
-    '#06b6d4', '#0ea5e9', '#3b82f6', '#6366f1', '#8b5cf6', '#a855f7', '#d946ef', '#ec4899'
-]
+/** 颜色枚举对应的具体颜色 */
+export const MARK_COLORS_MAP: Record<string, string> = {
+    'c1': '#ef4444',
+    'c2': '#f97316',
+    'c3': '#f59e0b',
+    'c4': '#eab308',
+    'c5': '#84cc16',
+    'c6': '#22c55e',
+    'c7': '#10b981',
+    'c8': '#14b8a6',
+    'c9': '#06b6d4',
+    'c10': '#0ea5e9',
+    'c11': '#3b82f6',
+    'c12': '#6366f1',
+    'c13': '#8b5cf6',
+    'c14': '#a855f7',
+    'c15': '#d946ef',
+    'c16': '#ec4899'
+}
+
+const MARK_COLORS = ['c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8', 'c9', 'c10', 'c11', 'c12', 'c13', 'c14', 'c15', 'c16', '']
 
 export const ColorPicker: FC<Props> = (props) => {
     const { value, onChange, visible, onClose } = props
 
-    const renderMarkColor = (color: string) => {
+    const renderMarkColor = (colorCode: string) => {
         const classes = [s.colorBtn, 'm-auto']
-        if (value === color) classes.push(s.selectedColor)
-        if (color === '') classes.push(s.removeBtn)
+        if (value === colorCode) classes.push(s.selectedColor)
+        if (colorCode === '') classes.push(s.removeBtn)
 
         return (
-            <List.Item key={color}>
+            <List.Item key={colorCode}>
                 <div
                     className={classes.join(' ')}
-                    style={{ backgroundColor: color }}
+                    style={{ backgroundColor: MARK_COLORS_MAP[colorCode] }}
                     onClick={() => {
-                        onChange?.(color || '#000')
+                        onChange?.(colorCode || '')
                         onClose()
                     }}
                 />
@@ -49,7 +66,7 @@ export const ColorPicker: FC<Props> = (props) => {
                     gutter: 16,
                     column: 6
                 }}
-                dataSource={[...MARK_COLORS, '']}
+                dataSource={MARK_COLORS}
                 renderItem={renderMarkColor}
             />
         </Modal>

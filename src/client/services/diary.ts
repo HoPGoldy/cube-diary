@@ -1,6 +1,18 @@
 import { queryClient, requestGet, requestPost } from './base'
 import { useMutation, useQuery } from 'react-query'
-import { Diary, DiaryQueryResp } from '@/types/diary'
+import { Diary, DiaryQueryResp, DiaryUpdateReqData } from '@/types/diary'
+import { AppResponse } from '@/types/global'
+
+const updateArticleCache = (updateData: DiaryUpdateReqData) => {
+    const oldData = queryClient.getQueryData<AppResponse<Diary>>(['diaryDetail', updateData.date])
+    if (!oldData) return
+
+    const newData = {
+        ...oldData,
+        data: { ...oldData.data, ...updateData }
+    }
+    queryClient.setQueryData(['diaryDetail', updateData.date], newData)
+}
 
 /** 查询日记列表 */
 export const useQueryDiaryList = (month?: string) => {
@@ -21,26 +33,20 @@ export const useQueryDiaryDetail = (date: number) => {
     })
 }
 
-/** 新增日记 */
-export const useAddDiary = () => {
-    return useMutation((data: Diary) => {
-        return requestPost('diary/add', data)
-    }, {
-        onMutate: (data) => {
-            queryClient.invalidateQueries('month')
-            queryClient.invalidateQueries(['diaryDetail', data.date])
-        }
-    })
-}
-
 /** 更新日记 */
 export const useUpdateDiary = () => {
-    return useMutation((data: Diary) => {
+    return useMutation((data: DiaryUpdateReqData) => {
         return requestPost('diary/update', data)
     }, {
         onMutate: (data) => {
             queryClient.invalidateQueries('month')
-            queryClient.invalidateQueries(['diaryDetail', data.date])
+            updateArticleCache(data)
         }
     })
+}
+
+/** 自动保存接口 */
+export const autoSaveContent = async (date: number, content: string) => {
+    updateArticleCache({ date, content })
+    return requestPost('diary/update', { date, content })
 }

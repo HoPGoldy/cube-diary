@@ -39,7 +39,7 @@ export const createDb = (props: Props) => {
         if (exists) return
         return sqliteDb.schema.createTable(TABLE_NAME.DIARY, t => {
             t.increments('id').primary()
-            t.text('date').notNullable()
+            t.timestamp('date').notNullable()
             t.text('content').notNullable()
             t.integer('createUserId').notNullable()
             t.string('color')
