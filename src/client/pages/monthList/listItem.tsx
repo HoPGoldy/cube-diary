@@ -2,6 +2,9 @@ import { Diary, UndoneDiary } from '@/types/diary'
 import { Card, List } from 'antd'
 import dayjs from 'dayjs'
 import React, { FC, useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
+import Preview from './preview'
+import { MARK_COLORS_MAP } from '@/client/components/ColorPicker'
 
 interface Props {
     item: Diary | UndoneDiary
@@ -20,20 +23,28 @@ export const WEEK_TO_CHINESE: Record<number, string> = {
     6: '周六'
 }
 
+export const getLabelByDate = (timestamp: number) => {
+    const date = dayjs(timestamp)
+    return `${date.format('MM 月 DD 日')} ${WEEK_TO_CHINESE[date.day()]}`
+}
+
 /**
  * 日记列表项组件
  */
 export const DiaryListItem: FC<Props> = ({ item }) => {
-    const title = useMemo(() => {
-        const date = dayjs(item.date)
-        return `${date.format('MM 月 DD 日')} ${WEEK_TO_CHINESE[date.day()]}`
-    }, [item.date])
+    const navigate = useNavigate()
+
+    const title = useMemo(() => getLabelByDate(item.date), [item.date])
+
+    const onEdit = () => {
+        navigate(`/diary/${dayjs(item.date).format('YYYYMMDD')}`)
+    }
 
     if ('undone' in item) {
         return (
             <List.Item>
-                <Card size="small">
-                    <div className="text-gray-400">
+                <Card size="small" onClick={onEdit}>
+                    <div className="text-gray-400 font-bold">
                         {title}
                     </div>
                 </Card>
@@ -44,14 +55,23 @@ export const DiaryListItem: FC<Props> = ({ item }) => {
     return (
         <List.Item>
             <Card
-                title={<div className="text-gray-400">{title}</div>}
+                title={
+                    <div
+                        className="text-gray-400 font-bold"
+                        onClick={onEdit}
+                    >{title}</div>
+                }
                 size="small"
                 extra={
-                    <div className={`w-4 h-4 rounded-full ${item.color}`}></div>
+                    item.color &&
+                    <div
+                        className="w-4 h-4 rounded-full"
+                        style={{ backgroundColor: MARK_COLORS_MAP[item.color]}}
+                    ></div>
                 }
             >
                 <div className="">
-                    {item.content}
+                    <Preview value={item.content} />
                 </div>
             </Card>
         </List.Item>

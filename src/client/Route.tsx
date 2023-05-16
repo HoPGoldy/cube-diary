@@ -4,7 +4,7 @@ import Loading from './layouts/Loading'
 import { LoginAuth } from './layouts/LoginAuth'
 import { AppContainer } from './layouts/AppContainer'
 import Search from './pages/search/Search'
-import { MobileSetting } from './pages/userSetting'
+import { MobileSetting } from './pages/setting'
 import Article from './pages/article/Article'
 import Entry from './pages/JumpToDefaultDataEntry'
 import { AppConfigProvider } from './layouts/AppConfigProvider'
@@ -28,12 +28,12 @@ export const routes = createHashRouter([
                     { index: true, element: <Entry /> },
                     // 日记列表
                     { path: '/month/:month', element: lazyLoad(() => import('./pages/monthList')) },
+                    // 日记详情编辑
+                    { path: '/diary/:date', element: lazyLoad(() => import('./pages/diaryEdit')) },
                     // 笔记详情
                     { path: '/article/:articleId', element: <Article /> },
                     // 笔记搜索
                     { path: '/search', element: <Search /> },
-                    // 设置页面，只在移动端使用
-                    { path: '/setting', element: <MobileSetting /> },
                     // 笔记管理
                     { path: '/articleManage', element: lazyLoad(() => import('./pages/articleManager')) },
                     // 标签管理

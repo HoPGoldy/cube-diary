@@ -5,7 +5,7 @@ import { TagService } from './service'
 import { validate } from '@/server/utils'
 import Joi from 'joi'
 import { getJwtPayload } from '@/server/lib/auth'
-import { Diary } from '@/types/diary'
+import { DiaryUpdateReqData } from '@/types/diary'
 
 interface Props {
     service: TagService
@@ -35,22 +35,10 @@ export const createDiaryRouter = (props: Props) => {
         response(ctx, resp)
     })
 
-    const addDiaryShema = Joi.object<Diary>({
+    const addDiaryShema = Joi.object<DiaryUpdateReqData>({
         date: Joi.number().required(),
         content: Joi.string().allow(''),
         color: Joi.string().allow(null),
-    })
-
-    // 添加日记
-    router.post('/add', async ctx => {
-        const body = validate(ctx, addDiaryShema)
-        if (!body) return
-
-        const payload = getJwtPayload(ctx)
-        if (!payload) return
-
-        const resp = await service.addDetail(body, payload.userId)
-        response(ctx, resp)
     })
 
     // 更新日记

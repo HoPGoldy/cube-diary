@@ -1,5 +1,5 @@
 import React, { FC, Fragment } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { Button, Card, Col, Row, Statistic, Switch } from 'antd'
 import { SnippetsOutlined, HighlightOutlined, CloseCircleOutlined } from '@ant-design/icons'
 import { useChangePassword } from '../changePassword'
@@ -47,7 +47,7 @@ export const DesktopSetting: FC<DesktopProps> = (props) => {
             <div style={{ margin: '1rem 0rem' }}>
                 <Row gutter={[16, 16]} justify="space-around">
                     <Col>
-                        <Statistic title="笔记数量" value={setting.articleCount} prefix={<SnippetsOutlined />} />
+                        <Statistic title="日记数量" value={setting.articleCount} prefix={<SnippetsOutlined />} />
                     </Col>
                     <Col>
                         <Statistic title="总字数" value={setting.articleLength} prefix={<HighlightOutlined />} />
@@ -79,9 +79,11 @@ export const DesktopSetting: FC<DesktopProps> = (props) => {
     )
 }
 
+interface MobileProps {
+    onBack: () => void
+}
 
-export const MobileSetting: FC = () => {
-    const navigate = useNavigate()
+export const MobileSetting: FC<MobileProps> = (props) => {
     /** 设置功能 */
     const setting = useSetting()
 
@@ -101,11 +103,11 @@ export const MobileSetting: FC = () => {
         <PageTitle title='设置' />
 
         <PageContent>
-            <div className='p-4 text-base'>
+            <div className='text-base m-4'>
                 <Card size="small">
                     <Row justify="space-around">
                         <Col>
-                            <Statistic title="笔记数量" value={setting.articleCount} prefix={<SnippetsOutlined />} />
+                            <Statistic title="日记数量" value={setting.articleCount} prefix={<SnippetsOutlined />} />
                         </Col>
                         <Col>
                             <Statistic title="总字数" value={setting.articleLength} prefix={<HighlightOutlined />} />
@@ -148,7 +150,7 @@ export const MobileSetting: FC = () => {
         </PageContent>
 
         <PageAction>
-            <ActionButton onClick={() => navigate(-1)}>返回</ActionButton>
+            <ActionButton onClick={props.onBack}>返回</ActionButton>
         </PageAction>
     </>)
 }

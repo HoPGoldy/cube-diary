@@ -8,7 +8,7 @@ import {
 import { Link } from 'react-router-dom'
 import { Button, Popover } from 'antd'
 import s from './styles.module.css'
-import { DesktopSetting } from '@/client/pages/userSetting'
+import { DesktopSetting } from '@/client/pages/setting'
 import { useAppSelector } from '@/client/store'
 import { useBreadcrumb } from '@/client/pages/article/Menu'
 

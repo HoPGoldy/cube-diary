@@ -37,6 +37,6 @@ export interface UndoneDiary {
 
 export type DiaryQueryResp = Array<Diary | UndoneDiary>
 
-export type DiaryUpdateReqData = Diary & {
+export type DiaryUpdateReqData = Partial<Diary> & {
     date: number
 }
