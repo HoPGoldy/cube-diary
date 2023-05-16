@@ -1,6 +1,6 @@
 import { queryClient, requestGet, requestPost } from './base'
 import { useMutation, useQuery } from 'react-query'
-import { Diary, DiaryQueryResp, DiaryUpdateReqData } from '@/types/diary'
+import { Diary, DiaryQueryResp, DiaryUpdateReqData, SearchDiaryReqData, SearchDiaryResp } from '@/types/diary'
 import { AppResponse } from '@/types/global'
 
 const updateArticleCache = (updateData: DiaryUpdateReqData) => {
@@ -49,4 +49,14 @@ export const useUpdateDiary = () => {
 export const autoSaveContent = async (date: number, content: string) => {
     updateArticleCache({ date, content })
     return requestPost('diary/update', { date, content })
+}
+
+/** 搜索日记列表 */
+export const useSearchDiary= (data: SearchDiaryReqData) => {
+    return useQuery(['searchDiary', data], async () => {
+        return requestPost<SearchDiaryResp>('diary/search', data)
+    }, {
+        refetchOnWindowFocus: false,
+        enabled: data.keyword !== '' || !!(data.colors && data.colors.length > 0)
+    })
 }

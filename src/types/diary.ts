@@ -40,3 +40,17 @@ export type DiaryQueryResp = Array<Diary | UndoneDiary>
 export type DiaryUpdateReqData = Partial<Diary> & {
     date: number
 }
+
+/** 日记搜索接口请求参数 */
+export interface SearchDiaryReqData {
+    keyword?: string
+    colors?: string[]
+    desc?: boolean
+    page?: number
+}
+
+/** 日记搜索结果 */
+export interface SearchDiaryResp {
+    total: number
+    rows: Diary[]
+}
