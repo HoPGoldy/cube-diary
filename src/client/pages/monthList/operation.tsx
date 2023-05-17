@@ -163,10 +163,10 @@ export const useOperation = () => {
                 />
             </Drawer>
             <ActionIcon icon={<SettingOutlined />} onClick={() => setShowSetting(true)} />
+            <ActionIcon icon={<CalendarOutlined />} onClick={() => setShowMonthPicker(true)} />
             <Link to="/search">
                 <ActionIcon icon={<SearchOutlined />} />
             </Link>
-            <ActionIcon icon={<CalendarOutlined />} onClick={() => setShowMonthPicker(true)} />
             <ActionButton onClick={() => onClickWrite()}>写点什么</ActionButton>
         </>)
     }
