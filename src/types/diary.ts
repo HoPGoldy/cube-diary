@@ -54,3 +54,30 @@ export interface SearchDiaryResp {
     total: number
     rows: Diary[]
 }
+
+/** json 导入配置项 */
+export interface JsonImportForm {
+    /**
+     * 导入配置项，覆盖还是合并
+     * 合并的意思就是同一天新的日记追加到旧日记下面
+     */
+    existOperation: 'cover' | 'merge' | 'skip'
+    /** 日期字段名 */
+    dateKey: string
+    /** 日期字段解析 */
+    dateFormatter: string
+    /** 日记内容名 */
+    contentKey: string
+    /** 颜色字段名 */
+    colorKey: string
+}
+
+/** 导入结果 */
+export interface JsonImportResult {
+    /** 新增了多少条日记 */
+    insertCount: number
+    /** 新增了多少字 */
+    insertNumber: number
+    /** 更新了多少条日记 */
+    updateCount: number
+}

@@ -26,7 +26,7 @@ export const useSetting = () => {
     const settingConfig = useMemo(() => {
         const list = [
             { label: '修改密码', icon: <LockOutlined />, link: '/changePassword' },
-            { label: '笔记管理', icon: <DatabaseOutlined />, link: '/articleManage' },
+            { label: '导入', icon: <DatabaseOutlined />, link: '/importDiary' },
             { label: '标签管理', icon: <TagsOutlined />, link: '/tags' },
             jwtPayload?.isAdmin
                 ? { label: '用户管理', icon: <ContactsOutlined />, link: '/userInvite' }

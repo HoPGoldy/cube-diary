@@ -1,6 +1,6 @@
 import { queryClient, requestGet, requestPost } from './base'
 import { useMutation, useQuery } from 'react-query'
-import { Diary, DiaryQueryResp, DiaryUpdateReqData, SearchDiaryReqData, SearchDiaryResp } from '@/types/diary'
+import { Diary, DiaryQueryResp, DiaryUpdateReqData, JsonImportResult, SearchDiaryReqData, SearchDiaryResp } from '@/types/diary'
 import { AppResponse } from '@/types/global'
 
 const updateArticleCache = (updateData: DiaryUpdateReqData) => {
@@ -58,5 +58,18 @@ export const useSearchDiary= (data: SearchDiaryReqData) => {
     }, {
         refetchOnWindowFocus: false,
         enabled: data.keyword !== '' || !!(data.colors && data.colors.length > 0)
+    })
+}
+
+/** 导入日记 */
+export const useImportDiary = () => {
+    return useMutation((data: FormData) => {
+        return requestPost<JsonImportResult>('diary/importDiary', data, {
+            headers: { 'Content-Type': 'multipart/form-data' },
+        })
+    }, {
+        onSuccess: () => {
+            queryClient.invalidateQueries('month')
+        }
     })
 }

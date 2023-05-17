@@ -7,6 +7,8 @@ import Search from './pages/search'
 import Article from './pages/article/Article'
 import Entry from './pages/JumpToDefaultDataEntry'
 import { AppConfigProvider } from './layouts/AppConfigProvider'
+import DiaryEdit from './pages/diaryEdit'
+import MonthList from './pages/monthList'
 
 const lazyLoad = (compLoader: () => Promise<{ default: ComponentType<any> }>) => {
     const Comp = lazy(compLoader)
@@ -26,11 +28,13 @@ export const routes = createHashRouter([
                 children: [
                     { index: true, element: <Entry /> },
                     // 日记列表
-                    { path: '/month/:month', element: lazyLoad(() => import('./pages/monthList')) },
+                    { path: '/month/:month', element: <MonthList /> },
                     // 日记详情编辑
-                    { path: '/diary/:date', element: lazyLoad(() => import('./pages/diaryEdit')) },
+                    { path: '/diary/:date', element: <DiaryEdit /> },
                     // 日记搜索
                     { path: '/search', element: <Search /> },
+                    // 导入
+                    { path: '/importDiary', element: lazyLoad(() => import('./pages/importDiary')) },
                     // 笔记详情
                     { path: '/article/:articleId', element: <Article /> },
                     // 笔记管理

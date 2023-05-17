@@ -13,7 +13,7 @@ import { useQueryDiaryDetail, useUpdateDiary } from '@/client/services/diary'
 import { getLabelByDate } from '../monthList/listItem'
 import { MARK_COLORS_MAP } from '@/client/components/ColorPicker'
 
-const About: FC = () => {
+const DiaryEdit: FC = () => {
     const params = useParams()
     const navigate = useNavigate()
     const diaryDate = useMemo(() => dayjs(params.date).valueOf(), [params.date])
@@ -92,4 +92,4 @@ const About: FC = () => {
     </>)
 }
 
-export default About
+export default DiaryEdit

@@ -1,8 +1,9 @@
 import { DatabaseAccessor } from '@/server/lib/sqlite'
 import dayjs from 'dayjs'
 import { keyBy } from 'lodash'
-import { DiaryQueryResp, DiaryUpdateReqData, SearchDiaryReqData, SearchDiaryResp } from '@/types/diary'
+import { DiaryQueryResp, DiaryUpdateReqData, JsonImportForm, JsonImportResult, SearchDiaryReqData, SearchDiaryResp } from '@/types/diary'
 import { PAGE_SIZE } from '@/config'
+import { readFile } from 'fs/promises'
 
 interface Props {
     db: DatabaseAccessor
@@ -96,8 +97,71 @@ export const createDiaryService = (props: Props) => {
         return { code: 200, data }
     }
 
+    const importDiary = async (filePath: string, config: JsonImportForm, userId: number) => {
+        const jsonFile = await readFile(filePath)
+        const jsonContent = JSON.parse(jsonFile.toString())
+
+        // 检查是否有重复的日记
+        const needImportDiarys: number[] = []
+        for (const diary of jsonContent) {
+            const date = diary[config.dateKey]
+            if (!date) {
+                return { code: 400, msg: '导入的日记中没有日期字段' }
+            }
+
+            needImportDiarys.push(dayjs(date, config.dateFormatter).valueOf())
+        }
+
+        const existDiarys = await db.diary()
+            .select('date', 'content')
+            .whereIn('date', needImportDiarys)
+            .andWhere('createUserId', userId)
+        const existDiaryMap = new Map(existDiarys.map(d => [d.date, d]))
+
+        const insertDiarys = []
+        const updateDiarys = []
+
+        for (const diary of jsonContent) {
+            const date = dayjs(diary[config.dateKey]).valueOf()
+            const content = diary[config.contentKey]
+            const color = diary[config.colorKey]
+
+            // 新增
+            const existDiary = existDiaryMap.get(date)
+            if (!existDiary) {
+                insertDiarys.push({ date, content, color, createUserId: userId })
+                continue
+            }
+
+            // 编辑
+            const newData = { ...existDiary, content, color }
+            if (config.existOperation === 'cover') newData.content = content
+            else if (config.existOperation === 'merge') newData.content = `${existDiary.content}\n${content}`
+            else if (config.existOperation === 'skip') continue
+            updateDiarys.push(newData)
+        }
+
+        // 批量插入
+        for (const diary of insertDiarys) {
+            await db.diary().insert(diary)
+        }
+
+        // 批量更新
+        for (const diary of updateDiarys) {
+            await db.diary().where('date', diary.date).andWhere('createUserId', userId).update(diary)
+        }
+
+        const result: JsonImportResult = {
+            insertCount: insertDiarys.length,
+            updateCount: updateDiarys.length,
+            insertNumber: insertDiarys.map(d => d.content.length).reduce((a, b) => a + b, 0),
+        }
+
+        return { code: 200, data: result }
+    }
+
     return {
-        getMonthList, getDetail, updateDetail, serachDiary
+        getMonthList, getDetail, updateDetail, serachDiary, importDiary
     }
 }
 
