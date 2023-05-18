@@ -1,23 +1,26 @@
 import React, { ChangeEventHandler, useRef, useState } from 'react'
-import { LeftOutlined, CloudUploadOutlined, BgColorsOutlined } from '@ant-design/icons'
+import { LeftOutlined, CloudUploadOutlined, BgColorsOutlined, SaveOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
 import { ActionButton, ActionIcon } from '@/client/layouts/PageWithAction'
 import { uploadFiles } from '@/client/services/file'
 import { STATUS_CODE } from '@/config'
 import { messageError } from '@/client/utils/message'
 import { getFileUrl } from '@/client/components/FileUploaderPlugin'
-import { ColorPicker } from '@/client/components/ColorPicker'
+import { ColorPicker, MARK_COLORS_MAP } from '@/client/components/ColorPicker'
+import { useIsMobile } from '@/client/layouts/Responsive'
+import { Button, Space } from 'antd'
 
 interface Props {
     diaryDate: number
     diaryUpdating: boolean
+    color?: string
     onClickSaveBtn: () => void
     onChangeColor: (color: string) => void
 }
 
 export const useOperation = (props: Props) => {
-    const { diaryUpdating, onClickSaveBtn } = props
-
+    const { diaryUpdating, color, onClickSaveBtn } = props
+    const isMobile = useIsMobile()
     const navigate = useNavigate()
     /** 保存按钮的文本 */
     const [saveBtnText, setSaveBtnText] = useState('')
@@ -40,6 +43,40 @@ export const useOperation = (props: Props) => {
                 visible={isColorPickerOpen}
                 onClose={() => setIsColorPickerOpen(false)}
             />
+        )
+    }
+
+    const renderColorMark = () => {
+        if (!color) return null
+        return (
+            <div
+                className="w-4 h-4 rounded-full"
+                style={{ backgroundColor: MARK_COLORS_MAP[color] }}
+            ></div>
+        )
+    }
+
+    const renderTitleOperation = () => {
+        if (isMobile) return renderColorMark()
+
+        return (
+            <div className="flex flex-row flex-nowrap items-center">
+                {renderColorPicker()}
+                <Space>
+                    {saveBtnText && <span className="text-xs font-normal">{saveBtnText}</span>}
+                    {renderColorMark()}
+                    <Button
+                        icon={<BgColorsOutlined />}
+                        onClick={() => setIsColorPickerOpen(true)}
+                    >颜色</Button>
+                    <Button
+                        type="primary"
+                        icon={<SaveOutlined />}
+                        onClick={onClickSaveBtn}
+                        loading={diaryUpdating}
+                    >保存</Button>
+                </Space>
+            </div>
         )
     }
 
@@ -84,13 +121,14 @@ export const useOperation = (props: Props) => {
             <ActionIcon icon={<BgColorsOutlined />} onClick={() => setIsColorPickerOpen(true)} />
             <ActionButton onClick={onClickSaveBtn} loading={diaryUpdating}>
                 保存
-                <span className="ml-2 text-xs">{saveBtnText}</span>
+                {saveBtnText && <span className="ml-2 text-xs">{saveBtnText}</span>}
             </ActionButton>
         </>)
     }
 
     return {
         renderMobileEditBar,
+        renderTitleOperation,
         setSaveBtnText
     }
 }

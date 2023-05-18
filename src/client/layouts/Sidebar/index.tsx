@@ -1,182 +1,75 @@
-import React, { FC } from 'react'
-import { ArticleMenuItem, TabTypes } from '@/types/article'
-import { useAppDispatch } from '@/client/store'
-import { setCurrentMenu } from '@/client/store/menu'
-import { Link, useNavigate } from 'react-router-dom'
-import { TreeMenu } from '@/client//components/TreeMenu'
-import { PlusOutlined, RollbackOutlined, LinkOutlined, InsertRowLeftOutlined } from '@ant-design/icons'
-import { Button, Col, Row, Space, Tooltip } from 'antd'
+import React, { FC, useEffect, useState } from 'react'
+import { Link, useParams } from 'react-router-dom'
+import { InsertRowLeftOutlined, RightOutlined } from '@ant-design/icons'
+import { Button, DatePicker, Space } from 'antd'
 import s from './styles.module.css'
-import { EMPTY_CLASSNAME, tabOptions, useMenu } from './useMenu'
-import Loading from '../Loading'
+import dayjs, { Dayjs } from 'dayjs'
+
+// 写了个 Array.form 自动生成，没想到比写死的还长...
+const MONTH_LIST = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 
 export const Sidebar: FC = () => {
-    const dispatch = useAppDispatch()
-    const menu = useMenu()
-    const navigate = useNavigate()
+    const params = useParams()
+    /** 页面年份 */
+    const [pageYear, setPageYear] = useState<Dayjs | null>(null)
+    /** 页面月份 */
+    const [pageMonth, setPageMonth] = useState<Dayjs | null>(null)
 
-    const renderMenuItem = (item: ArticleMenuItem) => {
+    useEffect(() => {
+        setPageYear(dayjs(params.month || params.date || undefined))
+        setPageMonth(dayjs(params.month || params.date || undefined))
+    }, [params.month, params.date])
+
+    const renderMenuItem = (index: number) => {
+        const month = pageYear?.clone().month(index)
+        if (month && month.isAfter(dayjs())) return null
+
+        const label = month?.format('YYYY 年 MM 月')
+        const className = [s.menuItem]
+        if (month?.isSame(pageMonth, 'month')) className.push(s.menuItemActive)
+
         return (
-            <Link key={item.id} to={`/article/${item.id}`}>
+            <Link key={index} to={`/month/${month?.format('YYYYMM')}`}>
                 <div
-                    className={s.menuItem}
-                    title={item.title}
+                    className={className.join(' ')}
+                    title={label}
                 >
-                    <span className="truncate">{item.title}</span>
-                    {item.color && (
-                        <div
-                            className="flex-shrink-0 w-3 h-3 rounded"
-                            style={{ backgroundColor: item.color }}
-                        />
-                    )}
+                    <span className="truncate">{label}</span>
+                    <RightOutlined />
                 </div>
             </Link>
         )
     }
 
-    /** 渲染下属文章列表 */
-    const renderSubMenu = () => {
-        if (menu.linkLoading) {
-            return <Loading tip='加载中...' className='my-8' />
-        }
-        const currentMenu = menu.articleLink?.data?.childrenArticles || []
-        // console.log('🚀 ~ 下属文章列表', currentMenu)
-
-        return (<>
-            {menu.parentArticleIds && (
-                <Link to={`/article/${menu.parentArticleIds[menu.parentArticleIds.length - 1]}`}>
-                    <Button
-                        className={`${s.toolBtn} keep-antd-style`}
-                        icon={<RollbackOutlined />}
-                        block
-                    >
-                        返回{menu.parentArticleTitle}
-                    </Button>
-                </Link>
-            )}
-            {currentMenu.length === 0
-                ? (<div className={EMPTY_CLASSNAME}>暂无子笔记</div>)
-                : currentMenu.map(renderMenuItem)
-            }
-
-            <Button
-                className={`${s.toolBtn} keep-antd-style`}
-                icon={<PlusOutlined />}
-                onClick={menu.createArticle}
-                block
-            >创建子笔记</Button>
-        </>)
-    }
-
-    /** 渲染相关文章列表 */
-    const renderRelatedMenu = () => {
-        if (menu.relatedLinkLoading) {
-            return <Loading tip='加载中...' className='my-8' />
-        }
-        const currentMenu = menu.articleRelatedLink?.data?.relatedArticles || []
-        // console.log('🚀 ~ 相关文章列表', currentMenu)
-
-        const addRelateBtn = (
-            <TreeMenu
-                key="related-tree"
-                value={menu.selectedRelatedArticleIds}
-                onChange={menu.onUpdateRelatedArticleIds}
-                onClickNode={menu.onUpdateRelatedList}
-                treeData={menu.articleTree?.data?.children || []}
-            >
-                <Button
-                    className={`${s.toolBtn} keep-antd-style`}
-                    icon={<LinkOutlined />}
-                    block
-                >关联其他笔记</Button>
-            </TreeMenu>
-        )
-
-        if (currentMenu.length === 0) {
-            return (<>
-                {<div className={EMPTY_CLASSNAME}>暂无相关笔记</div>}
-                {addRelateBtn}
-            </>)
-        }
-
-        return (<>
-            {currentMenu.map(renderMenuItem)}
-            {addRelateBtn}
-        </>)
-    }
-
-    /** 渲染收藏文章列表 */
-    const renderFavoriteMenu = () => {
-        if (menu.favoriteLoading) {
-            return <Loading tip='加载中...' className='my-8' />
-        }
-        const currentMenu = menu.articleFavorite?.data || []
-        // console.log('🚀 ~ 收藏文章列表', currentMenu)
-
-        return (<>
-            {currentMenu.length === 0
-                ? (<div className={EMPTY_CLASSNAME}>暂无收藏</div>)
-                : currentMenu.map(renderMenuItem)
-            }
-        </>)
-    }
-
-    const renderCurrentMenu = () => {
-        switch (menu.currentTab) {
-        case TabTypes.Sub:
-            return renderSubMenu()
-        case TabTypes.Related:
-            return renderRelatedMenu()
-        case TabTypes.Favorite:
-            return renderFavoriteMenu()
-        default:
-            return null
-        }
-    }
-
-    const renderTabBtns = () => {
-        return (
-            <Row gutter={8}>
-                {tabOptions.map(item => {
-                    const className = [s.toolBtn, 'keep-antd-style']
-                    if (item.value === menu.currentTab) className.push(s.selectedToolBtn)
-                    return (
-                        <Col span={8} key={item.value}>
-                            <Tooltip title={item.sidebarLabel} placement="bottom" color="#4b5563">
-                                <Button
-                                    className={className.join(' ')}
-                                    onClick={() => dispatch(setCurrentMenu(item.value))}
-                                    // style={{ backgroundColor: item.value === menu.currentTab ? '#f0f0f0' : '' }}
-                                    icon={item.icon}
-                                    block
-                                ></Button>
-                            </Tooltip>
-                        </Col>
-                    )
-                })}
-            </Row>
-        )
-    }
-
     return (
         <section className={s.sideberBox}>
-            {renderTabBtns()}
+            <Button
+                className={[s.yearPicker, 'keep-antd-style'].join(' ')}
+            >
+                <DatePicker
+                    picker="year"
+                    style={{ width: '100%' }}
+                    bordered={false}
+                    value={pageYear}
+                    allowClear={false}
+                    format={'YYYY 年'}
+                    onChange={setPageYear}
+                />
+            </Button>
 
             <div className="flex-grow flex-shrink overflow-y-auto noscrollbar overflow-x-hidden my-3">
                 <Space direction="vertical" style={{ width: '100%' }}>
-                    {renderCurrentMenu()}
+                    {MONTH_LIST.map(renderMenuItem)}
                 </Space>
             </div>
-            <TreeMenu
-                treeData={menu.articleTree?.data?.children || []}
-                onClickNode={node => navigate(`/article/${node.value}`)}
-            >
+
+            <Link to={`/month/${dayjs().format('YYYYMM')}`}>
                 <Button
                     className={`${s.toolBtn} keep-antd-style`}
                     icon={<InsertRowLeftOutlined />}
                     block
-                >笔记树</Button>
-            </TreeMenu>
+                >返回本月</Button>
+            </Link>
         </section>
     )
 }
