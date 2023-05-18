@@ -1,6 +1,6 @@
 import { queryClient, requestGet, requestPost } from './base'
 import { useMutation, useQuery } from 'react-query'
-import { Diary, DiaryQueryResp, DiaryUpdateReqData, JsonImportResult, SearchDiaryReqData, SearchDiaryResp } from '@/types/diary'
+import { Diary, DiaryExportReqData, DiaryQueryResp, DiaryUpdateReqData, JsonImportResult, SearchDiaryReqData, SearchDiaryResp } from '@/types/diary'
 import { AppResponse } from '@/types/global'
 
 const updateArticleCache = (updateData: DiaryUpdateReqData) => {
@@ -70,6 +70,14 @@ export const useImportDiary = () => {
     }, {
         onSuccess: () => {
             queryClient.invalidateQueries('month')
+            queryClient.invalidateQueries('userStatistic')
         }
+    })
+}
+
+/** 导出日记 */
+export const useExportDiary = () => {
+    return useMutation((data: DiaryExportReqData) => {
+        return requestPost<JsonImportResult>('diary/exportDiary', data)
     })
 }

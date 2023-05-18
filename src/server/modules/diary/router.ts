@@ -5,7 +5,7 @@ import { TagService } from './service'
 import { validate } from '@/server/utils'
 import Joi from 'joi'
 import { getJwtPayload } from '@/server/lib/auth'
-import { DiaryUpdateReqData, JsonImportForm, SearchDiaryReqData } from '@/types/diary'
+import { DiaryExportReqData, DiaryUpdateReqData, JsonImportForm, SearchDiaryReqData } from '@/types/diary'
 
 interface Props {
     service: TagService
@@ -97,6 +97,30 @@ export const createDiaryRouter = (props: Props) => {
             console.error(e)
             response(ctx, { code: 500, msg: '导入失败，请检查数据结构是否正确' })
         }
+    })
+
+    const exportDiaryShema = Joi.object<DiaryExportReqData>({
+        range: Joi.string(),
+        startDate: Joi.string().allow(null),
+        endDate: Joi.string().allow(null),
+        dateKey: Joi.string(),
+        contentKey: Joi.string(),
+        colorKey: Joi.string(),
+        dateFormatter: Joi.string(),
+    })
+
+    // 导出笔记
+    router.post('/exportDiary', async ctx => {
+        const query = validate(ctx, exportDiaryShema)
+        if (!query) return
+
+        const payload = getJwtPayload(ctx)
+        if (!payload) return
+
+        const data = await service.exportDiary(query, payload.userId)
+        ctx.set('Content-disposition', 'attachment; filename=data.txt')
+        ctx.set('Content-type', 'text/json')
+        ctx.body = data
     })
 
     return router

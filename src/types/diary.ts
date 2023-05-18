@@ -81,3 +81,21 @@ export interface JsonImportResult {
     /** 更新了多少条日记 */
     updateCount: number
 }
+
+/** 日记导出配置项 */
+export interface DiaryExportReqData {
+    /** 导出范围 */
+    range: 'all' | 'part'
+    /** 开始时间 */
+    startDate?: number
+    /** 结束时间 */
+    endDate?: number
+    /** 日期字段名 */
+    dateKey: string
+    /** 日期字段格式化 */
+    dateFormatter: string
+    /** 内容字段名 */
+    contentKey: string
+    /** 颜色字段名 */
+    colorKey: string
+}

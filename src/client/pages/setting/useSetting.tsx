@@ -27,7 +27,7 @@ export const useSetting = () => {
         const list = [
             { label: '修改密码', icon: <LockOutlined />, link: '/changePassword' },
             { label: '导入', icon: <DatabaseOutlined />, link: '/importDiary' },
-            { label: '标签管理', icon: <TagsOutlined />, link: '/tags' },
+            { label: '导出', icon: <TagsOutlined />, link: '/exportDiary' },
             jwtPayload?.isAdmin
                 ? { label: '用户管理', icon: <ContactsOutlined />, link: '/userInvite' }
                 : null,
