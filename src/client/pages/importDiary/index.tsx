@@ -1,9 +1,9 @@
 import React, { FC, useState, useRef, ChangeEventHandler } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { PageContent, PageAction, ActionIcon, ActionButton } from '../../layouts/PageWithAction'
-import { Card, Col, Form, Input, Modal, Row, Select, message } from 'antd'
+import { Button, Card, Col, Form, Input, Modal, Row, Select, message } from 'antd'
 import { STATUS_CODE } from '@/config'
-import { MobileArea } from '@/client/layouts/Responsive'
+import { DesktopArea, MobileArea } from '@/client/layouts/Responsive'
 import { ExclamationCircleFilled, LeftOutlined } from '@ant-design/icons'
 import { PageTitle } from '@/client/components/PageTitle'
 import { useImportDiary } from '@/client/services/diary'
@@ -80,6 +80,8 @@ const ImportDiary: FC = () => {
                 </div>
             )
         })
+
+        navigate('/')
     }
 
     const onFileChange: ChangeEventHandler<HTMLInputElement> = async (event) => {
@@ -109,103 +111,86 @@ const ImportDiary: FC = () => {
                 runUpload(formData)
             }
         })
-
-        
-
-
-        // console.log('🚀 ~ file: index.tsx:100 ~ constonFileChange:ChangeEventHandler<HTMLInputElement>= ~ resp:', resp)
-        // setLoading(true)
-        // const resp = await upload<JsonImportResult>('/api/import/json', { file: uploadFile, ...formValues })
-        // setLoading(false)
-        // if (!resp.success) return Notify.show({ type: 'danger', message: resp.message })
-
-        // const { existCount = 0, insertCount = 0, insertNumber = 0} = resp.data || {}
-
-        // await Dialog.confirm({
-        //     title: <b>导入成功</b>,
-        //     message: (
-        //         <div className="text-left">
-        //             <div className="pb-4">
-        //                 共计导入 {existCount + insertCount} 条，{insertNumber >= 0 ? '新增' : '减少'} {insertNumber} 字，其中：
-        //             </div>
-        //             <li>新增 {insertCount} 条</li>
-        //             <li>更新 {existCount} 条</li>
-        //             <div className="pt-4">可通过备份管理中的 “导入备份” 恢复到导入前的状态</div>
-        //         </div>
-        //     ),
-        //     className: 'text-mainColor',
-        //     cancelButtonText: '继续导入',
-        //     confirmButtonText: '返回首页'
-        // })
-
-        // router.push('/')
     }
 
     const renderContent = () => {
         return (
-            <div className='p-4 md:w-[80%] xl:w-[50%] 2xl:w-[40%] mx-auto'>
+            <div className='p-4'>
                 {contextHolder}
                 <MobileArea>
                     <Card size="small" className="mb-4">
                         <div className="text-center font-black">日记导入</div>
                     </Card>
                 </MobileArea>
-                <Card size="small" className="mb-4" title="导入配置">
-                    <Form
-                        className={s.importDiaryBox}
-                        form={form}
-                        initialValues={initialValues}
-                        onValuesChange={onFormValueChange}
-                        labelAlign='left'
-                    >
-                        <Row gutter={[16, 16]}>
-                            <Col span={9}>
-                                当日记存在时
-                            </Col>
-                            <Col span={15}>
-                                <Form.Item name="existOperation" noStyle>
-                                    <Select style={{ width: '100%' }} options={EXIST_OPERATION_OPTIONS}></Select>
-                                </Form.Item>
-                            </Col>
-                            <Col span={9}>
-                                日期字段名
-                            </Col>
-                            <Col span={15}>
-                                <Form.Item name="dateKey" noStyle>
-                                    <Input placeholder="默认使用 date" />
-                                </Form.Item>
-                            </Col>
-                            <Col span={9}>
-                                日期解析
-                            </Col>
-                            <Col span={15}>
-                                <Form.Item name="dateFormatter" noStyle>
-                                    <Input placeholder="默认解析毫秒时间戳" />
-                                </Form.Item>
-                            </Col>
-                            <Col span={9}>
-                                正文字段名
-                            </Col>
-                            <Col span={15}>
-                                <Form.Item name="contentKey" noStyle>
-                                    <Input placeholder="默认使用 content" />
-                                </Form.Item>
-                            </Col>
-                            <Col span={9}>
-                                颜色字段名
-                            </Col>
-                            <Col span={15}>
-                                <Form.Item name="colorKey" noStyle>
-                                    <Input placeholder="默认使用 color" />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-                    </Form>
-                </Card>
-
-                <Card size="small" className={s.previewArea} title="示例">
-                    <Preview value={example}></Preview>
-                </Card>
+                <Row gutter={[16, 16]}>
+                    <Col xs={24} md={24} lg={12}>
+                        <Card size="small" className="mb-4" title="导入配置">
+                            <Form
+                                className={s.importDiaryBox}
+                                form={form}
+                                initialValues={initialValues}
+                                onValuesChange={onFormValueChange}
+                                labelAlign='left'
+                            >
+                                <Row gutter={[16, 16]}>
+                                    <Col span={9}>
+                                        当日记存在时
+                                    </Col>
+                                    <Col span={15}>
+                                        <Form.Item name="existOperation" noStyle>
+                                            <Select style={{ width: '100%' }} options={EXIST_OPERATION_OPTIONS}></Select>
+                                        </Form.Item>
+                                    </Col>
+                                    <Col span={9}>
+                                        日期字段名
+                                    </Col>
+                                    <Col span={15}>
+                                        <Form.Item name="dateKey" noStyle>
+                                            <Input placeholder="默认使用 date" />
+                                        </Form.Item>
+                                    </Col>
+                                    <Col span={9}>
+                                        日期解析
+                                    </Col>
+                                    <Col span={15}>
+                                        <Form.Item name="dateFormatter" noStyle>
+                                            <Input placeholder="默认解析毫秒时间戳" />
+                                        </Form.Item>
+                                    </Col>
+                                    <Col span={9}>
+                                        正文字段名
+                                    </Col>
+                                    <Col span={15}>
+                                        <Form.Item name="contentKey" noStyle>
+                                            <Input placeholder="默认使用 content" />
+                                        </Form.Item>
+                                    </Col>
+                                    <Col span={9}>
+                                        颜色字段名
+                                    </Col>
+                                    <Col span={15}>
+                                        <Form.Item name="colorKey" noStyle>
+                                            <Input placeholder="默认使用 color" />
+                                        </Form.Item>
+                                    </Col>
+                                </Row>
+                            </Form>
+                        </Card>
+                        <DesktopArea>
+                            <Button
+                                block
+                                type="primary"
+                                onClick={onSelectFile}
+                                loading={isLoading}
+                            >选择文件并导入</Button>
+                        </DesktopArea>
+                    </Col>
+                    <Col xs={24} md={24} lg={12}>
+                        <Card size="small" className={s.previewArea} title="示例">
+                            <Preview value={example}></Preview>
+                        </Card>
+                    </Col>
+                </Row>
             </div>
         )
     }
@@ -218,16 +203,23 @@ const ImportDiary: FC = () => {
         </PageContent>
 
         <PageAction>
-            <ActionIcon icon={<LeftOutlined />} onClick={() => navigate(-1)} />
-            <ActionButton onClick={onSelectFile} loading={isLoading}>选择文件并导入</ActionButton>
-            <input
-                type="file"
-                ref={fileSelectRef}
-                accept=".json"
-                style={{ display: 'none' }}
-                onChange={onFileChange}
-            ></input>
+            <ActionIcon
+                icon={<LeftOutlined />}
+                onClick={() => navigate(-1)}
+            />
+            <ActionButton
+                onClick={onSelectFile}
+                loading={isLoading}
+            >选择文件并导入</ActionButton>
         </PageAction>
+
+        <input
+            type="file"
+            ref={fileSelectRef}
+            accept=".json"
+            style={{ display: 'none' }}
+            onChange={onFileChange}
+        ></input>
     </>)
 }
 

@@ -5,6 +5,7 @@ import { Card } from 'antd'
 import { GithubOutlined, SendOutlined } from '@ant-design/icons'
 import { Cell } from '../components/Cell'
 import { PageTitle } from '../components/PageTitle'
+import { MobileArea } from '../layouts/Responsive'
 
 const About: FC = () => {
     const navigate = useNavigate()
@@ -13,9 +14,11 @@ const About: FC = () => {
         <PageTitle title='关于应用' />
         <PageContent>
             <div className='p-4 text-base md:w-1/2 mx-auto'>
-                <Card size="small" className='text-center text-base font-bold'>
-                    关 于
-                </Card>
+                <MobileArea>
+                    <Card size="small" className='text-center text-base font-bold'>
+                        关 于
+                    </Card>
+                </MobileArea>
                 <Card size="small" className='mt-4 text-base'>
                     又快又好用的简单记事本 APP。
                     <br /><br />

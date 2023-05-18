@@ -121,10 +121,15 @@ export const ColorMutiplePicker: FC<ColorMutiplePickerProps> = (props) => {
 
     return (
         <List
-            className='mt-6'
+            className='mt-6 md:mt-2'
             grid={{
                 gutter: 16,
-                column: 6
+                xs: 6,
+                sm: 6,
+                md: 8,
+                lg: 16,
+                xl: 16,
+                xxl: 16
             }}
             dataSource={MARK_COLORS}
             renderItem={renderMarkColor}

@@ -11,7 +11,6 @@ import { useOperation } from './operation'
 import { PageTitle } from '@/client/components/PageTitle'
 import { useQueryDiaryDetail, useUpdateDiary } from '@/client/services/diary'
 import { getLabelByDate } from '../monthList/listItem'
-import { MARK_COLORS_MAP } from '@/client/components/ColorPicker'
 
 const DiaryEdit: FC = () => {
     const params = useParams()
@@ -50,6 +49,7 @@ const DiaryEdit: FC = () => {
     // /** 文章相关的操作 */
     const operation = useOperation({
         diaryDate,
+        color: diaryResp?.data?.color,
         diaryUpdating,
         onClickSaveBtn,
         onChangeColor,
@@ -67,11 +67,8 @@ const DiaryEdit: FC = () => {
             <div className="box-border p-4 md:w-full h-full flex flex-col flex-nowrap">
                 <div className="font-black text-xl flex flex-row flex-nowrap justify-between items-center">
                     {diaryTitle}
-                    {diaryResp?.data?.color &&
-                    <div
-                        className="w-4 h-4 rounded-full"
-                        style={{ backgroundColor: MARK_COLORS_MAP[diaryResp?.data?.color]}}
-                    ></div>}</div>
+                    {operation.renderTitleOperation()}
+                </div>
 
                 <div className={[s.editorArea, s.mdArea].join(' ')}>
                     {renderEditor()}

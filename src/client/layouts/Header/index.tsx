@@ -10,7 +10,7 @@ import { Button, Popover } from 'antd'
 import s from './styles.module.css'
 import { DesktopSetting } from '@/client/pages/setting'
 import { useAppSelector } from '@/client/store'
-import { useBreadcrumb } from '@/client/pages/article/Menu'
+import { usePageTitle } from './usePageTitle'
 
 interface Props {
     onClickCollasedIcon: () => void
@@ -23,8 +23,7 @@ const Header: FC<Props> = (props) => {
     const [userMenuVisible, setUserMenuVisible] = useState(false)
     /** 用户名 */
     const username = useAppSelector(s => s.user.userInfo?.username)
-    /** 面包屑功能 */
-    const { renderBreadcrumb } = useBreadcrumb()
+    const title = usePageTitle()
     /** 侧边栏展开按钮 */
     const CollasedIcon = collapsed ? MenuUnfoldOutlined : MenuFoldOutlined
 
@@ -32,7 +31,7 @@ const Header: FC<Props> = (props) => {
         <header className={s.headerBox}>
             <div className='flex flex-nowrap flex-grow overflow-hidden'>
                 <CollasedIcon onClick={onClickCollasedIcon} className="text-xl mr-4" />
-                {renderBreadcrumb()}
+                <div className="text-lg cursor-default">{title}</div>
             </div>
             <div className='flex flex-nowrap flex-shrink-0 ml-2'>
                 <Link to="/search">

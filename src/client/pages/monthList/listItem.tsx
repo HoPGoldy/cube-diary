@@ -44,7 +44,7 @@ export const DiaryListItem: FC<Props> = ({ item }) => {
         return (
             <List.Item>
                 <Card size="small" onClick={onEdit}>
-                    <div className="text-gray-400 font-bold">
+                    <div className="text-gray-400 font-bold cursor-pointer">
                         {title}
                     </div>
                 </Card>
@@ -57,7 +57,7 @@ export const DiaryListItem: FC<Props> = ({ item }) => {
             <Card
                 title={
                     <div
-                        className="text-gray-400 font-bold"
+                        className="text-gray-400 font-bold cursor-pointer"
                         onClick={onEdit}
                     >{title}</div>
                 }

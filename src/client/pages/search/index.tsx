@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { PageContent, PageAction, ActionIcon, ActionSearch } from '../../layouts/PageWithAction'
-import { Button, Input, List } from 'antd'
+import { Button, Col, Input, List, Row } from 'antd'
 import { PAGE_SIZE } from '@/config'
 import { DesktopArea } from '@/client/layouts/Responsive'
 import { BgColorsOutlined, LeftOutlined, ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons'
@@ -40,7 +40,7 @@ const SearchArticle: FC = () => {
 
     useEffect(() => {
         if (!listEmptyText) setListEmptyText('输入关键字或选择颜色进行搜索')
-        else setListEmptyText('没有找到相关笔记')
+        else setListEmptyText('没有找到相关日记')
     }, [isSearching])
 
     const onKeywordSearch = (value: string) => {
@@ -52,12 +52,22 @@ const SearchArticle: FC = () => {
         return (
             <div className='p-4'>
                 <DesktopArea>
-                    <Input.Search
-                        placeholder="请输入标题或者正文，回车搜索"
-                        enterButton="搜索"
-                        size="large"
-                        onSearch={onKeywordSearch}
-                    />
+                    <Row gutter={[16, 16]}>
+                        <Col span={24}>
+                            <Input.Search
+                                placeholder="请输入标题或者正文，回车搜索"
+                                enterButton="搜索"
+                                size="large"
+                                onSearch={onKeywordSearch}
+                            />
+                        </Col>
+                        <Col span={24}>
+                            <ColorMutiplePicker
+                                value={selectedColor}
+                                onChange={setSelectedColor}
+                            />
+                        </Col>
+                    </Row>
                 </DesktopArea>
                 <div className='md:my-4'>
                     <List
@@ -80,7 +90,7 @@ const SearchArticle: FC = () => {
     }
 
     return (<>
-        <PageTitle title='搜索笔记' />
+        <PageTitle title='搜索日记' />
 
         <PageContent>
             {renderContent()}

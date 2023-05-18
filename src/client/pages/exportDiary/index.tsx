@@ -1,8 +1,8 @@
 import React, { FC, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { PageContent, PageAction, ActionIcon, ActionButton } from '../../layouts/PageWithAction'
-import { Card, Col, DatePicker, Form, Input, Radio, Row, message } from 'antd'
-import { MobileArea } from '@/client/layouts/Responsive'
+import { Button, Card, Col, DatePicker, Form, Input, Radio, Row, message } from 'antd'
+import { DesktopArea, MobileArea } from '@/client/layouts/Responsive'
 import { LeftOutlined } from '@ant-design/icons'
 import { PageTitle } from '@/client/components/PageTitle'
 import { useExportDiary } from '@/client/services/diary'
@@ -95,90 +95,105 @@ const ExportDiary: FC = () => {
 
     const renderContent = () => {
         return (
-            <div className='p-4 md:w-[80%] xl:w-[50%] 2xl:w-[40%] mx-auto'>
+            <div className='p-4'>
                 {contextHolder}
                 <MobileArea>
                     <Card size="small" className="mb-4">
                         <div className="text-center font-black">日记导出</div>
                     </Card>
                 </MobileArea>
-                <Card size="small" className="mb-4" title="导出配置">
-                    <Form
-                        className={s.importDiaryBox}
-                        form={form}
-                        initialValues={initialValues}
-                        onValuesChange={onFormValueChange}
-                        labelAlign='left'
-                    >
-                        <Row gutter={[16, 16]}>
-                            <Col span={9}>
-                                导出范围
-                            </Col>
-                            <Col span={15}>
-                                <Form.Item name="range" noStyle>
-                                    <Radio.Group className="float-right">
-                                        <Radio value="all">全部</Radio>
-                                        <Radio value="part">部分</Radio>
-                                    </Radio.Group>
-                                </Form.Item>
-                            </Col>
-                            {isRangeExport && (<>
-                                <Col span={9}>
-                                    开始日期
-                                </Col>
-                                <Col span={15}>
-                                    <Form.Item name="startDate" noStyle rules={[{ required: true, message: '请选择开始日期'}]}>
-                                        <DatePicker className="w-full" />
-                                    </Form.Item>
-                                </Col>
-                                <Col span={9}>
-                                    结束日期
-                                </Col>
-                                <Col span={15}>
-                                    <Form.Item name="endDate" noStyle rules={[{ required: true, message: '请选择结束日期'}]}>
-                                        <DatePicker className="w-full" />
-                                    </Form.Item>
-                                </Col>
-                            </>)}
-                            <Col span={9}>
-                                日期字段名
-                            </Col>
-                            <Col span={15}>
-                                <Form.Item name="dateKey" noStyle>
-                                    <Input placeholder="默认使用 date" />
-                                </Form.Item>
-                            </Col>
-                            <Col span={9}>
-                                日期解析
-                            </Col>
-                            <Col span={15}>
-                                <Form.Item name="dateFormatter" noStyle>
-                                    <Input placeholder="默认解析毫秒时间戳" />
-                                </Form.Item>
-                            </Col>
-                            <Col span={9}>
-                                正文字段名
-                            </Col>
-                            <Col span={15}>
-                                <Form.Item name="contentKey" noStyle>
-                                    <Input placeholder="默认使用 content" />
-                                </Form.Item>
-                            </Col>
-                            <Col span={9}>
-                                颜色字段名
-                            </Col>
-                            <Col span={15}>
-                                <Form.Item name="colorKey" noStyle>
-                                    <Input placeholder="默认使用 color" />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-                    </Form>
-                </Card>
+                
+                <Row gutter={[16, 16]}>
+                    <Col xs={24} md={24} lg={12}>
+                        <Card size="small" className="mb-4" title="导出配置">
+                            <Form
+                                className={s.importDiaryBox}
+                                form={form}
+                                initialValues={initialValues}
+                                onValuesChange={onFormValueChange}
+                                labelAlign='left'
+                            >
+                                <Row gutter={[16, 16]}>
+                                    <Col span={9}>
+                                        导出范围
+                                    </Col>
+                                    <Col span={15}>
+                                        <Form.Item name="range" noStyle>
+                                            <Radio.Group className="float-right">
+                                                <Radio value="all">全部</Radio>
+                                                <Radio value="part">部分</Radio>
+                                            </Radio.Group>
+                                        </Form.Item>
+                                    </Col>
+                                    {isRangeExport && (<>
+                                        <Col span={9}>
+                                            开始日期
+                                        </Col>
+                                        <Col span={15}>
+                                            <Form.Item name="startDate" noStyle rules={[{ required: true, message: '请选择开始日期'}]}>
+                                                <DatePicker className="w-full" />
+                                            </Form.Item>
+                                        </Col>
+                                        <Col span={9}>
+                                            结束日期
+                                        </Col>
+                                        <Col span={15}>
+                                            <Form.Item name="endDate" noStyle rules={[{ required: true, message: '请选择结束日期'}]}>
+                                                <DatePicker className="w-full" />
+                                            </Form.Item>
+                                        </Col>
+                                    </>)}
+                                    <Col span={9}>
+                                        日期字段名
+                                    </Col>
+                                    <Col span={15}>
+                                        <Form.Item name="dateKey" noStyle>
+                                            <Input placeholder="默认使用 date" />
+                                        </Form.Item>
+                                    </Col>
+                                    <Col span={9}>
+                                        日期解析
+                                    </Col>
+                                    <Col span={15}>
+                                        <Form.Item name="dateFormatter" noStyle>
+                                            <Input placeholder="默认解析毫秒时间戳" />
+                                        </Form.Item>
+                                    </Col>
+                                    <Col span={9}>
+                                        正文字段名
+                                    </Col>
+                                    <Col span={15}>
+                                        <Form.Item name="contentKey" noStyle>
+                                            <Input placeholder="默认使用 content" />
+                                        </Form.Item>
+                                    </Col>
+                                    <Col span={9}>
+                                        颜色字段名
+                                    </Col>
+                                    <Col span={15}>
+                                        <Form.Item name="colorKey" noStyle>
+                                            <Input placeholder="默认使用 color" />
+                                        </Form.Item>
+                                    </Col>
+                                </Row>
+                            </Form>
+                        </Card>
+                        <DesktopArea>
+                            <Button
+                                block
+                                type="primary"
+                                onClick={onExport}
+                                loading={isLoading}
+                            >导出</Button>
+                        </DesktopArea>
+                    </Col>
 
-                <Card size="small" className={s.previewArea} title="示例" extra="将导出为以下格式">
-                    <Preview value={example}></Preview>
-                </Card>
+                    <Col xs={24} md={24} lg={12}>
+                        <Card size="small" className={s.previewArea} title="示例" extra="将导出为以下格式">
+                            <Preview value={example}></Preview>
+                        </Card>
+                    </Col>
+                </Row>
             </div>
         )
     }
@@ -191,8 +206,14 @@ const ExportDiary: FC = () => {
         </PageContent>
 
         <PageAction>
-            <ActionIcon icon={<LeftOutlined />} onClick={() => navigate(-1)} />
-            <ActionButton onClick={onExport} loading={isLoading}>导出</ActionButton>
+            <ActionIcon
+                icon={<LeftOutlined />}
+                onClick={() => navigate(-1)}
+            />
+            <ActionButton
+                onClick={onExport}
+                loading={isLoading}
+            >导出</ActionButton>
         </PageAction>
     </>)
 }
