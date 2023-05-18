@@ -1,7 +1,7 @@
 import { DatabaseAccessor } from '@/server/lib/sqlite'
 import dayjs from 'dayjs'
 import { keyBy } from 'lodash'
-import { DiaryQueryResp, DiaryUpdateReqData, JsonImportForm, JsonImportResult, SearchDiaryReqData, SearchDiaryResp } from '@/types/diary'
+import { DiaryExportReqData, DiaryQueryResp, DiaryUpdateReqData, JsonImportForm, JsonImportResult, SearchDiaryReqData, SearchDiaryResp } from '@/types/diary'
 import { PAGE_SIZE } from '@/config'
 import { readFile } from 'fs/promises'
 
@@ -160,8 +160,27 @@ export const createDiaryService = (props: Props) => {
         return { code: 200, data: result }
     }
 
+    const exportDiary = async (config: DiaryExportReqData, userId: number) => {
+        const sqlOpt = db.diary().select('date', 'content', 'color').where('createUserId', userId)
+
+        if (config.range === 'part') {
+            const dateRange: [number, number] = [dayjs(config.startDate).valueOf(), dayjs(config.endDate).valueOf()]
+            sqlOpt.andWhereBetween('date', dateRange)
+        }
+
+        const diarys = await sqlOpt
+
+        const data = diarys.map(diary => ({
+            [config.dateKey]: config.dateFormatter ? dayjs(diary.date).format(config.dateFormatter) : diary.date,
+            [config.contentKey]: diary.content,
+            [config.colorKey]: diary.color,
+        }))
+
+        return JSON.stringify(data)
+    }
+
     return {
-        getMonthList, getDetail, updateDetail, serachDiary, importDiary
+        getMonthList, getDetail, updateDetail, serachDiary, importDiary, exportDiary
     }
 }
 

@@ -42,7 +42,7 @@ const MonthList: FC = () => {
     }
 
     return (<>
-        <PageTitle title='用户管理' />
+        <PageTitle title='日记列表' />
 
         <PageContent>
             <div className="m-4" onClick={onClickDetail}>

@@ -35,6 +35,8 @@ export const routes = createHashRouter([
                     { path: '/search', element: <Search /> },
                     // 导入
                     { path: '/importDiary', element: lazyLoad(() => import('./pages/importDiary')) },
+                    // 导出
+                    { path: '/exportDiary', element: lazyLoad(() => import('./pages/exportDiary')) },
                     // 笔记详情
                     { path: '/article/:articleId', element: <Article /> },
                     // 笔记管理

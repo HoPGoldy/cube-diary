@@ -1,0 +1,11 @@
+.previewArea :global(.ant-card-body) {
+    padding: 0 !important;
+}
+
+.previewArea :global(pre) {
+    margin: 0 !important;
+}
+
+.previewArea :global(code) {
+    background: #eee !important;
+}
