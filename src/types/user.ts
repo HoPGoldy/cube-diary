@@ -12,13 +12,6 @@ export interface UserStorage {
     initTime: number
     /** 是否为管理员 */
     isAdmin?: boolean
-    /** 用户当前根节点文章的 id */
-    rootArticleId: number
-    /**
-     * 该用户收藏的文章 id
-     * 逗号分割
-     */
-    favoriteArticleIds?: string
     /** 用户是否被封禁 */
     isBanned?: boolean
 }
@@ -75,8 +68,6 @@ export interface FrontendUserInfo {
     theme: AppTheme
     /** 初始化时间 */
     initTime: number
-    /** 笔记根节点 id */
-    rootArticleId: number
     /** 是否为管理员 */
     isAdmin?: boolean
 }

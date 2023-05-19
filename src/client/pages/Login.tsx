@@ -6,7 +6,6 @@ import React, { useRef, useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import { useLogin } from '../services/user'
 import { useAppDispatch, useAppSelector } from '../store'
-import { setCurrentArticle } from '../store/menu'
 import { login } from '../store/user'
 import { messageError, messageSuccess } from '../utils/message'
 import { UserOutlined, KeyOutlined } from '@ant-design/icons'
@@ -48,7 +47,6 @@ const Register = () => {
         messageSuccess(`登录成功，欢迎回来，${resp?.data?.username}`)
         const userInfo = resp.data as LoginSuccessResp
         dispatch(login(userInfo))
-        dispatch(setCurrentArticle(userInfo.rootArticleId))
     }
 
     if (userInfo) {

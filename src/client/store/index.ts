@@ -3,13 +3,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import type { TypedUseSelectorHook } from 'react-redux'
 import userReducer from './user'
 import globalReducer from './global'
-import menuReducer from './menu'
 
 export const store = configureStore({
     reducer: {
         user: userReducer,
         global: globalReducer,
-        menu: menuReducer,
     },
 })
 

@@ -4,7 +4,6 @@ import React, { FC, useEffect, PropsWithChildren } from 'react'
 import { Navigate } from 'react-router-dom'
 import { useQueryUserInfo } from '../services/user'
 import { useAppDispatch, useAppSelector } from '../store'
-import { setCurrentArticle } from '../store/menu'
 import { login } from '../store/user'
 import Loading from './Loading'
 
@@ -18,7 +17,6 @@ export const LoginAuth: FC<PropsWithChildren> = ({ children }) => {
         if (!userInfoResp || userInfoResp.code !== STATUS_CODE.SUCCESS) return
         const userInfo = userInfoResp.data as LoginSuccessResp
         dispatch(login(userInfo))
-        dispatch(setCurrentArticle(userInfo.rootArticleId))
     }, [userInfoResp])
 
     if ((!userInfo && !token) || userInfoResp?.code === 401) {

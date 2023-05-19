@@ -98,7 +98,7 @@ export const createUserRouter = (props: Props) => {
         const payload = getJwtPayload(ctx)
         if (!payload) return
 
-        const resp = await service.getArticleCount(payload.userId)
+        const resp = await service.getDiaryCount(payload.userId)
         response(ctx, resp)
     })
 

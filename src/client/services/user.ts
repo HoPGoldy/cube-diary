@@ -36,7 +36,7 @@ export const useRegister = () => {
 
 
 /** 统计文章 */
-export const useQueryArticleCount = () => {
+export const useQueryDiaryCount = () => {
     return useQuery('userStatistic', () => {
         return requestGet('user/statistic')
     })

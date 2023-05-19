@@ -47,10 +47,10 @@ export const DesktopSetting: FC<DesktopProps> = (props) => {
             <div style={{ margin: '1rem 0rem' }}>
                 <Row gutter={[16, 16]} justify="space-around">
                     <Col>
-                        <Statistic title="日记数量" value={setting.articleCount} prefix={<SnippetsOutlined />} />
+                        <Statistic title="日记数量" value={setting.diaryCount} prefix={<SnippetsOutlined />} />
                     </Col>
                     <Col>
-                        <Statistic title="总字数" value={setting.articleLength} prefix={<HighlightOutlined />} />
+                        <Statistic title="总字数" value={setting.diaryLength} prefix={<HighlightOutlined />} />
                     </Col>
                 </Row>
             </div>
@@ -107,10 +107,10 @@ export const MobileSetting: FC<MobileProps> = (props) => {
                 <Card size="small">
                     <Row justify="space-around">
                         <Col>
-                            <Statistic title="日记数量" value={setting.articleCount} prefix={<SnippetsOutlined />} />
+                            <Statistic title="日记数量" value={setting.diaryCount} prefix={<SnippetsOutlined />} />
                         </Col>
                         <Col>
-                            <Statistic title="总字数" value={setting.articleLength} prefix={<HighlightOutlined />} />
+                            <Statistic title="总字数" value={setting.diaryLength} prefix={<HighlightOutlined />} />
                         </Col>
                     </Row>
                 </Card>

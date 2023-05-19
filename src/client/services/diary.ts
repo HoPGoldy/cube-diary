@@ -3,7 +3,7 @@ import { useMutation, useQuery } from 'react-query'
 import { Diary, DiaryExportReqData, DiaryQueryResp, DiaryUpdateReqData, JsonImportResult, SearchDiaryReqData, SearchDiaryResp } from '@/types/diary'
 import { AppResponse } from '@/types/global'
 
-const updateArticleCache = (updateData: DiaryUpdateReqData) => {
+const updateDiaryCache = (updateData: DiaryUpdateReqData) => {
     const oldData = queryClient.getQueryData<AppResponse<Diary>>(['diaryDetail', updateData.date])
     if (!oldData) return
 
@@ -40,14 +40,14 @@ export const useUpdateDiary = () => {
     }, {
         onMutate: (data) => {
             queryClient.invalidateQueries('month')
-            updateArticleCache(data)
+            updateDiaryCache(data)
         }
     })
 }
 
 /** 自动保存接口 */
 export const autoSaveContent = async (date: number, content: string) => {
-    updateArticleCache({ date, content })
+    updateDiaryCache({ date, content })
     return requestPost('diary/update', { date, content })
 }
 
