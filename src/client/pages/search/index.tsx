@@ -1,7 +1,7 @@
-import React, { FC, useState, useEffect } from 'react'
+import React, { FC, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { PageContent, PageAction, ActionIcon, ActionSearch } from '../../layouts/PageWithAction'
-import { Button, Col, Input, List, Row } from 'antd'
+import { Button, Col, Input, Pagination, Row, Spin } from 'antd'
 import { PAGE_SIZE } from '@/config'
 import { DesktopArea } from '@/client/layouts/Responsive'
 import { BgColorsOutlined, LeftOutlined, ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons'
@@ -11,6 +11,9 @@ import { DiaryListItem } from '../monthList/listItem'
 import { MobileDrawer } from '@/client/components/MobileDrawer'
 import { ColorMutiplePicker } from '@/client/components/ColorPicker'
 import { messageSuccess } from '@/client/utils/message'
+import s from '@/client/pages/monthList/styles.module.css'
+
+const TIP_CLASS = 'mt-8 text-gray-500 dark:text-neutral-500 cursor-default'
 
 /**
  * 搜索页面
@@ -35,13 +38,6 @@ const SearchDiary: FC = () => {
         desc,
         page: currentPage,
     })
-    /** 搜索列表占位文本 */
-    const [listEmptyText, setListEmptyText] = useState<string>()
-
-    useEffect(() => {
-        if (!listEmptyText) setListEmptyText('输入关键字或选择颜色进行搜索')
-        else setListEmptyText('没有找到相关日记')
-    }, [isSearching])
 
     const onKeywordSearch = (value: string) => {
         setKeyword(value)
@@ -49,7 +45,34 @@ const SearchDiary: FC = () => {
     }
 
     const renderContent = () => {
-        return (
+        if (isSearching) return <Spin spinning={isSearching} />
+
+        if (!keyword && !selectedColor.length) {
+            return <div className={TIP_CLASS}>输入关键字或选择颜色进行搜索</div>
+        }
+
+        if (!diaryListResp?.data?.rows.length) {
+            return <div className={TIP_CLASS}>没有找到相关日记</div>
+        }
+
+        return (<>
+            <div className={s.listContainer}>
+                {diaryListResp?.data?.rows.map(item => <DiaryListItem key={item.date} item={item} />)}
+            </div>
+            <Pagination
+                className="mt-4"
+                pageSize={PAGE_SIZE}
+                current={currentPage}
+                onChange={setCurrentPage}
+                total={diaryListResp?.data?.total || 0}
+            />
+        </>)
+    }
+
+    return (<>
+        <PageTitle title='搜索日记' />
+
+        <PageContent>
             <div className='p-4'>
                 <DesktopArea>
                     <Row gutter={[16, 16]}>
@@ -69,31 +92,10 @@ const SearchDiary: FC = () => {
                         </Col>
                     </Row>
                 </DesktopArea>
-                <div className='md:my-4'>
-                    <List
-                        loading={isSearching}
-                        grid={{ gutter: 16, xs: 1, sm: 1, md: 2, lg: 2, xl: 3, xxl: 4 }}
-                        dataSource={diaryListResp?.data?.rows || []}
-                        renderItem={item => <DiaryListItem item={item} />}
-                        locale={{ emptyText: listEmptyText }}
-                        pagination={{
-                            total: diaryListResp?.data?.total || 0,
-                            pageSize: PAGE_SIZE,
-                            current: currentPage,
-                            onChange: setCurrentPage,
-                            align: 'center',
-                        }}
-                    />
+                <div className='md:my-4 flex flex-col flex-nowrap justify-center items-center'>
+                    {renderContent()}
                 </div>
             </div>
-        )
-    }
-
-    return (<>
-        <PageTitle title='搜索日记' />
-
-        <PageContent>
-            {renderContent()}
         </PageContent>
 
         <PageAction>
