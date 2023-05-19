@@ -3,7 +3,7 @@ import { useQueryAppConfig } from '../services/global'
 import { useAppDispatch, useAppSelector } from '../store'
 import { setAppConfig } from '../store/global'
 import { Navigate, useLocation } from 'react-router-dom'
-import Loading from './Loading'
+import Loading from './loading'
 
 export const AppConfigProvider: FC<PropsWithChildren> = (props) => {
     const location = useLocation()

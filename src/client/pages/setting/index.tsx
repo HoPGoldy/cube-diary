@@ -3,12 +3,12 @@ import { Link } from 'react-router-dom'
 import { Button, Card, Col, Row, Statistic, Switch } from 'antd'
 import { SnippetsOutlined, HighlightOutlined, CloseCircleOutlined } from '@ant-design/icons'
 import { useChangePassword } from '../changePassword'
-import { ActionButton, PageAction, PageContent } from '@/client/layouts/PageWithAction'
+import { ActionButton, PageAction, PageContent } from '@/client/layouts/pageWithAction'
 import { UserOutlined, RightOutlined, LogoutOutlined } from '@ant-design/icons'
-import { Cell, SplitLine } from '@/client/components/Cell'
+import { Cell, SplitLine } from '@/client/components/cell'
 import { SettingLinkItem, useSetting } from './useSetting'
 import { AppTheme } from '@/types/user'
-import { PageTitle } from '@/client/components/PageTitle'
+import { PageTitle } from '@/client/components/pageTitle'
 
 interface DesktopProps {
     onClick: () => void

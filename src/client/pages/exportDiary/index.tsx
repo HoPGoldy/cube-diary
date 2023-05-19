@@ -1,10 +1,10 @@
 import React, { FC, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { PageContent, PageAction, ActionIcon, ActionButton } from '../../layouts/PageWithAction'
+import { PageContent, PageAction, ActionIcon, ActionButton } from '../../layouts/pageWithAction'
 import { Button, Card, Col, DatePicker, Form, Input, Radio, Row, message } from 'antd'
-import { DesktopArea, MobileArea } from '@/client/layouts/Responsive'
+import { DesktopArea, MobileArea } from '@/client/layouts/responsive'
 import { LeftOutlined } from '@ant-design/icons'
-import { PageTitle } from '@/client/components/PageTitle'
+import { PageTitle } from '@/client/components/pageTitle'
 import { useExportDiary } from '@/client/services/diary'
 import s from './styles.module.css'
 

@@ -1,11 +1,11 @@
 import React, { FC } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { PageContent, PageAction, ActionButton } from '../layouts/PageWithAction'
+import { PageContent, PageAction, ActionButton } from '../layouts/pageWithAction'
 import { Card } from 'antd'
 import { GithubOutlined, SendOutlined } from '@ant-design/icons'
-import { Cell } from '../components/Cell'
-import { PageTitle } from '../components/PageTitle'
-import { MobileArea } from '../layouts/Responsive'
+import { Cell } from '../components/cell'
+import { PageTitle } from '../components/pageTitle'
+import { MobileArea } from '../layouts/responsive'
 
 const About: FC = () => {
     const navigate = useNavigate()

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { ActionButton, ActionIcon } from '@/client/layouts/PageWithAction'
+import { ActionButton, ActionIcon } from '@/client/layouts/pageWithAction'
 import { messageWarning } from '@/client/utils/message'
 import { SettingOutlined, SearchOutlined, CalendarOutlined, LeftOutlined, RightOutlined, DoubleLeftOutlined, DoubleRightOutlined } from '@ant-design/icons'
 import { MobileSetting } from '../setting'
 import s from './styles.module.css'
 import { Col, Drawer, Row } from 'antd'
 import dayjs, { Dayjs } from 'dayjs'
-import { MobileDrawer } from '@/client/components/MobileDrawer'
+import { MobileDrawer } from '@/client/components/mobileDrawer'
 
 /**
  * 生成日记编辑的跳转链接

@@ -4,7 +4,7 @@ import dayjs from 'dayjs'
 import React, { FC, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Preview from './preview'
-import { MARK_COLORS_MAP } from '@/client/components/ColorPicker'
+import { MARK_COLORS_MAP } from '@/client/components/colorPicker'
 import s from './styles.module.css'
 
 interface Props {

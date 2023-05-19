@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { Outlet } from 'react-router-dom'
-import { Sidebar } from '../Sidebar'
-import { useIsMobile } from '../Responsive'
-import Header from '../Header'
+import { Sidebar } from '../sidebar'
+import { useIsMobile } from '../responsive'
+import Header from '../header'
 
 const SIDE_WIDTH = '240px'
 

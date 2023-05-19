@@ -9,7 +9,7 @@ import { useAppDispatch, useAppSelector } from '../store'
 import { login } from '../store/user'
 import { messageError, messageSuccess } from '../utils/message'
 import { UserOutlined, KeyOutlined } from '@ant-design/icons'
-import { PageTitle } from '../components/PageTitle'
+import { PageTitle } from '../components/pageTitle'
 
 const Register = () => {
     const dispatch = useAppDispatch()

@@ -5,7 +5,7 @@ import { Navigate } from 'react-router-dom'
 import { useQueryUserInfo } from '../services/user'
 import { useAppDispatch, useAppSelector } from '../store'
 import { login } from '../store/user'
-import Loading from './Loading'
+import Loading from './loading'
 
 export const LoginAuth: FC<PropsWithChildren> = ({ children }) => {
     const userInfo = useAppSelector(s => s.user.userInfo)

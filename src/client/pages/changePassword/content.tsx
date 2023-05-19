@@ -5,7 +5,7 @@ import { sha } from '@/utils/crypto'
 import { useAppDispatch } from '@/client/store'
 import { logout } from '@/client/store/user'
 import { messageSuccess } from '@/client/utils/message'
-import { useIsMobile } from '@/client/layouts/Responsive'
+import { useIsMobile } from '@/client/layouts/responsive'
 import s from './styles.module.css'
 
 export const useChangePasswordContent = () => {

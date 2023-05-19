@@ -3,7 +3,7 @@ import { ConfigProvider, ThemeConfig, theme as antdTheme } from 'antd'
 import zhCN from 'antd/locale/zh_CN'
 import { useAppSelector } from '../store'
 import cloneDeep from 'lodash/cloneDeep'
-import { useIsMobile } from '../layouts/Responsive'
+import { useIsMobile } from '../layouts/responsive'
 import { getUserTheme } from '../store/user'
 import { AppTheme } from '@/types/user'
 

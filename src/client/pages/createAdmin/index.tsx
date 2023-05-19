@@ -7,7 +7,7 @@ import { getIsMobile, initSuccess } from '@/client/store/global'
 import { Button, Row, Col, Input, InputRef } from 'antd'
 import { messageError, messageSuccess } from '@/client/utils/message'
 import s from './styles.module.css'
-import { PageTitle } from '@/client/components/PageTitle'
+import { PageTitle } from '@/client/components/pageTitle'
 
 const getViewWidth = () => {
     // 获取浏览器宽度

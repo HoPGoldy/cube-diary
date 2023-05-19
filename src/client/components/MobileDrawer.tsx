@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import { Button, ConfigProvider, Drawer, DrawerProps, ThemeConfig } from 'antd'
-import { MobileArea } from '../layouts/Responsive'
+import { MobileArea } from '../layouts/responsive'
 
 const themeConfig: ThemeConfig = {
     token: {

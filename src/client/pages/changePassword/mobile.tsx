@@ -1,10 +1,10 @@
-import { ActionButton, ActionIcon, PageAction, PageContent } from '@/client/layouts/PageWithAction'
+import { ActionButton, ActionIcon, PageAction, PageContent } from '@/client/layouts/pageWithAction'
 import { Card } from 'antd'
 import React, { FC } from 'react'
 import { useChangePasswordContent } from './content'
 import { LeftOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
-import { PageTitle } from '@/client/components/PageTitle'
+import { PageTitle } from '@/client/components/pageTitle'
 
 const ChangePassword: FC = () => {
     const navigate = useNavigate()

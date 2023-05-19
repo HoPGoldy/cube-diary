@@ -1,10 +1,10 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Editor as MdEditor } from '@bytemd/react'
-import { plugins } from '@/client/components/FileUploaderPlugin'
+import { plugins } from '@/client/components/fileUploaderPlugin'
 import debounce from 'lodash/debounce'
 import { STATUS_CODE } from '@/config'
 import { messageError } from '@/client/utils/message'
-import { useIsMobile } from '@/client/layouts/Responsive'
+import { useIsMobile } from '@/client/layouts/responsive'
 import zh_Hans from 'bytemd/locales/zh_Hans.json'
 import { autoSaveContent } from '@/client/services/diary'
 

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useChangePasswordContent } from './content'
 import { useNavigate } from 'react-router-dom'
 import { Modal } from 'antd'
-import { useIsMobile } from '@/client/layouts/Responsive'
+import { useIsMobile } from '@/client/layouts/responsive'
 
 export const useChangePassword = () => {
     const navigate = useNavigate()

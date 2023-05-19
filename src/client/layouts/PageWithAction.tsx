@@ -1,6 +1,6 @@
 import React, { FC, PropsWithChildren } from 'react'
 import { Button, ButtonProps, Input } from 'antd'
-import { MobileArea } from './Responsive'
+import { MobileArea } from './responsive'
 import { SearchOutlined } from '@ant-design/icons'
 import { SearchProps } from 'antd/es/input'
 

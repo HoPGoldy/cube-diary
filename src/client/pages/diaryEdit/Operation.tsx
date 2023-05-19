@@ -1,13 +1,13 @@
 import React, { ChangeEventHandler, useRef, useState } from 'react'
 import { LeftOutlined, CloudUploadOutlined, BgColorsOutlined, SaveOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
-import { ActionButton, ActionIcon } from '@/client/layouts/PageWithAction'
+import { ActionButton, ActionIcon } from '@/client/layouts/pageWithAction'
 import { uploadFiles } from '@/client/services/file'
 import { STATUS_CODE } from '@/config'
 import { messageError } from '@/client/utils/message'
-import { getFileUrl } from '@/client/components/FileUploaderPlugin'
-import { ColorPicker, MARK_COLORS_MAP } from '@/client/components/ColorPicker'
-import { useIsMobile } from '@/client/layouts/Responsive'
+import { getFileUrl } from '@/client/components/fileUploaderPlugin'
+import { ColorPicker, MARK_COLORS_MAP } from '@/client/components/colorPicker'
+import { useIsMobile } from '@/client/layouts/responsive'
 import { Button, Space } from 'antd'
 
 interface Props {

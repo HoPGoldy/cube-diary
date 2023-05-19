@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import { Viewer } from '@bytemd/react'
-import { plugins } from '@/client/components/FileUploaderPlugin'
+import { plugins } from '@/client/components/fileUploaderPlugin'
 import s from './styles.module.css'
 
 interface Props {
