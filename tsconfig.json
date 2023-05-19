@@ -12,6 +12,7 @@
     "noEmit": true,
     "noImplicitReturns": true,
     "jsx": "react",
+    "newLine": "lf",
     "allowJs": false,
     "isolatedModules": true,
     "skipLibCheck": true,
