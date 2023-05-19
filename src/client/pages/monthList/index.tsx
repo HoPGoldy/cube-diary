@@ -7,6 +7,7 @@ import { PageTitle } from '@/client/components/PageTitle'
 import { useQueryDiaryList } from '@/client/services/diary'
 import { DiaryListItem } from './listItem'
 import { useOperation } from './operation'
+import s from './styles.module.css'
 
 
 /**
@@ -31,6 +32,12 @@ const MonthList: FC = () => {
 
     const renderContent = () => {
         if (isLoading) return <Loading />
+
+        return (
+            <div className={s.listContainer}>
+                {monthListResp?.data?.map(item => <DiaryListItem key={item.date} item={item} />)}
+            </div>
+        )
 
         return (
             <List

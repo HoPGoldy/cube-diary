@@ -26,14 +26,14 @@ export const useSetting = () => {
     const settingConfig = useMemo(() => {
         const list = [
             { label: '修改密码', icon: <LockOutlined />, link: '/changePassword' },
-            { label: '导入', icon: <DatabaseOutlined />, link: '/importDiary' },
-            { label: '导出', icon: <TagsOutlined />, link: '/exportDiary' },
             jwtPayload?.isAdmin
                 ? { label: '用户管理', icon: <ContactsOutlined />, link: '/userInvite' }
                 : null,
+            { label: '导入', icon: <DatabaseOutlined />, link: '/importDiary' },
+            { label: '导出', icon: <TagsOutlined />, link: '/exportDiary' },
             { label: '关于', icon: <SmileOutlined />, link: '/about' },
         ].filter(Boolean) as SettingLinkItem[]
-        
+
         return list
     }, [jwtPayload?.isAdmin])
 

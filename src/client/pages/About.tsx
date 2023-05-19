@@ -20,9 +20,9 @@ const About: FC = () => {
                     </Card>
                 </MobileArea>
                 <Card size="small" className='mt-4 text-base'>
-                    又快又好用的简单记事本 APP。
+                    又快又好用的简单日记本 APP。
                     <br /><br />
-                    包含支持文件上传的 Markdown 编辑器、双端响应式布局、数据自托管、支持搜索、标签、笔记嵌套等功能。
+                    包含支持图片上传的 Markdown 编辑器、双端响应式布局、数据自托管、导入导出等功能。
                 </Card>
                 <Card size="small" className='mt-4'>
                     <a href="mailto:hopgoldy@gmail.com?&subject=cube-dnote 相关">
