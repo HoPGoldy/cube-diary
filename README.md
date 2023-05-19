@@ -6,17 +6,19 @@
 
 <details>
     <summary style="cursor:pointer">查看桌面端截图</summary>
-    <a href="https://imgse.com/i/p9gfefJ"><img src="https://s1.ax1x.com/2023/05/15/p9gfefJ.png" alt="p9gfefJ.png"></a>
-    <a href="https://imgse.com/i/p9gfTNF"><img src="https://s1.ax1x.com/2023/05/15/p9gfTNF.png" alt="p9gfTNF.png"></a>
-    <a href="https://imgse.com/i/p9gfoAU"><img src="https://s1.ax1x.com/2023/05/15/p9gfoAU.png" alt="p9gfoAU.png"></a>
+    <a href="https://imgse.com/i/p9hgbUf"><img src="https://s1.ax1x.com/2023/05/19/p9hgbUf.png" alt="登录"></a>
+    <a href="https://imgse.com/i/p9hgX8g"><img src="https://s1.ax1x.com/2023/05/19/p9hgX8g.png" alt="日记列表"></a>
+    <a href="https://imgse.com/i/p9hgj2Q"><img src="https://s1.ax1x.com/2023/05/19/p9hgj2Q.png" alt="日记编辑"></a>
+    <a href="https://imgse.com/i/p9hgOPS"><img src="https://s1.ax1x.com/2023/05/19/p9hgOPS.png" alt="搜索"></a>
 </details>
 
 <details>
     <summary style="cursor:pointer">查看移动端截图</summary>
     <div style="display: flex; align-items: center;">
-        <a href="https://imgse.com/i/p9ghgUO"><img src="https://s1.ax1x.com/2023/05/15/p9ghgUO.png" alt="p9ghgUO.png"></a>
-        <a href="https://imgse.com/i/p9ghcVK"><img src="https://s1.ax1x.com/2023/05/15/p9ghcVK.png" alt="p9ghcVK.png"></a>
-        <a href="https://imgse.com/i/p9ghyb6"><img src="https://s1.ax1x.com/2023/05/15/p9ghyb6.png" alt="p9ghyb6.png"></a>
+        <a href="https://imgse.com/i/p9hgTbt"><img src="https://s1.ax1x.com/2023/05/19/p9hgTbt.png" alt="移动端登录"></a>
+        <a href="https://imgse.com/i/p9hgHVP"><img src="https://s1.ax1x.com/2023/05/19/p9hgHVP.png" alt="移动端日记列表"></a>
+        <a href="https://imgse.com/i/p9hgIKA"><img src="https://s1.ax1x.com/2023/05/19/p9hgIKA.png" alt="移动端日记编辑"></a>
+        <a href="https://imgse.com/i/p9hgoDI"><img src="https://s1.ax1x.com/2023/05/19/p9hgoDI.png" alt="移动端搜索"></a>
     </div>
 </details>
 
@@ -24,11 +26,11 @@
 
 - 🚫 无广告、无收费、完全开源，自己的数据自己掌握
 - 🚀 极其简单的部署，仅需两行命令
-- 📝 支持 MarkDown 语法，支持实时预览、自动保存
+- 🧩 自定义 JSON 导入导出
+- 📝 支持 MarkDown 语法，支持实时预览、自动保存、颜色标记
 - 🔗 支持笔记内图片、文件上传
 - 📱 桌面端 / 移动端全站响应式设计
-- 🎯 支持关键字、标签搜索
-- 🧩 支持笔记嵌套、管理、收藏、颜色标记
+- 🎯 支持关键字搜索
 - 🤖 支持多用户使用
 - 🌙 黑夜模式
 
