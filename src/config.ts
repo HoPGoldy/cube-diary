@@ -56,18 +56,8 @@ export const TABLE_NAME = {
     USER: 'users',
     /** 日记表 */
     DIARY: 'diaries',
-    /** 文章表 */
-    ARTICLE: 'articles',
-    /** 标签表 */
-    TAG: 'tags',
-    /** 标签分组表 */
-    TAG_GROUP: 'tagGroups',
     /** 附件表 */
     FILE: 'files',
-    /** 用户收藏文章表 */
-    FAVORITE: 'favorites',
-    /** 文章相互关联表 */
-    ARTICLE_RELATION: 'articleRelations',
     /** 用户邀请表 */
     USER_INVITE: 'userInvites'
 } as const

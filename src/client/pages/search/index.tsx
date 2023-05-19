@@ -16,7 +16,7 @@ import { messageSuccess } from '@/client/utils/message'
  * 搜索页面
  * 可以通过关键字和标签来搜索笔记
  */
-const SearchArticle: FC = () => {
+const SearchDiary: FC = () => {
     const navigate = useNavigate()
     /** 搜索关键字 */
     const [keyword, setKeyword] = useState('')
@@ -133,4 +133,4 @@ const SearchArticle: FC = () => {
     </>)
 }
 
-export default SearchArticle
+export default SearchDiary

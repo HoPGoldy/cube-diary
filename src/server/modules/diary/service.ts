@@ -63,13 +63,13 @@ export const createDiaryService = (props: Props) => {
     }
 
     const updateDetail = async (detail: DiaryUpdateReqData, userId: number) => {
-        const oldArticle = await db.diary().select('content', 'color').where('date', detail.date).andWhere('createUserId', userId).first()
-        if (!oldArticle) {
+        const oldDiary = await db.diary().select('content', 'color').where('date', detail.date).andWhere('createUserId', userId).first()
+        if (!oldDiary) {
             await db.diary().insert({ ...detail, createUserId: userId })
             return { code: 200 }
         }
 
-        await db.diary().update({ ...oldArticle, ...detail }).where('date', detail.date).andWhere('createUserId', userId)
+        await db.diary().update({ ...oldDiary, ...detail }).where('date', detail.date).andWhere('createUserId', userId)
         return { code: 200 }
     }
 

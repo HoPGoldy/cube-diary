@@ -18,10 +18,9 @@ const DiaryEdit: FC = () => {
     const diaryDate = useMemo(() => dayjs(params.date).valueOf(), [params.date])
     const diaryTitle = useMemo(() => getLabelByDate(diaryDate), [diaryDate])
     /** 获取详情 */
-    const { data: diaryResp, isFetching: isLoadingArticle } = useQueryDiaryDetail(diaryDate)
-
+    const { data: diaryResp, isFetching: isLoadingDiary } = useQueryDiaryDetail(diaryDate)
     /** 保存详情 */
-    const { mutateAsync: updateArticle, isLoading: diaryUpdating } = useUpdateDiary()
+    const { mutateAsync: updateDiary, isLoading: diaryUpdating } = useUpdateDiary()
 
     /** 功能 - 编辑器 */
     const { renderEditor, setEditorContent, content } = useEditor({
@@ -31,7 +30,7 @@ const DiaryEdit: FC = () => {
 
     /** 点击保存按钮必定会触发保存，无论内容是否被修改 */
     const onClickSaveBtn = async () => {
-        const resp = await updateArticle({ date: diaryDate, content })
+        const resp = await updateDiary({ date: diaryDate, content })
         if (resp.code !== STATUS_CODE.SUCCESS) return
 
         messageSuccess('保存成功')
@@ -40,7 +39,7 @@ const DiaryEdit: FC = () => {
 
     /** 保存颜色修改 */
     const onChangeColor = async (color: string) => {
-        const resp = await updateArticle({ date: diaryDate, color })
+        const resp = await updateDiary({ date: diaryDate, color })
         if (resp.code !== STATUS_CODE.SUCCESS) return
 
         messageSuccess('颜色修改成功')
@@ -61,7 +60,7 @@ const DiaryEdit: FC = () => {
     }, [diaryResp])
 
     const renderContent = () => {
-        if (isLoadingArticle) return <Loading tip='内容加载中...' />
+        if (isLoadingDiary) return <Loading tip='内容加载中...' />
 
         return (
             <div className="box-border p-4 md:w-full h-full flex flex-col flex-nowrap">

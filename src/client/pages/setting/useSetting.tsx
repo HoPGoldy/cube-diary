@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import { AppTheme } from '@/types/user'
 import { useAppDispatch, useAppSelector } from '@/client/store'
 import { changeTheme, getUserTheme, logout } from '@/client/store/user'
-import { useQueryArticleCount, useSetTheme } from '@/client/services/user'
+import { useQueryDiaryCount, useSetTheme } from '@/client/services/user'
 import { LockOutlined, DatabaseOutlined, TagsOutlined, SmileOutlined, ContactsOutlined } from '@ant-design/icons'
 import { useJwtPayload } from '@/client/utils/jwt'
 
@@ -17,7 +17,7 @@ export const useSetting = () => {
     const userInfo = useAppSelector(s => s.user.userInfo)
     const dispatch = useAppDispatch()
     // 数量统计接口
-    const { data: countInfo } = useQueryArticleCount()
+    const { data: countInfo } = useQueryDiaryCount()
     /** 是否是管理员 */
     const jwtPayload = useJwtPayload()
     /** 主题设置 */
@@ -47,13 +47,13 @@ export const useSetting = () => {
         dispatch(logout())
     }
 
-    const articleCount = countInfo?.data?.articleCount || '---'
-    const articleLength = countInfo?.data?.articleLength || '---'
+    const diaryCount = countInfo?.data?.diaryCount || '---'
+    const diaryLength = countInfo?.data?.diaryLength || '---'
     const userName = userInfo?.username || '---'
     const userTheme = getUserTheme(userInfo)
 
     return {
-        articleCount, articleLength, userName, onLogout, settingConfig,
+        diaryCount, diaryLength, userName, onLogout, settingConfig,
         userTheme, onSwitchTheme
     }
 }

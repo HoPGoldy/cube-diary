@@ -1,12 +1,10 @@
 import { getStoragePath } from '../lib/fileAccessor'
 import { createDb } from '../lib/sqlite'
 import { getAppConfig } from '../lib/fileAccessor'
-import { createArticleService } from '@/server/modules/article/service'
 import { createFileService } from '@/server/modules/file/service'
 import { createGlobalService } from '../modules/global/service'
 import { createLoginLock } from '../lib/LoginLocker'
 import { createBanLock } from '../lib/banLocker'
-import { createTagService } from '@/server/modules/tag/service'
 import { createUserService } from '@/server/modules/user/service'
 import { createUserManageService } from '@/server/modules/userManage/service'
 
@@ -25,8 +23,6 @@ export const buildApp = async () => {
 
     const diaryService = createDiaryService({ db })
 
-    const articleService = createArticleService({ db })
-
     const fileService = createFileService({
         getSaveDir: getStoragePath,
         db
@@ -36,8 +32,6 @@ export const buildApp = async () => {
         getConfig: getAppConfig,
         db
     })
-    
-    const tagService = createTagService({ db })
 
     const loginLocker = createLoginLock({
         excludePath: ['/global', '/user/createAdmin'],
@@ -56,9 +50,8 @@ export const buildApp = async () => {
         createToken: createToken,
         getReplayAttackSecret: secretFile.read,
         db,
-        addArticle: articleService.addArticle,
         finishUserInvite: userInviteService.userRegister,
     })
 
-    return { globalService, userService, diaryService, tagService, articleService, fileService, userInviteService, banLocker, loginLocker }
+    return { globalService, userService, diaryService, fileService, userInviteService, banLocker, loginLocker }
 }

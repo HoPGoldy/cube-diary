@@ -4,17 +4,14 @@ import { STATUS_CODE } from '@/config'
 import { sha } from '@/utils/crypto'
 import { LoginLocker } from '@/server/lib/LoginLocker'
 import { nanoid } from 'nanoid'
-import { ArticleService } from '../article/service'
 import { DatabaseAccessor } from '@/server/lib/sqlite'
 import { UserInviteService } from '../userManage/service'
-import { FIRST_NOTE_CONTENT, FIRST_NOTE_TITLE } from './firstNote'
 
 interface Props {
     loginLocker: LoginLocker
     createToken: (payload: Record<string, any>) => Promise<string>
     getReplayAttackSecret: () => Promise<string>
     db: DatabaseAccessor
-    addArticle: ArticleService['addArticle']
     finishUserInvite: UserInviteService['userRegister']
 }
 
@@ -23,7 +20,6 @@ export const createUserService = (props: Props) => {
         loginLocker, createToken,
         finishUserInvite,
         getReplayAttackSecret,
-        addArticle,
         db,
     } = props
 
@@ -41,7 +37,7 @@ export const createUserService = (props: Props) => {
         const userStorage = await db.user().select().where({ id: userId }).first()
         if (!userStorage) return loginFail(ip, '用户不存在')
 
-        const { username, theme, initTime, isAdmin, rootArticleId } = userStorage
+        const { username, theme, initTime, isAdmin } = userStorage
 
         // 用户每次重新进入页面都会刷新 token
         const token = await createToken({ userId, isAdmin })
@@ -53,7 +49,6 @@ export const createUserService = (props: Props) => {
             initTime,
             isAdmin,
             username,
-            rootArticleId,
             replayAttackSecret,
         }
 
@@ -101,20 +96,12 @@ export const createUserService = (props: Props) => {
             passwordHash: sha(passwordSalt + passwordHash),
             passwordSalt,
             initTime: Date.now(),
-            rootArticleId: -1,
             theme: AppTheme.Light,
             isAdmin,
         }
 
         // 获取新用户的 id
-        const [id] = await db.user().insert(initStorage)
-
-        // 给这个用户创建一个根节点文章
-        const createResp = await addArticle(FIRST_NOTE_TITLE, FIRST_NOTE_CONTENT, id)
-        if (!createResp.data) return createResp
-
-        // 把根节点文章 id 存到用户表
-        await db.user().update({ rootArticleId: createResp.data }).where({ id })
+        await db.user().insert(initStorage)
         return { code: 200 }
     }
 
@@ -179,18 +166,18 @@ export const createUserService = (props: Props) => {
     /**
      * 文章统计
      */
-    const getArticleCount = async (userId: number) => {
+    const getDiaryCount = async (userId: number) => {
         const [countResult] = await db.diary().count().where('createUserId', userId)
         const [lengthResult] = await db.diary().sum(db.knex.raw('LENGTH(content)')).where('createUserId', userId) as any
 
         const data = {
-            articleCount: countResult['count(*)'],
-            articleLength: lengthResult['sum(LENGTH(content))'],
+            diaryCount: countResult['count(*)'],
+            diaryLength: lengthResult['sum(LENGTH(content))'],
         }
         return { code: 200, data }
     }
 
-    return { getUserInfo, login, register, createAdmin, changePassword, setTheme, getArticleCount }
+    return { getUserInfo, login, register, createAdmin, changePassword, setTheme, getDiaryCount }
 }
 
 export type UserService = ReturnType<typeof createUserService>

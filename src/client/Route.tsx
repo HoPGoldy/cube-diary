@@ -4,7 +4,6 @@ import Loading from './layouts/Loading'
 import { LoginAuth } from './layouts/LoginAuth'
 import { AppContainer } from './layouts/AppContainer'
 import Search from './pages/search'
-import Article from './pages/article/Article'
 import Entry from './pages/JumpToDefaultDataEntry'
 import { AppConfigProvider } from './layouts/AppConfigProvider'
 import DiaryEdit from './pages/diaryEdit'
@@ -37,12 +36,6 @@ export const routes = createHashRouter([
                     { path: '/importDiary', element: lazyLoad(() => import('./pages/importDiary')) },
                     // 导出
                     { path: '/exportDiary', element: lazyLoad(() => import('./pages/exportDiary')) },
-                    // 笔记详情
-                    { path: '/article/:articleId', element: <Article /> },
-                    // 笔记管理
-                    { path: '/articleManage', element: lazyLoad(() => import('./pages/articleManager')) },
-                    // 标签管理
-                    { path: '/tags', element: lazyLoad(() => import('./pages/tagManager/TagManager')) },
                     // 修改密码
                     { path: '/changePassword', element: lazyLoad(() => import('./pages/changePassword/mobile')) },
                     // 邀请管理

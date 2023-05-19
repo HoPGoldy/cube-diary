@@ -5,10 +5,8 @@ import { createCheckReplayAttack } from '../lib/replayAttackDefense'
 import { AUTH_EXCLUDE, REPLAY_ATTACK_EXCLUDE } from '@/config'
 import { errorWapper } from '../utils'
 import { buildApp } from './buildApp'
-import { createArticleRouter } from '../modules/article/router'
 import { createFileRouter } from '../modules/file/router'
 import { createGlobalRouter } from '../modules/global/router'
-import { createTagRouter } from '../modules/tag/router'
 import { createUserRouter } from '../modules/user/router'
 import { createUserManageRouter } from '../modules/userManage/router'
 import { createDiaryRouter } from '../modules/diary/router'
@@ -32,11 +30,9 @@ export const buildRouter = async () => {
     const globalRouter = createGlobalRouter({ service: services.globalService })
     const userRouter = createUserRouter({ service: services.userService })
     const diaryRouter = createDiaryRouter({ service: services.diaryService })
-    const tagRouter = createTagRouter({ service: services.tagService })
-    const articleRouter = createArticleRouter({ service: services.articleService })
     const fileRouter = createFileRouter({ service: services.fileService })
     const userInviteRouter = createUserManageRouter({ service: services.userInviteService })
-    const routes = [globalRouter, userRouter, diaryRouter, tagRouter, articleRouter, fileRouter, userInviteRouter]
+    const routes = [globalRouter, userRouter, diaryRouter, fileRouter, userInviteRouter]
 
     routes.forEach(route => apiRouter.use('/api', errorWapper, route.routes(), route.allowedMethods()))
 

@@ -36,7 +36,3 @@ export interface AppConfig {
     APP_NAME: string
     LOGIN_SUBTITLE: string
 }
-
-export interface UserDataInfoResp {
-    articleCount: number
-}
