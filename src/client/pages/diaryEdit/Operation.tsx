@@ -117,8 +117,8 @@ export const useOperation = (props: Props) => {
                 onChange={onFileSelect}
             ></input>
             <ActionIcon icon={<LeftOutlined />} onClick={() => navigate(-1)} />
-            <ActionIcon icon={<CloudUploadOutlined />} onClick={() => fileSelectRef.current?.click()} />
             <ActionIcon icon={<BgColorsOutlined />} onClick={() => setIsColorPickerOpen(true)} />
+            <ActionIcon icon={<CloudUploadOutlined />} onClick={() => fileSelectRef.current?.click()} />
             <ActionButton onClick={onClickSaveBtn} loading={diaryUpdating}>
                 保存
                 {saveBtnText && <span className="ml-2 text-xs">{saveBtnText}</span>}

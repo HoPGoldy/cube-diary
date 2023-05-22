@@ -69,7 +69,7 @@ export const DiaryListItem: FC<Props> = ({ item }) => {
                 ></div>
             }
         >
-            <div className="">
+            <div data-diary-date={item.date}>
                 <Preview value={item.content} />
             </div>
         </Card>
