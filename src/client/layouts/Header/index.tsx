@@ -41,7 +41,7 @@ const Header: FC<Props> = (props) => {
                 </Link>
                 <Popover
                     placement="bottomRight"
-                    // trigger="click"
+                    trigger="click"
                     content={<DesktopSetting onClick={() => setUserMenuVisible(false)} />}
                     open={userMenuVisible}
                     onOpenChange={setUserMenuVisible}

@@ -1,6 +1,5 @@
 import React, { ChangeEventHandler, useRef, useState } from 'react'
 import { LeftOutlined, CloudUploadOutlined, BgColorsOutlined, SaveOutlined } from '@ant-design/icons'
-import { useNavigate } from 'react-router-dom'
 import { ActionButton, ActionIcon } from '@/client/layouts/pageWithAction'
 import { uploadFiles } from '@/client/services/file'
 import { STATUS_CODE } from '@/config'
@@ -15,13 +14,13 @@ interface Props {
     diaryUpdating: boolean
     color?: string
     onClickSaveBtn: () => void
+    onClickBack: () => void
     onChangeColor: (color: string) => void
 }
 
 export const useOperation = (props: Props) => {
-    const { diaryUpdating, color, onClickSaveBtn } = props
+    const { diaryUpdating, color, onClickSaveBtn, onClickBack } = props
     const isMobile = useIsMobile()
-    const navigate = useNavigate()
     /** 保存按钮的文本 */
     const [saveBtnText, setSaveBtnText] = useState('')
     /** 移动端的附件选择器 */
@@ -116,7 +115,7 @@ export const useOperation = (props: Props) => {
                 style={{ display: 'none' }}
                 onChange={onFileSelect}
             ></input>
-            <ActionIcon icon={<LeftOutlined />} onClick={() => navigate(-1)} />
+            <ActionIcon icon={<LeftOutlined />} onClick={onClickBack} />
             <ActionIcon icon={<BgColorsOutlined />} onClick={() => setIsColorPickerOpen(true)} />
             <ActionIcon icon={<CloudUploadOutlined />} onClick={() => fileSelectRef.current?.click()} />
             <ActionButton onClick={onClickSaveBtn} loading={diaryUpdating}>

@@ -47,17 +47,15 @@ const MonthList: FC = () => {
     }
 
     useEffect(() => {
-        setTimeout(() => {
-            if (!focusDate) {
-                listBottomRef.current?.scrollIntoView({ behavior: 'smooth' })
-                return
-            }
-    
-            const targetDiv = document.querySelector(`[data-diary-date='${focusDate}']`)
-            if (targetDiv) targetDiv.scrollIntoView()
-            dispatch(setFocusDiaryDate(undefined))
-        }, 50)
-    }, [])
+        if (!focusDate) {
+            listBottomRef.current?.scrollIntoView()
+            return
+        }
+
+        const targetDiv = document.querySelector(`[data-diary-date='${focusDate}']`)
+        if (targetDiv) targetDiv.scrollIntoView()
+        dispatch(setFocusDiaryDate(undefined))
+    }, [monthListResp])
 
     return (<>
         <PageTitle title='日记列表' />

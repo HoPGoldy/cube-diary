@@ -31,14 +31,19 @@ const DiaryEdit: FC = () => {
         diaryDate
     })
 
+    /** 点击左下角返回按钮 */
+    const onClickBack = () => {
+        dispatch(setFocusDiaryDate(diaryDate?.toString()))
+        navigate(-1)
+    }
+
     /** 点击保存按钮必定会触发保存，无论内容是否被修改 */
     const onClickSaveBtn = async () => {
         const resp = await updateDiary({ date: diaryDate, content })
         if (resp.code !== STATUS_CODE.SUCCESS) return
 
         messageSuccess('保存成功')
-        dispatch(setFocusDiaryDate(diaryDate?.toString()))
-        navigate(-1)
+        onClickBack()
     }
 
     /** 保存颜色修改 */
@@ -55,6 +60,7 @@ const DiaryEdit: FC = () => {
         color: diaryResp?.data?.color,
         diaryUpdating,
         onClickSaveBtn,
+        onClickBack,
         onChangeColor,
     })
 

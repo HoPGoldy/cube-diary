@@ -56,6 +56,7 @@ export const DiaryListItem: FC<Props> = ({ item }) => {
             title={
                 <div
                     className="text-gray-400 font-bold cursor-pointer"
+                    data-diary-date={item.date}
                     onClick={onEdit}
                 >{title}</div>
             }
@@ -69,9 +70,7 @@ export const DiaryListItem: FC<Props> = ({ item }) => {
                 ></div>
             }
         >
-            <div data-diary-date={item.date}>
-                <Preview value={item.content} />
-            </div>
+            <Preview value={item.content} />
         </Card>
     )
 }
