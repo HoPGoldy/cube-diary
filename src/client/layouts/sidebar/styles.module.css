@@ -1,0 +1,40 @@
+.sideberBox {
+    @apply bg-gray-200 dark:bg-neutral-800;
+    @apply box-border p-3 h-full w-60 flex flex-col flex-nowrap text-center;
+}
+
+.menuItem {
+    @apply py-2 px-2;
+    @apply flex items-center justify-between;
+    @apply hover:dark:bg-neutral-700 hover:bg-gray-300;
+    @apply active:dark:bg-neutral-600 active:bg-gray-400;
+    @apply text-black dark:text-neutral-200 text-left transition-all cursor-pointer rounded;
+}
+
+.menuItemActive {
+    @apply bg-gray-300 dark:bg-neutral-700;
+}
+
+/** 侧边栏的工具按钮，比如笔记树、创建笔记等 **/
+.toolBtn {
+    @apply flex-shrink-0 bg-gray-300 dark:bg-neutral-900 border-0;
+    @apply hover:!bg-gray-100 hover:dark:!bg-neutral-700;
+}
+
+.yearPicker {
+    @apply p-0 h-10;
+    @apply flex-shrink-0 bg-gray-300 dark:bg-neutral-900 border-0;
+    @apply hover:!bg-gray-100 hover:dark:!bg-neutral-700;
+}
+
+.yearPicker :global(input) {
+    @apply cursor-pointer font-bold !text-xl;
+}
+
+.yearPicker :global(.ant-picker-input) {
+    /* @apply !mb-4; */
+}
+
+.selectedToolBtn {
+    @apply bg-gray-400 dark:bg-neutral-600;
+}

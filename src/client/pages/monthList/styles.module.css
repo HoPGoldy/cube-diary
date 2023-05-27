@@ -1,0 +1,58 @@
+.listContainer {
+    @apply columns-1 md:columns-2 lg:columns-3 gap-x-2;
+}
+
+.listItem {
+    page-break-inside: avoid;
+    -webkit-column-break-inside: avoid;
+    @apply mb-2;
+    /* 悬停样式 */
+    @apply hover:ring-2 ring-gray-300 dark:ring-neutral-500 transition-shadow;
+}
+
+.mdArea :global(img) {
+    max-width: 100%;
+    margin: auto;
+    display: block;
+}
+
+.mdArea :global(table) {
+    width: 100%;
+    border-top: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+}
+
+.mdArea :global(th) {
+    border-bottom: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    padding: 8px;
+    min-width: 60px;
+}
+
+.mdArea :global(td) {
+    border-bottom: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    padding: 8px;
+    min-width: 60px;
+}
+
+.mdArea :global(p) {
+    @apply my-1;
+}
+
+.settingDrawer :global(.ant-drawer-body) {
+    padding: 0 !important;
+}
+
+.monthPickerItem {
+    @apply text-center py-1;
+}
+
+.monthPickerItemActive {
+    @apply rounded text-white;
+    background: var(--cube-diary-primary-button-color);
+}
+
+.monthPickerItemDisabled {
+    @apply text-gray-300;
+}
