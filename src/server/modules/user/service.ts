@@ -27,7 +27,7 @@ export const createUserService = (props: Props) => {
         const lockInfo = loginLocker.recordLoginFail(ip)
         const retryNumber = 3 - lockInfo.length
         const message = retryNumber > 0 ? `将在 ${retryNumber} 次后锁定登录` : '账号已被锁定'
-        return { code: 401, msg: `${msg}，${message}` }
+        return { code: STATUS_CODE.PASSWORD_ERROR, msg: `${msg}，${message}` }
     }
 
     /**

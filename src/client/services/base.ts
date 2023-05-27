@@ -44,7 +44,7 @@ axiosInstance.interceptors.response.use(resp => {
         message('error', msg || '您已被封禁')
     }
     else if (code !== 200) {
-        const type = code === 401 ? 'warning' : 'error'
+        const type = code === STATUS_CODE.PASSWORD_ERROR ? 'warning' : 'error'
         message(type, msg || '未知错误')
     }
 

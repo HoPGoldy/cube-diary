@@ -41,7 +41,11 @@ const MonthList: FC = () => {
 
         return (
             <div className={s.listContainer}>
-                {monthListResp?.data?.map(item => <DiaryListItem key={item.date} item={item} />)}
+                {monthListResp?.data?.map(item => (
+                    <div data-diary-date={item.date} key={item.date}>
+                        <DiaryListItem item={item} />
+                    </div>
+                ))}
             </div>
         )
     }
@@ -54,7 +58,6 @@ const MonthList: FC = () => {
 
         const targetDiv = document.querySelector(`[data-diary-date='${focusDate}']`)
         if (targetDiv) targetDiv.scrollIntoView()
-        dispatch(setFocusDiaryDate(undefined))
     }, [monthListResp])
 
     return (<>
@@ -65,17 +68,16 @@ const MonthList: FC = () => {
                 {renderContent()}
             </div>
             <div ref={listBottomRef}></div>
-        </PageContent>
-
-        <PageAction>
             <Image
-                style={{ display: 'none' }}
                 preview={{
                     visible: !!visibleImgSrc,
                     src: visibleImgSrc,
                     onVisibleChange: () => setVisibleImgSrc(''),
                 }}
             />
+        </PageContent>
+
+        <PageAction>
             {renderMobileBar()}
         </PageAction>
     </>)

@@ -10,6 +10,10 @@ export const STATUS_CODE = {
      */
     BAN: 40103,
     /**
+     * 密码错误
+     */
+    PASSWORD_ERROR: 40104,
+    /**
      * 因为关联了其他资源所以无法删除
      */
     CANT_DELETE: 40601,
