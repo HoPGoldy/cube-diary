@@ -5,6 +5,7 @@ import { resolve } from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+    base: './',
     server: {
         port: 3500,
         watch: {
