@@ -11,7 +11,7 @@ export const getFileUrl = (file: UploadedFile) => {
     // 后缀名
     const suffix = file.filename?.split('.')?.pop()
     const isImg = ['png', 'jpg', 'jpeg', 'gif', 'bmp'].includes(suffix?.toLocaleLowerCase() || 'unknown')
-    return `\n${isImg ? '!' : ''}[${file.filename}](/api/file/get?hash=${file.md5})`
+    return `\n${isImg ? '!' : ''}[${file.filename}](api/file/get?hash=${file.md5})`
 }
 
 const FILE_ICON_CONFIG = [
