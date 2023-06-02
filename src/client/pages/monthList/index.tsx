@@ -8,8 +8,7 @@ import { useQueryDiaryList } from '@/client/services/diary'
 import { DiaryListItem } from './listItem'
 import { useOperation } from './operation'
 import s from './styles.module.css'
-import { useAppDispatch, useAppSelector } from '@/client/store'
-import { setFocusDiaryDate } from '@/client/store/global'
+import { useAppSelector } from '@/client/store'
 
 /**
  * 日记列表
@@ -17,7 +16,6 @@ import { setFocusDiaryDate } from '@/client/store/global'
  */
 const MonthList: FC = () => {
     const { month } = useParams()
-    const dispatch = useAppDispatch()
     /** 要跳转到的日记 */
     const focusDate = useAppSelector(s => s.global.focusDiaryDate)
     /** 获取日记列表 */

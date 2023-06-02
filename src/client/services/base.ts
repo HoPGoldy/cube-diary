@@ -15,7 +15,7 @@ const isAppResponse = (data: unknown): data is AppResponse<unknown> => {
     return typeof data === 'object' && data !== null && 'code' in data
 }
 
-export const axiosInstance = axios.create({ baseURL: '/api/' })
+export const axiosInstance = axios.create({ baseURL: 'api/' })
 
 axiosInstance.interceptors.request.use(config => {
     const state = store.getState()
