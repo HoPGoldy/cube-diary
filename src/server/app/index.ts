@@ -9,14 +9,15 @@ import { upgradeDatabase } from '../lib/databaseUpgrader'
 import { fontentServe } from '../lib/fontentServe'
 
 interface Props {
-  servePort: number
-  storagePath: string
-  configPath: string
-  fontentPath: string
+    servePort: number
+    storagePath: string
+    configPath: string
+    fontentPath: string
+    formLimit: string
 }
 
 export const runApp = async (props: Props) => {
-    const { servePort } = props
+    const { servePort, formLimit } = props
     setConfigPath(props.configPath)
     setBaseStoragePath(props.storagePath)
 
@@ -27,7 +28,7 @@ export const runApp = async (props: Props) => {
     const apiRouter = await buildRouter()
 
     app.use(logger())
-        .use(bodyParser({ multipart: true }))
+        .use(bodyParser({ multipart: true, formLimit }))
         .use(historyApiFallback({ whiteList: ['/api'] }))
         .use(fontentServe(props.fontentPath))
         .use(apiRouter.routes())

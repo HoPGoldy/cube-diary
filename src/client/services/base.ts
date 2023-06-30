@@ -49,6 +49,18 @@ axiosInstance.interceptors.response.use(resp => {
     }
 
     return resp
+}, resp => {
+    if (!resp.response) {
+        message('error', '网络错误，请检查网络连接是否正常')
+        return Promise.reject(resp)
+    }
+
+    const { status, statusText, data } = resp.response
+
+    if (status === 413) message('error', '上传失败，文件大小超出上限')
+    else message('error', statusText || data || '错误代码：' + status)
+
+    return Promise.reject(resp)
 })
 
 export const requestGet = async <T = any>(url: string, config?: AxiosRequestConfig) => {

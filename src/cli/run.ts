@@ -7,6 +7,7 @@ import path from 'path'
 interface RunOptions {
     storage: string
     port: string
+    formLimit: string
 }
 
 export const actionRun = (opts: RunOptions) => {
@@ -22,6 +23,7 @@ export const actionRun = (opts: RunOptions) => {
     runApp({
         storagePath: opts.storage,
         configPath,
+        formLimit: opts.formLimit,
         servePort: +opts.port,
         fontentPath: path.join(__dirname, '../client'),
     })

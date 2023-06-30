@@ -15,19 +15,19 @@ type DbPatcher = (db: Knex) => Promise<void>
  * 最上面的版本最早
  */
 const DB_PATCH_LIST: Array<{ version: string, patcher: DbPatcher }> = [
-    {
-        version: '1.1.0',
-        patcher: async (db) => {
-            db.schema.hasTable('users').then(exists => {
-                if (!exists) return
-                return db.schema.alterTable('users', t => {
-                    t.string('first_name')
-                    t.string('last_name')
-                })
-            })
+    // {
+    //     version: '1.1.0',
+    //     patcher: async (db) => {
+    //         db.schema.hasTable('users').then(exists => {
+    //             if (!exists) return
+    //             return db.schema.alterTable('users', t => {
+    //                 t.string('first_name')
+    //                 t.string('last_name')
+    //             })
+    //         })
             
-        }
-    }
+    //     }
+    // }
 ]
 
 /**
@@ -63,7 +63,7 @@ export const upgradeDatabase = async (dbFilePath: string) => {
     const dbVersionFile = createAccessor({ fileName: 'dbVersion', getInitData: async () => packageVersion })
     const currentVersion = await dbVersionFile.read()
 
-    if (currentVersion === packageVersion) return
+    if (!currentVersion || currentVersion === packageVersion) return
     let hasUpdate = false
     console.log('版本更新，正在检查数据库版本...')
 
@@ -93,5 +93,6 @@ export const upgradeDatabase = async (dbFilePath: string) => {
         }
     }
 
+    await dbVersionFile.write(packageVersion)
     console.log(hasUpdate ? '数据库升级成功！' : '数据库无需升级！')
 }

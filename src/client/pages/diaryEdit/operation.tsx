@@ -87,6 +87,8 @@ export const useOperation = (props: Props) => {
         if (!files) return
 
         const resp = await uploadFiles(files)
+        // 解决同一个文件不能重复上传的问题
+        event.target.value = ''
         if (resp.code !== STATUS_CODE.SUCCESS || !resp.data) {
             messageError(resp.msg || '上传失败')
             return
