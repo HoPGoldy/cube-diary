@@ -8,7 +8,7 @@ interface Props {
 export const PageTitle: FC<Props> = (props) => {
     return (
         <Helmet>
-            <title>{props.title} - cubenote</title>
+            <title>{props.title} - cubediary</title>
         </Helmet>
     )
 }
