@@ -1,12 +1,12 @@
 import { AppResponse } from '@/types/global'
-import { store } from '@/client/store'
-import { logout } from '@/client/store/user'
+import { logout, stateReplayAttackSecret, stateUserToken } from '@/client/store/user'
 import { message } from '../utils/message'
 import { createReplayAttackHeaders } from '@/utils/crypto'
 import axios from 'axios'
 import type { AxiosRequestConfig } from 'axios'
 import { QueryClient } from 'react-query'
 import { STATUS_CODE } from '@/config'
+import { getDefaultStore } from 'jotai'
 
 /**
  * 是否为标准后端数据结构
@@ -18,8 +18,10 @@ const isAppResponse = (data: unknown): data is AppResponse<unknown> => {
 export const axiosInstance = axios.create({ baseURL: 'api/' })
 
 axiosInstance.interceptors.request.use(config => {
-    const state = store.getState()
-    const { token, replayAttackSecret } = state.user
+    const store = getDefaultStore()
+
+    const token = store.get(stateUserToken)
+    const replayAttackSecret = store.get(stateReplayAttackSecret)
 
     // 附加 jwt header
     if (token) config.headers.Authorization = `Bearer ${token}`
@@ -37,10 +39,10 @@ axiosInstance.interceptors.response.use(resp => {
     const { code, msg } = resp.data
 
     if (code === 401) {
-        store.dispatch(logout())
+        logout()
     }
     else if (code === STATUS_CODE.BAN) {
-        store.dispatch(logout())
+        logout()
         message('error', msg || '您已被封禁')
     }
     else if (code !== 200) {

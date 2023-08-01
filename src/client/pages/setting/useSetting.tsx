@@ -1,10 +1,11 @@
 import React, { useMemo } from 'react'
 import { AppTheme } from '@/types/user'
 import { useAppDispatch, useAppSelector } from '@/client/store'
-import { changeTheme, getUserTheme, logout } from '@/client/store/user'
+import { changeTheme, getUserTheme, logout, stateUser } from '@/client/store/user'
 import { useQueryDiaryCount, useSetTheme } from '@/client/services/user'
 import { LockOutlined, DatabaseOutlined, TagsOutlined, SmileOutlined, ContactsOutlined } from '@ant-design/icons'
 import { useJwtPayload } from '@/client/utils/jwt'
+import { useAtomValue } from 'jotai'
 
 export interface SettingLinkItem {
     label: string
@@ -14,7 +15,7 @@ export interface SettingLinkItem {
 }
 
 export const useSetting = () => {
-    const userInfo = useAppSelector(s => s.user.userInfo)
+    const userInfo = useAtomValue(stateUser)
     const dispatch = useAppDispatch()
     // 数量统计接口
     const { data: countInfo } = useQueryDiaryCount()
@@ -40,11 +41,11 @@ export const useSetting = () => {
     const onSwitchTheme = () => {
         const newTheme = userInfo?.theme === AppTheme.Light ? AppTheme.Dark : AppTheme.Light
         setAppTheme(newTheme)
-        dispatch(changeTheme(newTheme))
+        changeTheme(newTheme)
     }
 
     const onLogout = () => {
-        dispatch(logout())
+        logout()
     }
 
     const diaryCount = countInfo?.data?.diaryCount || '---'

@@ -8,6 +8,8 @@ import { useAppSelector } from '../store'
 import { messageError, messageSuccess } from '../utils/message'
 import { UserOutlined, KeyOutlined } from '@ant-design/icons'
 import { PageTitle } from '../components/pageTitle'
+import { useAtomValue } from 'jotai'
+import { stateUser } from '../store/user'
 
 const Register = () => {
     const navigate = useNavigate()
@@ -25,7 +27,7 @@ const Register = () => {
     // 提交登录
     const { mutateAsync: postRegistration, isLoading: isRegistering } = useRegister()
     // store 里的用户信息
-    const userInfo = useAppSelector(s => s.user.userInfo)
+    const userInfo = useAtomValue(stateUser)
 
     const onSubmit = async () => {
         if (!username) {

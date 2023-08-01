@@ -6,10 +6,11 @@ import React, { useRef, useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import { useLogin } from '../services/user'
 import { useAppDispatch, useAppSelector } from '../store'
-import { login } from '../store/user'
+import { login, stateUser } from '../store/user'
 import { messageError, messageSuccess } from '../utils/message'
 import { UserOutlined, KeyOutlined } from '@ant-design/icons'
 import { PageTitle } from '../components/pageTitle'
+import { useAtomValue } from 'jotai'
 
 const Register = () => {
     const dispatch = useAppDispatch()
@@ -26,7 +27,7 @@ const Register = () => {
     // 提交登录
     const { mutateAsync: postLogin, isLoading: isLogin } = useLogin()
     // store 里的用户信息
-    const userInfo = useAppSelector(s => s.user.userInfo)
+    const userInfo = useAtomValue(stateUser)
 
     const onSubmit = async () => {
         if (!username) {
@@ -46,7 +47,7 @@ const Register = () => {
 
         messageSuccess(`登录成功，欢迎回来，${resp?.data?.username}`)
         const userInfo = resp.data as LoginSuccessResp
-        dispatch(login(userInfo))
+        login(userInfo)
     }
 
     if (userInfo) {

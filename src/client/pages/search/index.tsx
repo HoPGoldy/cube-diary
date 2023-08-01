@@ -81,6 +81,7 @@ const SearchDiary: FC = () => {
                                 placeholder="请输入标题或者正文，回车搜索"
                                 enterButton="搜索"
                                 size="large"
+                                autoFocus
                                 onSearch={onKeywordSearch}
                             />
                         </Col>

@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { AppConfigResp } from '@/types/appConfig'
+import { atom } from 'jotai'
 
 interface UserState {
     appConfig?: AppConfigResp
@@ -51,3 +52,8 @@ export const globalSlice = createSlice({
 export const { setAppConfig, initSuccess, setIsMobile, setFocusDiaryDate } = globalSlice.actions
 
 export default globalSlice.reducer
+
+/**
+ * 当前应用配置
+ */
+export const stateAppConfig = atom<AppConfigResp | undefined>(undefined)
