@@ -5,7 +5,7 @@ import { messageWarning } from '@/client/utils/message'
 import { SettingOutlined, SearchOutlined, CalendarOutlined, LeftOutlined, RightOutlined, DoubleLeftOutlined, DoubleRightOutlined } from '@ant-design/icons'
 import { MobileSetting } from '../setting'
 import s from './styles.module.css'
-import { Button, Col, Drawer, Row } from 'antd'
+import { Button, Col, Drawer, Input, Row } from 'antd'
 import dayjs, { Dayjs } from 'dayjs'
 import { MobileDrawer } from '@/client/components/mobileDrawer'
 
@@ -102,41 +102,46 @@ export const useOperation = () => {
                 title={dayjs(params.month).format('YYYY 年 MM 月')}
                 open={showMonthPicker}
                 onClose={() => setShowMonthPicker(false)}
-                height="16rem"
+                height="16.5rem"
                 footer={
-                    <Row gutter={8}>
-                        <Col>
+                    <div className="flex flex-row flex-nowrap items-center">
+                        <div className="mr-2">
                             <Button
                                 icon={<DoubleLeftOutlined />}
                                 onClick={() => setCurrentYear(+currentYear - 1)}
+                                size="large"
                             ></Button>
-                        </Col>
-                        <Col>
+                        </div>
+                        <div className="mr-2">
                             <Button
                                 icon={<LeftOutlined />}
                                 onClick={jumpToPrevMonth}
+                                size="large"
                             ></Button>
-                        </Col>
-                        <Col flex={1}>
-                            <input
+                        </div>
+                        <div className="flex-1 mr-2">
+                            <Input
                                 value={currentYear}
                                 onInput={(e: any) => setCurrentYear(e.target.value)}
+                                bordered={false}
                                 className="text-center w-full text-base font-blod"
-                            ></input>
-                        </Col>
-                        <Col>
+                            ></Input>
+                        </div>
+                        <div className="mr-2">
                             <Button
                                 icon={<RightOutlined />}
                                 onClick={jumpToNextMonth}
+                                size="large"
                             ></Button>
-                        </Col>
-                        <Col>
+                        </div>
+                        <div>
                             <Button
                                 icon={<DoubleRightOutlined />}
                                 onClick={() => setCurrentYear(+currentYear + 1)}
+                                size="large"
                             ></Button>
-                        </Col>
-                    </Row>
+                        </div>
+                    </div>
                 }
             >
                 <Row gutter={[8, 8]}>

@@ -26,14 +26,14 @@ export const stateReplayAttackSecret = atom<string | undefined>(undefined)
 /**
  * 当前用户的登录 token
  */
-export const stateUserToken = atom<string | undefined>(undefined)
+export const stateUserToken = atom<string | null>(localStorage.getItem('cube-diary-token'))
 
 export const logout = () => {
     const store = getDefaultStore()
 
     store.set(stateUser, undefined)
     store.set(stateReplayAttackSecret, undefined)
-    store.set(stateUserToken, undefined)
+    store.set(stateUserToken, null)
     localStorage.removeItem('cube-diary-token')
     Cookies.remove('cube-diary-token')
 }

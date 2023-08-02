@@ -70,7 +70,7 @@ const DiaryEdit: FC = () => {
     }, [diaryResp])
 
     const renderContent = () => {
-        if (isLoadingDiary) return <Loading tip='内容加载中...' />
+        if (isLoadingDiary) return <Loading />
 
         return (
             <div className="box-border p-4 md:w-full h-full flex flex-col flex-nowrap">

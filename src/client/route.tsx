@@ -12,7 +12,7 @@ import MonthList from './pages/monthList'
 const lazyLoad = (compLoader: () => Promise<{ default: ComponentType<any> }>) => {
     const Comp = lazy(compLoader)
     return (
-        <Suspense fallback={<Loading />}>
+        <Suspense fallback={<Loading tip="资源加载中..." />}>
             <Comp />
         </Suspense>
     )

@@ -1,4 +1,5 @@
 import React, { FC, useState, useEffect } from 'react'
+import { LoadingOutlined } from '@ant-design/icons'
 
 interface Props {
     tip?: string
@@ -6,7 +7,7 @@ interface Props {
     className?: string
 }
 
-const Loading: FC<Props> = ({ tip = '页面加载中...', delay = 500, className }) => {
+const Loading: FC<Props> = ({ tip = '内容加载中...', delay = 500, className }) => {
     const [showTip, setShowTip] = useState(false)
 
     useEffect(() => {
@@ -15,8 +16,8 @@ const Loading: FC<Props> = ({ tip = '页面加载中...', delay = 500, className
     }, [])
 
     return showTip ? (
-        <div className={'w-full flex justify-center items-center dark:text-gray-400 ' + className}>
-            {tip}
+        <div className={'w-full flex justify-center items-center dark:text-gray-400 mt-24 ' + className}>
+            <LoadingOutlined /> <div className='ml-2'>{tip}</div>
         </div>
     ) : null
 }
