@@ -2,12 +2,12 @@ import { sha } from '@/utils/crypto'
 import React, { FC, useRef, useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import { useCreateAdmin } from '@/client/services/user'
-import { useAppDispatch, useAppSelector } from '@/client/store'
-import { getIsMobile, initSuccess } from '@/client/store/global'
+import { getIsMobile, stateAppConfig } from '@/client/store/global'
 import { Button, Row, Col, Input, InputRef } from 'antd'
 import { messageError, messageSuccess } from '@/client/utils/message'
 import s from './styles.module.css'
 import { PageTitle } from '@/client/components/pageTitle'
+import { useAtom } from 'jotai'
 
 const getViewWidth = () => {
     // 获取浏览器宽度
@@ -25,7 +25,6 @@ const getViewWidth = () => {
 const viewWidth = getViewWidth()
 
 const Register: FC = () => {
-    const dispatch = useAppDispatch()
     // 密码输入框
     const passwordInputRef = useRef<InputRef>(null)
     // 重复密码输入框
@@ -43,7 +42,7 @@ const Register: FC = () => {
     // 提交注册
     const { mutateAsync: createAdmin, isLoading: isCreating } = useCreateAdmin()
     // 是否需要初始化，初始化完成后这个值就变成 false 了
-    const needInit = useAppSelector(s => s.global.appConfig?.needInit)
+    const [appConfig, setAppConfig] = useAtom(stateAppConfig)
     // 轮播框宽度
     const viewCarouselRef = useRef<HTMLDivElement>(null)
     // 轮播位置
@@ -81,10 +80,13 @@ const Register: FC = () => {
         if (resp.code !== 200) return
 
         messageSuccess('初始化完成')
-        dispatch(initSuccess())
+        setAppConfig(old => {
+            if (!old) return old
+            return { ...old, needInit: false }
+        })
     }
 
-    if (needInit === false) {
+    if (appConfig?.needInit === false) {
         return (
             <Navigate to='/login' replace />
         )

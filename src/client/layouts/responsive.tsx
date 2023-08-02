@@ -1,14 +1,14 @@
 import React, { FC, useEffect, PropsWithChildren } from 'react'
-import { useAppDispatch, useAppSelector } from '../store'
 import debounce from 'lodash/debounce'
-import { getIsMobile, setIsMobile } from '../store/global'
+import { getIsMobile, stateIsMobile } from '../store/global'
+import { useAtomValue, useSetAtom } from 'jotai'
 
 export const ResponsiveProvider: FC<PropsWithChildren> = ({ children }) => {
-    const dispatch = useAppDispatch()
+    const setIsMobile = useSetAtom(stateIsMobile)
 
     useEffect(() => {
         const listener = debounce(() => {
-            dispatch(setIsMobile(getIsMobile()))
+            setIsMobile(getIsMobile())
         }, 300)
 
         window.addEventListener('resize', listener, true)
@@ -21,7 +21,7 @@ export const ResponsiveProvider: FC<PropsWithChildren> = ({ children }) => {
 }
 
 export const useIsMobile = () => {
-    return useAppSelector(s => s.global.isMobile)
+    return useAtomValue(stateIsMobile)
 }
 
 export const MobileArea: FC<PropsWithChildren> = ({ children }) => {

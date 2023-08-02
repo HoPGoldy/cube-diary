@@ -11,12 +11,12 @@ import { useOperation } from './operation'
 import { PageTitle } from '@/client/components/pageTitle'
 import { useQueryDiaryDetail, useUpdateDiary } from '@/client/services/diary'
 import { getLabelByDate } from '../monthList/listItem'
-import { useAppDispatch } from '@/client/store'
-import { setFocusDiaryDate } from '@/client/store/global'
+import { stateFocusDiaryDate } from '@/client/store/global'
+import { useSetAtom } from 'jotai'
 
 const DiaryEdit: FC = () => {
     const params = useParams()
-    const dispatch = useAppDispatch()
+    const setFocusDiaryDate = useSetAtom(stateFocusDiaryDate)
     const navigate = useNavigate()
     const diaryDate = useMemo(() => dayjs(params.date).valueOf(), [params.date])
     const diaryTitle = useMemo(() => getLabelByDate(diaryDate), [diaryDate])
@@ -33,7 +33,7 @@ const DiaryEdit: FC = () => {
 
     /** 点击左下角返回按钮 */
     const onClickBack = () => {
-        dispatch(setFocusDiaryDate(diaryDate?.toString()))
+        setFocusDiaryDate(diaryDate?.toString())
         navigate(-1)
     }
 

@@ -1,7 +1,5 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
-import { store } from './store'
-import { Provider } from 'react-redux'
 import { routes } from './route'
 import { QueryClientProvider } from 'react-query'
 import { queryClient } from './services/base'
@@ -34,13 +32,11 @@ const App = () => {
  * @see https://github.com/SortableJS/react-sortablejs/issues/241
  */
 createRoot(rootContainer).render(
-    <Provider store={store}>
-        <ResponsiveProvider>
-            <AntdConfigProvider>
-                <AntdApp className='h-full'>
-                    <App />
-                </AntdApp>
-            </AntdConfigProvider>
-        </ResponsiveProvider>
-    </Provider>
+    <ResponsiveProvider>
+        <AntdConfigProvider>
+            <AntdApp className='h-full'>
+                <App />
+            </AntdApp>
+        </AntdConfigProvider>
+    </ResponsiveProvider>
 )

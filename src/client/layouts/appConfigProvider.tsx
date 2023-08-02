@@ -1,20 +1,19 @@
 import React, { FC, useEffect, PropsWithChildren } from 'react'
 import { useQueryAppConfig } from '../services/global'
-import { useAppDispatch, useAppSelector } from '../store'
-import { setAppConfig } from '../store/global'
+import { stateAppConfig } from '../store/global'
 import { Navigate, useLocation } from 'react-router-dom'
 import Loading from './loading'
+import { useAtom } from 'jotai'
 
 export const AppConfigProvider: FC<PropsWithChildren> = (props) => {
     const location = useLocation()
-    const appConfig = useAppSelector(s => s.global.appConfig)
-    const dispatch = useAppDispatch()
+    const [appConfig, setAppConfig] = useAtom(stateAppConfig)
 
     const { data, isError } = useQueryAppConfig()
 
     useEffect(() => {
         if (!data || !data.data) return
-        dispatch(setAppConfig(data.data))
+        setAppConfig(data.data)
     }, [data])
 
     if (appConfig?.needInit && location.pathname !== '/init') {

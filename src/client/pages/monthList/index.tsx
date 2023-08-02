@@ -8,7 +8,8 @@ import { useQueryDiaryList } from '@/client/services/diary'
 import { DiaryListItem } from './listItem'
 import { useOperation } from './operation'
 import s from './styles.module.css'
-import { useAppSelector } from '@/client/store'
+import { useAtomValue } from 'jotai'
+import { stateFocusDiaryDate } from '@/client/store/global'
 
 /**
  * 日记列表
@@ -17,7 +18,7 @@ import { useAppSelector } from '@/client/store'
 const MonthList: FC = () => {
     const { month } = useParams()
     /** 要跳转到的日记 */
-    const focusDate = useAppSelector(s => s.global.focusDiaryDate)
+    const focusDate = useAtomValue(stateFocusDiaryDate)
     /** 获取日记列表 */
     const { data: monthListResp, isLoading } = useQueryDiaryList(month)
     /** 当前正在预览的图片链接 */

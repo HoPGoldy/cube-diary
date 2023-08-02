@@ -2,7 +2,6 @@ import React from 'react'
 import { Col, Form, Input, Row } from 'antd'
 import { useChangePassword } from '@/client/services/user'
 import { sha } from '@/utils/crypto'
-import { useAppDispatch } from '@/client/store'
 import { logout } from '@/client/store/user'
 import { messageSuccess } from '@/client/utils/message'
 import { useIsMobile } from '@/client/layouts/responsive'
@@ -10,7 +9,6 @@ import s from './styles.module.css'
 
 export const useChangePasswordContent = () => {
     const [form] = Form.useForm()
-    const dispatch = useAppDispatch()
     const isMobile = useIsMobile()
     const { mutateAsync: postChangePassword, isLoading: isChangingPassword } = useChangePassword()
 
@@ -22,7 +20,7 @@ export const useChangePasswordContent = () => {
         })
         if (resp.code !== 200) return false
 
-        dispatch(logout())
+        logout()
         messageSuccess('密码修改成功，请重新登录')
         return true
     }

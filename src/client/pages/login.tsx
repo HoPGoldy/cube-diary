@@ -5,15 +5,14 @@ import { Button, Input, InputRef } from 'antd'
 import React, { useRef, useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import { useLogin } from '../services/user'
-import { useAppDispatch, useAppSelector } from '../store'
 import { login, stateUser } from '../store/user'
 import { messageError, messageSuccess } from '../utils/message'
 import { UserOutlined, KeyOutlined } from '@ant-design/icons'
 import { PageTitle } from '../components/pageTitle'
 import { useAtomValue } from 'jotai'
+import { stateAppConfig } from '../store/global'
 
 const Register = () => {
-    const dispatch = useAppDispatch()
     // 用户名
     const [username, setUsername] = useState('')
     // 密码
@@ -23,7 +22,7 @@ const Register = () => {
     // 密码输入框
     const passwordInputRef = useRef<InputRef>(null)
     // 应用配置
-    const config = useAppSelector(s => s.global.appConfig)
+    const config = useAtomValue(stateAppConfig)
     // 提交登录
     const { mutateAsync: postLogin, isLoading: isLogin } = useLogin()
     // store 里的用户信息

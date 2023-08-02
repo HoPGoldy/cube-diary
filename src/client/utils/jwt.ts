@@ -1,6 +1,5 @@
 import { useMemo } from 'react'
 import { MyJwtPayload } from '@/types/global'
-import { useAppSelector } from '../store'
 import { useAtomValue } from 'jotai'
 import { stateUserToken } from '../store/user'
 

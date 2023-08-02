@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react'
 import { AppTheme } from '@/types/user'
-import { useAppDispatch, useAppSelector } from '@/client/store'
 import { changeTheme, getUserTheme, logout, stateUser } from '@/client/store/user'
 import { useQueryDiaryCount, useSetTheme } from '@/client/services/user'
 import { LockOutlined, DatabaseOutlined, TagsOutlined, SmileOutlined, ContactsOutlined } from '@ant-design/icons'
@@ -16,7 +15,6 @@ export interface SettingLinkItem {
 
 export const useSetting = () => {
     const userInfo = useAtomValue(stateUser)
-    const dispatch = useAppDispatch()
     // 数量统计接口
     const { data: countInfo } = useQueryDiaryCount()
     /** 是否是管理员 */

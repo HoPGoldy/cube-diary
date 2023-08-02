@@ -1,12 +1,12 @@
 import React, { FC, PropsWithChildren, useEffect, useMemo } from 'react'
 import { ConfigProvider, ThemeConfig, theme as antdTheme } from 'antd'
 import zhCN from 'antd/locale/zh_CN'
-import { useAppSelector } from '../store'
 import cloneDeep from 'lodash/cloneDeep'
 import { useIsMobile } from '../layouts/responsive'
 import { getUserTheme, stateUser } from '../store/user'
 import { AppTheme } from '@/types/user'
 import { useAtomValue } from 'jotai'
+import { stateAppConfig } from '../store/global'
 
 const globalThemeConfig: ThemeConfig = {
     // algorithm: theme.darkAlgorithm,
@@ -26,7 +26,7 @@ const globalThemeConfig: ThemeConfig = {
  * antd 使用的主题配置
  */
 export const AntdConfigProvider: FC<PropsWithChildren> = (props) => {
-    const appConfig = useAppSelector(s => s.global.appConfig)
+    const appConfig = useAtomValue(stateAppConfig)
     const userInfo = useAtomValue(stateUser)
     const isMobile = useIsMobile()
 

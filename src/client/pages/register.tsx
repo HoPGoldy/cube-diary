@@ -4,12 +4,12 @@ import { Button, Input, InputRef } from 'antd'
 import React, { useRef, useState } from 'react'
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import { useRegister } from '../services/user'
-import { useAppSelector } from '../store'
 import { messageError, messageSuccess } from '../utils/message'
 import { UserOutlined, KeyOutlined } from '@ant-design/icons'
 import { PageTitle } from '../components/pageTitle'
 import { useAtomValue } from 'jotai'
 import { stateUser } from '../store/user'
+import { stateAppConfig } from '../store/global'
 
 const Register = () => {
     const navigate = useNavigate()
@@ -23,7 +23,7 @@ const Register = () => {
     // 输入框引用（用户名，密码输入框，密码确认框）
     const inputRef = useRef<(InputRef | null)[]>([])
     // 应用配置
-    const config = useAppSelector(s => s.global.appConfig)
+    const config = useAtomValue(stateAppConfig)
     // 提交登录
     const { mutateAsync: postRegistration, isLoading: isRegistering } = useRegister()
     // store 里的用户信息
