@@ -45,7 +45,7 @@
 }
 
 .monthPickerItem {
-    @apply text-center py-1;
+    @apply text-center py-1 dark:text-neutral-200;
 }
 
 .monthPickerItemActive {
@@ -54,5 +54,5 @@
 }
 
 .monthPickerItemDisabled {
-    @apply text-gray-300;
+    @apply text-gray-300 dark:text-neutral-500;
 }

@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom'
 import Preview from './preview'
 import { MARK_COLORS_MAP } from '@/client/components/colorPicker'
 import s from './styles.module.css'
+import { useSetAtom } from 'jotai'
+import { stateFocusDiaryDate } from '@/client/store/global'
 
 interface Props {
     item: Diary | UndoneDiary
@@ -34,10 +36,12 @@ export const getLabelByDate = (timestamp: number) => {
  */
 export const DiaryListItem: FC<Props> = ({ item }) => {
     const navigate = useNavigate()
+    const setFocusDiaryDate = useSetAtom(stateFocusDiaryDate)
 
     const title = useMemo(() => getLabelByDate(item.date), [item.date])
 
     const onEdit = () => {
+        setFocusDiaryDate(item.date.toString())
         navigate(`/diary/${dayjs(item.date).format('YYYYMMDD')}`)
     }
 

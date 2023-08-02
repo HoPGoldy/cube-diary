@@ -54,11 +54,11 @@ const Register = () => {
     }
 
     return (
-        <div className="h-screen w-screen bg-gray-100 flex flex-col justify-center items-center dark:text-gray-100">
+        <div className="h-screen w-screen bg-gray-100 dark:bg-neutral-800 flex flex-col justify-center items-center dark:text-gray-100">
             <PageTitle title='登录' />
             <header className="w-screen text-center min-h-[236px]">
-                <div className="text-5xl font-bold text-mainColor">{config?.appName}</div>
-                <div className="mt-4 text-xl text-mainColor">{config?.loginSubtitle}</div>
+                <div className="text-5xl font-bold text-mainColor dark:text-neutral-200">{config?.appName}</div>
+                <div className="mt-4 text-xl text-mainColor dark:text-neutral-300">{config?.loginSubtitle}</div>
             </header>
             <div className='w-[70%] md:w-[40%] lg:w-[30%] xl:w-[20%] flex flex-col items-center'>
                 <Input

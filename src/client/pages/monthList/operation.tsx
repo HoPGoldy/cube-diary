@@ -5,7 +5,7 @@ import { messageWarning } from '@/client/utils/message'
 import { SettingOutlined, SearchOutlined, CalendarOutlined, LeftOutlined, RightOutlined, DoubleLeftOutlined, DoubleRightOutlined } from '@ant-design/icons'
 import { MobileSetting } from '../setting'
 import s from './styles.module.css'
-import { Col, Drawer, Row } from 'antd'
+import { Button, Col, Drawer, Row } from 'antd'
 import dayjs, { Dayjs } from 'dayjs'
 import { MobileDrawer } from '@/client/components/mobileDrawer'
 
@@ -106,16 +106,16 @@ export const useOperation = () => {
                 footer={
                     <Row gutter={8}>
                         <Col>
-                            <DoubleLeftOutlined
-                                style={{ fontSize: 24, marginLeft: 16 }}
+                            <Button
+                                icon={<DoubleLeftOutlined />}
                                 onClick={() => setCurrentYear(+currentYear - 1)}
-                            />
+                            ></Button>
                         </Col>
                         <Col>
-                            <LeftOutlined
-                                style={{ fontSize: 24 }}
+                            <Button
+                                icon={<LeftOutlined />}
                                 onClick={jumpToPrevMonth}
-                            />
+                            ></Button>
                         </Col>
                         <Col flex={1}>
                             <input
@@ -125,16 +125,16 @@ export const useOperation = () => {
                             ></input>
                         </Col>
                         <Col>
-                            <RightOutlined
-                                style={{ fontSize: 24 }}
+                            <Button
+                                icon={<RightOutlined />}
                                 onClick={jumpToNextMonth}
-                            />
+                            ></Button>
                         </Col>
                         <Col>
-                            <DoubleRightOutlined
-                                style={{ fontSize: 24, marginRight: 16 }}
+                            <Button
+                                icon={<DoubleRightOutlined />}
                                 onClick={() => setCurrentYear(+currentYear + 1)}
-                            />
+                            ></Button>
                         </Col>
                     </Row>
                 }
