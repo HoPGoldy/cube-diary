@@ -24,7 +24,7 @@ const getViewWidth = () => {
 
 const viewWidth = getViewWidth()
 
-const Register: FC = () => {
+const CreateAdmin: FC = () => {
     // 密码输入框
     const passwordInputRef = useRef<InputRef>(null)
     // 重复密码输入框
@@ -41,7 +41,7 @@ const Register: FC = () => {
     const [repeatPwdError, setRepeatPwdError] = useState('')
     // 提交注册
     const { mutateAsync: createAdmin, isLoading: isCreating } = useCreateAdmin()
-    // 是否需要初始化，初始化完成后这个值就变成 false 了
+    // 是否需要初始化，初始化完成后 needInit 就变成 false 了
     const [appConfig, setAppConfig] = useAtom(stateAppConfig)
     // 轮播框宽度
     const viewCarouselRef = useRef<HTMLDivElement>(null)
@@ -277,4 +277,4 @@ const Register: FC = () => {
     )
 }
 
-export default Register
+export default CreateAdmin

@@ -9,7 +9,7 @@ import { SearchProps } from 'antd/es/input'
  */
 export const PageContent: FC<PropsWithChildren> = (props) => {
     return (
-        <div className="overflow-y-auto relative md:h-full h-page-content" >
+        <div className="overflow-y-auto relative md:h-full h-page-content cube-diary-page-content" >
             {props.children}
         </div>
     )

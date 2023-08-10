@@ -10,6 +10,7 @@ import { useOperation } from './operation'
 import s from './styles.module.css'
 import { useAtomValue } from 'jotai'
 import { stateFocusDiaryDate } from '@/client/store/global'
+import { useDragPoint } from './useDragPoint'
 
 /**
  * 日记列表
@@ -27,6 +28,8 @@ const MonthList: FC = () => {
     const { renderMobileBar } = useOperation()
     /** 列表底部 div 引用 */
     const listBottomRef = useRef<HTMLDivElement>(null)
+    /** 上下月切换功能 */
+    const { renderBottomPoint, renderTopPoint, listListener } = useDragPoint()
     
     const onClickDetail: MouseEventHandler<HTMLDivElement> = (e) => {
         const target = (e.target as HTMLImageElement)
@@ -63,8 +66,10 @@ const MonthList: FC = () => {
         <PageTitle title='日记列表' />
 
         <PageContent>
-            <div className="mx-4 mt-4" onClick={onClickDetail}>
+            <div className="mx-4 mt-4 relative" onClick={onClickDetail} {...listListener}>
+                {renderTopPoint()}
                 {renderContent()}
+                {renderBottomPoint()}
             </div>
             <div ref={listBottomRef}></div>
             <Image

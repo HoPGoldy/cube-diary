@@ -20,7 +20,7 @@ export const useSetting = () => {
     /** 是否是管理员 */
     const jwtPayload = useJwtPayload()
     /** 主题设置 */
-    const { mutateAsync: setAppTheme } = useSetTheme()
+    const { mutateAsync: updateAppTheme } = useSetTheme()
 
     const settingConfig = useMemo(() => {
         const list = [
@@ -38,7 +38,7 @@ export const useSetting = () => {
 
     const onSwitchTheme = () => {
         const newTheme = userInfo?.theme === AppTheme.Light ? AppTheme.Dark : AppTheme.Light
-        setAppTheme(newTheme)
+        updateAppTheme(newTheme)
         changeTheme(newTheme)
     }
 

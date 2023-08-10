@@ -12,7 +12,7 @@ import { PageTitle } from '../components/pageTitle'
 import { useAtomValue } from 'jotai'
 import { stateAppConfig } from '../store/global'
 
-const Register = () => {
+const Login = () => {
     // 用户名
     const [username, setUsername] = useState('')
     // 密码
@@ -103,4 +103,4 @@ const Register = () => {
     )
 }
 
-export default Register
+export default Login
