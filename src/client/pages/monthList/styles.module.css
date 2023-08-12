@@ -1,72 +1,74 @@
 .listContainer {
-    @apply columns-1 md:columns-2 lg:columns-3 gap-x-2 relative;
+  @apply columns-1 md:columns-2 lg:columns-3 gap-x-2 relative;
 }
 
 .listItem {
-    page-break-inside: avoid;
-    -webkit-column-break-inside: avoid;
-    @apply mb-2;
-    /* 悬停样式 */
-    @apply hover:ring-2 ring-gray-300 dark:ring-neutral-500 transition-shadow;
+  page-break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+  @apply mb-2;
+
+  /* 悬停样式 */
+  @apply hover:ring-2 ring-gray-300 dark:ring-neutral-500 transition-shadow;
 }
 
 .mdArea :global(img) {
-    max-width: 100%;
-    margin: auto;
-    display: block;
+  max-width: 100%;
+  margin: auto;
+  display: block;
 }
 
 .mdArea :global(table) {
-    width: 100%;
-    border-top: 1px solid #ddd;
-    border-left: 1px solid #ddd;
+  width: 100%;
+  border-top: 1px solid #ddd;
+  border-left: 1px solid #ddd;
 }
 
 .mdArea :global(th) {
-    border-bottom: 1px solid #ddd;
-    border-right: 1px solid #ddd;
-    padding: 8px;
-    min-width: 60px;
+  border-bottom: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  padding: 8px;
+  min-width: 60px;
 }
 
 .mdArea :global(td) {
-    border-bottom: 1px solid #ddd;
-    border-right: 1px solid #ddd;
-    padding: 8px;
-    min-width: 60px;
+  border-bottom: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  padding: 8px;
+  min-width: 60px;
 }
 
 .mdArea :global(p) {
-    @apply my-1;
+  @apply my-1;
 }
 
 .settingDrawer :global(.ant-drawer-body) {
-    padding: 0 !important;
+  padding: 0 !important;
 }
 
 .monthPickerItem {
-    @apply text-center py-1 dark:text-neutral-200;
+  @apply text-center py-1 dark:text-neutral-200;
 }
 
 .monthPickerItemActive {
-    @apply rounded text-white;
-    background: var(--cube-diary-primary-button-color);
+  @apply rounded text-white;
+
+  background: var(--cube-diary-primary-button-color);
 }
 
 .monthPickerItemDisabled {
-    @apply text-gray-300 dark:text-neutral-500;
+  @apply text-gray-300 dark:text-neutral-500;
 }
 
 .topPoint {
-    position: fixed;
-    left: calc(50vw - 106px);
-    top: -50px;
-    z-index: 2;
+  position: fixed;
+  left: calc(50vw - 106px);
+  top: -50px;
+  z-index: 2;
 }
 
 .bottomPoint {
-    position: fixed;
-    left: calc(50vw - 106px);
-    bottom: -50px;
-    z-index: 2;
+  position: fixed;
+  left: calc(50vw - 106px);
+  bottom: -50px;
+  z-index: 2;
 }

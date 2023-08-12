@@ -1,87 +1,95 @@
 
 /** 桌面端侧边栏导航树组件的过渡动画 **/
 .my-transition-enter {
-    opacity: 0;
-    transform: scale(0.9);
+  opacity: 0;
+  transform: scale(0.9);
 }
+
 .my-transition-enter-active {
-    opacity: 1;
-    transform: translateX(0);
-    transition: opacity 100ms, transform 100ms;
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 100ms, transform 100ms;
 }
+
 .my-transition-exit {
-    opacity: 1;
+  opacity: 1;
 }
+
 .my-transition-exit-active {
-    opacity: 0;
-    transform: scale(0.9);
-    transition: opacity 100ms, transform 100ms;
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 100ms, transform 100ms;
 }
 
 /** 移动端标签批量操作的过渡动画 **/
 .batch-modal-enter {
-    opacity: 0;
-    transform: translateY(50%);
+  opacity: 0;
+  transform: translateY(50%);
 }
+
 .batch-modal-enter-active {
-    opacity: 1;
-    transform: translateY(0);
-    transition: opacity 100ms, transform 100ms;
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 100ms, transform 100ms;
 }
+
 .batch-modal-exit {
-    opacity: 1;
+  opacity: 1;
 }
+
 .batch-modal-exit-active {
-    opacity: 0;
-    transform: translateY(50%);
-    transition: opacity 100ms, transform 100ms;
+  opacity: 0;
+  transform: translateY(50%);
+  transition: opacity 100ms, transform 100ms;
 }
 
 /** 移动端导航 - 列表向左滑动效果 **/
 .to-left-enter .menu-container {
-    opacity: 0;
-    /* transform: translateX(-50%); */
+  opacity: 0;
+
+  /* transform: translateX(-50%); */
 }
 
 .to-left-enter-active .menu-container {
-    opacity: 1;
-    transform: translateX(0%);
+  opacity: 1;
+  transform: translateX(0%);
 }
 
 .to-left-exit .menu-container {
-    opacity: 1;
-    transform: translateX(0%);
+  opacity: 1;
+  transform: translateX(0%);
 }
 
 .to-left-exit-active .menu-container {
-    opacity: 0;
-    transform: translateX(50%);
+  opacity: 0;
+  transform: translateX(50%);
 }
 
 /** 移动端导航 - 列表向右滑动效果 **/
 .to-right-enter .menu-container {
-    opacity: 0;
-    /* transform: translateX(50%); */
+  opacity: 0;
+
+  /* transform: translateX(50%); */
 }
 
 .to-right-enter-active .menu-container {
-    opacity: 1;
-    transform: translateX(0%);
+  opacity: 1;
+  transform: translateX(0%);
 }
 
 .to-right-exit .menu-container {
-    opacity: 1;
-    transform: translateX(0%);
+  opacity: 1;
+  transform: translateX(0%);
 }
 
 .to-right-exit-active .menu-container {
-    opacity: 0;
-    transform: translateX(-50%);
+  opacity: 0;
+  transform: translateX(-50%);
 }
 
 .to-left-enter-active .menu-container,
 .to-left-exit-active .menu-container,
 .to-right-enter-active .menu-container,
 .to-right-exit-active .menu-container {
-    transition: opacity 200ms, transform 200ms;
+  transition: opacity 200ms, transform 200ms;
 }

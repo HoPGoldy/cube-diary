@@ -1,9 +1,9 @@
 .headerBox {
-    height: 3rem;
-    border-bottom: 1px solid #d1d5db;
-    @apply dark:border-b-gray-700;
-    @apply flex items-center justify-between;
-    @apply w-full py-2 px-4;
-    @apply bg-white dark:bg-antd-dark overflow-hidden box-border;
-    @apply transition-colors;
+  height: 3rem;
+  border-bottom: 1px solid #d1d5db;
+  @apply dark:border-b-gray-700;
+  @apply flex items-center justify-between;
+  @apply w-full py-2 px-4;
+  @apply bg-white dark:bg-antd-dark overflow-hidden box-border;
+  @apply transition-colors;
 }

@@ -1,58 +1,69 @@
-import React, { useMemo } from 'react'
-import { AppTheme } from '@/types/user'
-import { changeTheme, getUserTheme, logout, stateUser } from '@/client/store/user'
-import { useQueryDiaryCount, useSetTheme } from '@/client/services/user'
-import { LockOutlined, DatabaseOutlined, TagsOutlined, SmileOutlined, ContactsOutlined } from '@ant-design/icons'
-import { useJwtPayload } from '@/client/utils/jwt'
-import { useAtomValue } from 'jotai'
+import React, { useMemo } from 'react';
+import { AppTheme } from '@/types/user';
+import { changeTheme, getUserTheme, logout, stateUser } from '@/client/store/user';
+import { useQueryDiaryCount, useSetTheme } from '@/client/services/user';
+import {
+  LockOutlined,
+  DatabaseOutlined,
+  TagsOutlined,
+  SmileOutlined,
+  ContactsOutlined,
+} from '@ant-design/icons';
+import { useJwtPayload } from '@/client/utils/jwt';
+import { useAtomValue } from 'jotai';
 
 export interface SettingLinkItem {
-    label: string
-    icon: React.ReactNode
-    link: string
-    onClick?: () => void
+  label: string;
+  icon: React.ReactNode;
+  link: string;
+  onClick?: () => void;
 }
 
 export const useSetting = () => {
-    const userInfo = useAtomValue(stateUser)
-    // 数量统计接口
-    const { data: countInfo } = useQueryDiaryCount()
-    /** 是否是管理员 */
-    const jwtPayload = useJwtPayload()
-    /** 主题设置 */
-    const { mutateAsync: updateAppTheme } = useSetTheme()
+  const userInfo = useAtomValue(stateUser);
+  // 数量统计接口
+  const { data: countInfo } = useQueryDiaryCount();
+  /** 是否是管理员 */
+  const jwtPayload = useJwtPayload();
+  /** 主题设置 */
+  const { mutateAsync: updateAppTheme } = useSetTheme();
 
-    const settingConfig = useMemo(() => {
-        const list = [
-            { label: '修改密码', icon: <LockOutlined />, link: '/changePassword' },
-            jwtPayload?.isAdmin
-                ? { label: '用户管理', icon: <ContactsOutlined />, link: '/userInvite' }
-                : null,
-            { label: '导入', icon: <DatabaseOutlined />, link: '/importDiary' },
-            { label: '导出', icon: <TagsOutlined />, link: '/exportDiary' },
-            { label: '关于', icon: <SmileOutlined />, link: '/about' },
-        ].filter(Boolean) as SettingLinkItem[]
+  const settingConfig = useMemo(() => {
+    const list = [
+      { label: '修改密码', icon: <LockOutlined />, link: '/changePassword' },
+      jwtPayload?.isAdmin
+        ? { label: '用户管理', icon: <ContactsOutlined />, link: '/userInvite' }
+        : null,
+      { label: '导入', icon: <DatabaseOutlined />, link: '/importDiary' },
+      { label: '导出', icon: <TagsOutlined />, link: '/exportDiary' },
+      { label: '关于', icon: <SmileOutlined />, link: '/about' },
+    ].filter(Boolean) as SettingLinkItem[];
 
-        return list
-    }, [jwtPayload?.isAdmin])
+    return list;
+  }, [jwtPayload?.isAdmin]);
 
-    const onSwitchTheme = () => {
-        const newTheme = userInfo?.theme === AppTheme.Light ? AppTheme.Dark : AppTheme.Light
-        updateAppTheme(newTheme)
-        changeTheme(newTheme)
-    }
+  const onSwitchTheme = () => {
+    const newTheme = userInfo?.theme === AppTheme.Light ? AppTheme.Dark : AppTheme.Light;
+    updateAppTheme(newTheme);
+    changeTheme(newTheme);
+  };
 
-    const onLogout = () => {
-        logout()
-    }
+  const onLogout = () => {
+    logout();
+  };
 
-    const diaryCount = countInfo?.data?.diaryCount || '---'
-    const diaryLength = countInfo?.data?.diaryLength || '---'
-    const userName = userInfo?.username || '---'
-    const userTheme = getUserTheme(userInfo)
+  const diaryCount = countInfo?.data?.diaryCount || '---';
+  const diaryLength = countInfo?.data?.diaryLength || '---';
+  const userName = userInfo?.username || '---';
+  const userTheme = getUserTheme(userInfo);
 
-    return {
-        diaryCount, diaryLength, userName, onLogout, settingConfig,
-        userTheme, onSwitchTheme
-    }
-}
+  return {
+    diaryCount,
+    diaryLength,
+    userName,
+    onLogout,
+    settingConfig,
+    userTheme,
+    onSwitchTheme,
+  };
+};

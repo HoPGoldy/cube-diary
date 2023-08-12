@@ -1,7 +1,7 @@
 .subTitle {
-    @apply text-center text-xl mb-16;
+  @apply text-center text-xl mb-16;
 }
 
 .description {
-    @apply text-slate-600 text-base mt-6;
+  @apply text-slate-600 text-base mt-6;
 }

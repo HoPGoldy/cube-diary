@@ -1,48 +1,38 @@
-// eslint-disable-next-line no-undef
 module.exports = {
-    'env': {
-        'browser': true,
-        'es2021': true
+    env: {
+      browser: true,
+      es2021: true,
+      node: true,
     },
-    'root': true,
-    'extends': [
-        'eslint:recommended',
-        'plugin:react/recommended',
-        'plugin:@typescript-eslint/recommended'
+    extends: [
+      'eslint:recommended',
+      'plugin:react/recommended',
+      'plugin:@typescript-eslint/recommended',
+      'plugin:react-hooks/recommended',
+      'prettier',
+      'plugin:prettier/recommended',
     ],
-    'parser': '@typescript-eslint/parser',
-    'parserOptions': {
-        'ecmaFeatures': {
-            'jsx': true
+    parser: '@typescript-eslint/parser',
+    overrides: [
+      {
+        env: {
+          node: true,
         },
-        'ecmaVersion': 'latest',
-        'sourceType': 'module'
-    },
-    'plugins': [
-        'react',
-        '@typescript-eslint'
+        files: ['.eslintrc.{js,cjs}'],
+        parserOptions: {
+          sourceType: 'script',
+        },
+      },
     ],
-    'settings': {
-        'react': {
-            'version': 'detect',
-        },
+    plugins: ['react', '@typescript-eslint', 'prettier'],
+    rules: {
+      'no-var': 'error',
+      'no-undef': 'off',
+      'prettier/prettier': 'error',
+      'react/jsx-uses-react': 'off',
+      'react/react-in-jsx-scope': 'off',
+      'react/jsx-no-target-blank': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
+      'react-hooks/exhaustive-deps': 'off',
     },
-    'rules': {
-        'indent': [
-            'error',
-            4
-        ],
-        'linebreak-style': [
-            'error'
-        ],
-        'quotes': [
-            'error',
-            'single'
-        ],
-        'semi': [
-            'error',
-            'never'
-        ],
-        '@typescript-eslint/no-explicit-any': 'off',
-    }
-}
+  };

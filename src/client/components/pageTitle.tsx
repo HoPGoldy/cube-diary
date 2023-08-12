@@ -1,14 +1,14 @@
-import React, { FC } from 'react'
-import { Helmet } from 'react-helmet'
+import React, { FC } from 'react';
+import { Helmet } from 'react-helmet';
 
 interface Props {
-    title: string
+  title: string;
 }
 
 export const PageTitle: FC<Props> = (props) => {
-    return (
-        <Helmet>
-            <title>{props.title} - cubediary</title>
-        </Helmet>
-    )
-}
+  return (
+    <Helmet>
+      <title>{props.title} - cubediary</title>
+    </Helmet>
+  );
+};

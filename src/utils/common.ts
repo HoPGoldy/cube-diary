@@ -4,11 +4,11 @@
  * 导致最多只能打开一个新标签页，所以需要用这种方式来打开多个标签页
  */
 export const openNewTab = (href: string) => {
-    const a = document.createElement('a')
-    a.setAttribute('href', href)
-    a.setAttribute('target', '_blank')
-    a.setAttribute('id', 'startTelMedicine')
-    document.body.appendChild(a)
-    a.click()
-    document.body.removeChild(a)
-}
+  const a = document.createElement('a');
+  a.setAttribute('href', href);
+  a.setAttribute('target', '_blank');
+  a.setAttribute('id', 'startTelMedicine');
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+};

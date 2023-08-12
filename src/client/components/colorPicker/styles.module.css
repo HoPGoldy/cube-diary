@@ -1,21 +1,22 @@
 .colorBtn {
-    @apply w-6 h-6 rounded-full cursor-pointer hover:ring-4 hover:ring-gray-300 dark:ring-neutral-500 transition
+  @apply w-6 h-6 rounded-full cursor-pointer hover:ring-4 hover:ring-gray-300 dark:ring-neutral-500 transition
 }
 
 .selectedColor {
-    @apply ring-4 ring-gray-700 dark:ring-gray-300 hover:ring-gray-700
+  @apply ring-4 ring-gray-700 dark:ring-gray-300 hover:ring-gray-700
 }
 
 .removeBtn {
-    @apply border-2 border-solid border-red-500 relative overflow-hidden;
+  @apply border-2 border-solid border-red-500 relative overflow-hidden;
 }
 
 .removeBtn::after {
-    @apply bg-red-500 absolute;
-    content: "";
-    left: -1px;
-    top: 10px;
-    width: 25px;
-    height: 2px;
-    transform: rotateZ(45deg) scale(1);
+  @apply bg-red-500 absolute;
+
+  content: "";
+  left: -1px;
+  top: 10px;
+  width: 25px;
+  height: 2px;
+  transform: rotateZ(45deg) scale(1);
 }
