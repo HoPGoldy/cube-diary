@@ -1,11 +1,14 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useMemo } from 'react';
 import { ArrowDownOutlined } from '@ant-design/icons';
 import s from './styles.module.css';
 import { Button } from 'antd';
+import { useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs';
 
 const ease = (distance: number) => Math.round(distance / 3);
 
 interface UseDragPointProps {
+  month?: string;
   triggerOffset?: number;
 }
 
@@ -13,7 +16,10 @@ interface UseDragPointProps {
  * 在列表页，滚动到顶和到底时会出现切换到其他月份的提示
  */
 export const useDragPoint = (props?: UseDragPointProps) => {
-  const { triggerOffset = 150 } = props || {};
+  const { triggerOffset = 100, month } = props || {};
+  const navigate = useNavigate();
+  const topDomRef = useRef<HTMLDivElement>(null);
+  const bottomDomRef = useRef<HTMLDivElement>(null);
   /** 是否可以触发刷新 */
   const [canTrigger, setCanTrigger] = useState(false);
   /** 触摸起始点 y 坐标 */
@@ -22,15 +28,19 @@ export const useDragPoint = (props?: UseDragPointProps) => {
   const [showTopPoint, setShowTopPoint] = useState(false);
   /** 是否显示底部提示 */
   const [showBottomPoint, setShowBottomPoint] = useState(false);
-  const topDomRef = useRef<HTMLDivElement>(null);
-  const bottomDomRef = useRef<HTMLDivElement>(null);
+
+  /** 是否显示下个月 */
+  const showNext = useMemo(() => {
+    if (!month) return false;
+    return dayjs(month).add(1, 'month').isBefore(dayjs());
+  }, [month]);
 
   const renderTopPoint = () => {
     return (
       <div
         className={s.topPoint}
         ref={topDomRef}
-        style={{ display: showTopPoint ? 'block' : 'none ' }}>
+        style={{ display: showTopPoint ? 'block' : 'none ', left: 'calc(50vw - 85px)' }}>
         <Button
           type={canTrigger ? 'primary' : 'default'}
           shape='round'
@@ -44,11 +54,16 @@ export const useDragPoint = (props?: UseDragPointProps) => {
   };
 
   const renderBottomPoint = () => {
-    return (
-      <div
-        className={s.bottomPoint}
-        ref={bottomDomRef}
-        style={{ display: showBottomPoint ? 'block' : 'none ' }}>
+    const getBtn = () => {
+      if (!showNext) {
+        return (
+          <Button style={{ left: 'calc(50vw - 176px)' }} shape='round'>
+            已经到底了
+          </Button>
+        );
+      }
+
+      return (
         <Button
           type={canTrigger ? 'primary' : 'default'}
           shape='round'
@@ -57,6 +72,15 @@ export const useDragPoint = (props?: UseDragPointProps) => {
           }>
           {canTrigger ? '松手查看下月日记' : '上划查看下月日记'}
         </Button>
+      );
+    };
+
+    return (
+      <div
+        className={s.bottomPoint}
+        ref={bottomDomRef}
+        style={{ display: showBottomPoint ? 'block' : 'none ', left: 'calc(50vw - 85px)' }}>
+        {getBtn()}
       </div>
     );
   };
@@ -89,7 +113,27 @@ export const useDragPoint = (props?: UseDragPointProps) => {
     setCanTrigger(Math.abs(offset) > triggerOffset);
   };
 
+  const onPrev = () => {
+    if (!month) return;
+    const prevMonth = dayjs(month).subtract(1, 'month').format('YYYYMM');
+    navigate(`/month/${prevMonth}`);
+  };
+
+  const onNext = () => {
+    if (!month) return;
+    const nextMonth = dayjs(month).add(1, 'month').format('YYYYMM');
+    navigate(`/month/${nextMonth}`);
+  };
+
   const onTouchEnd = () => {
+    if (canTrigger) {
+      if (showTopPoint) {
+        onPrev();
+      } else if (showBottomPoint && showNext) {
+        onNext();
+      }
+    }
+
     setCanTrigger(false);
 
     if (topDomRef.current) {

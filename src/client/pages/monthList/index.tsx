@@ -28,8 +28,9 @@ const MonthList: FC = () => {
   const { renderMobileBar } = useOperation();
   /** 列表底部 div 引用 */
   const listBottomRef = useRef<HTMLDivElement>(null);
+
   /** 上下月切换功能 */
-  const { renderBottomPoint, renderTopPoint, listListener } = useDragPoint();
+  const { renderBottomPoint, renderTopPoint, listListener } = useDragPoint({ month });
 
   const onClickDetail: MouseEventHandler<HTMLDivElement> = (e) => {
     const target = e.target as HTMLImageElement;

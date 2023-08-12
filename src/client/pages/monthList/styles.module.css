@@ -61,14 +61,12 @@
 
 .topPoint {
   position: fixed;
-  left: calc(50vw - 106px);
   top: -50px;
   z-index: 2;
 }
 
 .bottomPoint {
   position: fixed;
-  left: calc(50vw - 106px);
   bottom: -50px;
   z-index: 2;
 }
