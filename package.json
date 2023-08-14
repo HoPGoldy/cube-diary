@@ -11,7 +11,7 @@
     "dev": "cross-env NODE_ENV=development concurrently \"npm run server:dev\" \"npm run client:dev\"",
     "build": "npm run lint && npm run server:build && npm run client:build",
     "start": "node dist/index.js",
-    "lint": "eslint src --ext .ts --ext .tsx ** stylelint \"src/**/*.css\"",
+    "lint": "eslint src --ext .ts --ext .tsx && stylelint \"src/**/*.css\"",
     "server:dev": "nodemon -e ts --watch src --ignore src/client --exec ts-node -r tsconfig-paths/register --project tsconfig.server.json --files src",
     "server:build": "tsc --project tsconfig.server.json && tsc-alias -p tsconfig.server.json",
     "client:dev": "vite --host",
