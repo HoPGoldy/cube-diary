@@ -1,25 +1,13 @@
-import React, { FC } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { PageContent, PageAction, ActionButton } from '../layouts/pageWithAction';
+import React from 'react';
 import { Card } from 'antd';
 import { GithubOutlined, SendOutlined } from '@ant-design/icons';
-import { Cell } from '../components/cell';
-import { PageTitle } from '../components/pageTitle';
-import { MobileArea } from '../layouts/responsive';
+import { Cell } from '@/client/components/cell';
 
-const About: FC = () => {
-  const navigate = useNavigate();
-
-  return (
-    <>
-      <PageTitle title='关于应用' />
-      <PageContent>
-        <div className='p-4 text-base md:w-1/2 mx-auto'>
-          <MobileArea>
-            <Card size='small' className='text-center text-base font-bold'>
-              关 于
-            </Card>
-          </MobileArea>
+export const useAboutContent = () => {
+  const renderContent = () => {
+    return (
+      <>
+        <div className='text-base mx-auto'>
           <Card size='small' className='mt-4 text-base'>
             又快又好用的简单日记本 APP。
             <br />
@@ -54,15 +42,12 @@ const About: FC = () => {
           </Card>
         </div>
 
-        <div className='text-center absolute w-full bottom-0 text-mainColor mb-0 md:mb-4 dark:text-gray-200'>
-          Powered by 💗 Yuzizi
+        <div className='text-center w-full bottom-0 text-mainColor mt-4 md:mb-4 dark:text-gray-200'>
+          {'Powered by 💗 Yuzizi'}
         </div>
-      </PageContent>
-      <PageAction>
-        <ActionButton onClick={() => navigate(-1)}>返回</ActionButton>
-      </PageAction>
-    </>
-  );
-};
+      </>
+    );
+  };
 
-export default About;
+  return { renderContent };
+};

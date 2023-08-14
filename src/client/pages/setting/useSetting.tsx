@@ -11,15 +11,25 @@ import {
 } from '@ant-design/icons';
 import { useJwtPayload } from '@/client/utils/jwt';
 import { useAtomValue } from 'jotai';
+import { useChangePassword } from '../changePassword';
+import { useNavigate } from 'react-router-dom';
+import { useAbout } from '../about';
+import { useUserManage } from '../userInvite';
 
 export interface SettingLinkItem {
   label: string;
   icon: React.ReactNode;
-  link: string;
-  onClick?: () => void;
+  onClick: () => void;
 }
 
 export const useSetting = () => {
+  const navigate = useNavigate();
+  /** 修改密码功能 */
+  const changePassword = useChangePassword();
+  /** 用户管理 */
+  const userManage = useUserManage();
+  /** 关于页面 */
+  const about = useAbout();
   const userInfo = useAtomValue(stateUser);
   // 数量统计接口
   const { data: countInfo } = useQueryDiaryCount();
@@ -30,13 +40,17 @@ export const useSetting = () => {
 
   const settingConfig = useMemo(() => {
     const list = [
-      { label: '修改密码', icon: <LockOutlined />, link: '/changePassword' },
+      {
+        label: '修改密码',
+        icon: <LockOutlined />,
+        onClick: changePassword.showModal,
+      },
       jwtPayload?.isAdmin
-        ? { label: '用户管理', icon: <ContactsOutlined />, link: '/userInvite' }
+        ? { label: '用户管理', icon: <ContactsOutlined />, onClick: userManage.showModal }
         : null,
-      { label: '导入', icon: <DatabaseOutlined />, link: '/importDiary' },
-      { label: '导出', icon: <TagsOutlined />, link: '/exportDiary' },
-      { label: '关于', icon: <SmileOutlined />, link: '/about' },
+      { label: '导入', icon: <DatabaseOutlined />, onClick: () => navigate('/importDiary') },
+      { label: '导出', icon: <TagsOutlined />, onClick: () => navigate('/exportDiary') },
+      { label: '关于', icon: <SmileOutlined />, onClick: about.showModal },
     ].filter(Boolean) as SettingLinkItem[];
 
     return list;
@@ -57,6 +71,16 @@ export const useSetting = () => {
   const userName = userInfo?.username || '---';
   const userTheme = getUserTheme(userInfo);
 
+  const renderModal = () => {
+    return (
+      <>
+        {changePassword.renderModal()}
+        {userManage.renderModal()}
+        {about.renderModal()}
+      </>
+    );
+  };
+
   return {
     diaryCount,
     diaryLength,
@@ -65,5 +89,6 @@ export const useSetting = () => {
     settingConfig,
     userTheme,
     onSwitchTheme,
+    renderModal,
   };
 };

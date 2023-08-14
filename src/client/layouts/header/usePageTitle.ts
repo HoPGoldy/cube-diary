@@ -5,9 +5,8 @@ import { useLocation, useParams } from 'react-router-dom';
 const pageTitle: Record<string, string> = {
   '/exportDiary': '导出笔记',
   '/importDiary': '导入笔记',
-  '/search': '搜索笔记',
   '/userInvite': '用户管理',
-  '/about': '关于',
+  '/search': '搜索笔记',
 };
 
 export const usePageTitle = () => {

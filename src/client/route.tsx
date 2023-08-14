@@ -36,15 +36,6 @@ export const routes = createHashRouter([
           { path: '/importDiary', element: lazyLoad(() => import('./pages/importDiary')) },
           // 导出
           { path: '/exportDiary', element: lazyLoad(() => import('./pages/exportDiary')) },
-          // 修改密码
-          {
-            path: '/changePassword',
-            element: lazyLoad(() => import('./pages/changePassword/mobile')),
-          },
-          // 邀请管理
-          { path: 'userInvite', element: lazyLoad(() => import('./pages/userInvite')) },
-          // 关于应用
-          { path: '/about', element: lazyLoad(() => import('./pages/about')) },
         ],
         element: (
           <LoginAuth>

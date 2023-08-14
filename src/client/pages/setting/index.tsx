@@ -1,8 +1,6 @@
 import React, { FC, Fragment } from 'react';
-import { Link } from 'react-router-dom';
 import { Button, Card, Col, Row, Statistic, Switch } from 'antd';
 import { SnippetsOutlined, HighlightOutlined, CloseCircleOutlined } from '@ant-design/icons';
-import { useChangePassword } from '../changePassword';
 import { ActionButton, PageAction, PageContent } from '@/client/layouts/pageWithAction';
 import { UserOutlined, RightOutlined, LogoutOutlined } from '@ant-design/icons';
 import { Cell, SplitLine } from '@/client/components/cell';
@@ -15,29 +13,15 @@ interface DesktopProps {
 }
 
 export const DesktopSetting: FC<DesktopProps> = (props) => {
-  /** 修改密码功能 */
-  const { renderChangePasswordModal, showChangePassword } = useChangePassword();
   /** 设置功能 */
   const setting = useSetting();
 
   const renderConfigItem = (item: SettingLinkItem) => {
-    if (item.link === '/changePassword') {
-      return (
-        <Col span={24} key={item.link}>
-          <Button block onClick={showChangePassword} icon={item.icon}>
-            {item.label}
-          </Button>
-        </Col>
-      );
-    }
-
     return (
-      <Col span={24} key={item.link}>
-        <Link to={item.link}>
-          <Button block icon={item.icon}>
-            {item.label}
-          </Button>
-        </Link>
+      <Col span={24} key={item.label}>
+        <Button block icon={item.icon} onClick={item.onClick}>
+          {item.label}
+        </Button>
       </Col>
     );
   };
@@ -76,7 +60,7 @@ export const DesktopSetting: FC<DesktopProps> = (props) => {
           </Button>
         </Col>
       </Row>
-      {renderChangePasswordModal()}
+      {setting.renderModal()}
     </div>
   );
 };
@@ -91,17 +75,16 @@ export const MobileSetting: FC<MobileProps> = (props) => {
 
   const renderConfigItem = (item: SettingLinkItem, index: number) => {
     return (
-      <Fragment key={item.link}>
-        <Link to={item.link}>
-          <Cell
-            title={
-              <div>
-                {item.icon} &nbsp;{item.label}
-              </div>
-            }
-            extra={<RightOutlined />}
-          />
-        </Link>
+      <Fragment key={item.label}>
+        <Cell
+          title={
+            <div>
+              {item.icon} &nbsp;{item.label}
+            </div>
+          }
+          onClick={item.onClick}
+          extra={<RightOutlined />}
+        />
         {index !== setting.settingConfig.length - 1 && <SplitLine />}
       </Fragment>
     );
@@ -175,6 +158,7 @@ export const MobileSetting: FC<MobileProps> = (props) => {
               extra={<LogoutOutlined />}
             />
           </Card>
+          {setting.renderModal()}
         </div>
       </PageContent>
 
