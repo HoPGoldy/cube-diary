@@ -11,26 +11,31 @@ import {
 } from '@ant-design/icons';
 import { useJwtPayload } from '@/client/utils/jwt';
 import { useAtomValue } from 'jotai';
-import { useChangePassword } from '../changePassword';
-import { useNavigate } from 'react-router-dom';
-import { useAbout } from '../about';
-import { useUserManage } from '../userInvite';
+import useChangePassword from '../changePassword';
+import useAbout from '../about';
+import useUserManage from '../userInvite';
+import useImportDiary from '../importDiary';
+import useExportDiary from '../exportDiary';
 
 export interface SettingLinkItem {
   label: string;
   icon: React.ReactNode;
+  hidden?: boolean;
   onClick: () => void;
 }
 
 export const useSetting = () => {
-  const navigate = useNavigate();
+  const userInfo = useAtomValue(stateUser);
   /** 修改密码功能 */
   const changePassword = useChangePassword();
   /** 用户管理 */
   const userManage = useUserManage();
   /** 关于页面 */
   const about = useAbout();
-  const userInfo = useAtomValue(stateUser);
+  /** 日记导入 */
+  const importDiary = useImportDiary();
+  /** 日记导出 */
+  const exportDiary = useExportDiary();
   // 数量统计接口
   const { data: countInfo } = useQueryDiaryCount();
   /** 是否是管理员 */
@@ -39,19 +44,22 @@ export const useSetting = () => {
   const { mutateAsync: updateAppTheme } = useSetTheme();
 
   const settingConfig = useMemo(() => {
-    const list = [
+    const list: SettingLinkItem[] = [
       {
         label: '修改密码',
         icon: <LockOutlined />,
         onClick: changePassword.showModal,
       },
-      jwtPayload?.isAdmin
-        ? { label: '用户管理', icon: <ContactsOutlined />, onClick: userManage.showModal }
-        : null,
-      { label: '导入', icon: <DatabaseOutlined />, onClick: () => navigate('/importDiary') },
-      { label: '导出', icon: <TagsOutlined />, onClick: () => navigate('/exportDiary') },
+      {
+        label: '用户管理',
+        icon: <ContactsOutlined />,
+        onClick: userManage.showModal,
+        hidden: !jwtPayload?.isAdmin,
+      },
+      { label: '导入', icon: <DatabaseOutlined />, onClick: importDiary.showModal },
+      { label: '导出', icon: <TagsOutlined />, onClick: exportDiary.showModal },
       { label: '关于', icon: <SmileOutlined />, onClick: about.showModal },
-    ].filter(Boolean) as SettingLinkItem[];
+    ].filter((i) => !i.hidden);
 
     return list;
   }, [jwtPayload?.isAdmin]);
@@ -76,6 +84,8 @@ export const useSetting = () => {
       <>
         {changePassword.renderModal()}
         {userManage.renderModal()}
+        {importDiary.renderModal()}
+        {exportDiary.renderModal()}
         {about.renderModal()}
       </>
     );

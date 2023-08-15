@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { FC } from 'react';
 import Loading from '../../layouts/loading';
-import { Col, Row, Button, List, Card } from 'antd';
+import { Col, Row, Button, List, Card, Space } from 'antd';
 import { UserInviteFrontendDetail } from '@/types/userInvite';
 import {
   useAddInvite,
@@ -12,6 +12,10 @@ import copy from 'copy-to-clipboard';
 import { messageSuccess, messageWarning } from '@/client/utils/message';
 import dayjs from 'dayjs';
 import { useJwtPayload } from '@/client/utils/jwt';
+import { SettingContainerProps } from '@/client/components/settingContainer';
+import { useIsMobile } from '@/client/layouts/responsive';
+import { ActionButton, ActionIcon, PageAction, PageContent } from '@/client/layouts/pageWithAction';
+import { LeftOutlined } from '@ant-design/icons';
 
 const getStatusColor = (item: UserInviteFrontendDetail) => {
   if (!item.username) return 'bg-yellow-500';
@@ -19,7 +23,8 @@ const getStatusColor = (item: UserInviteFrontendDetail) => {
   return 'bg-green-500';
 };
 
-export const useUserManageContent = () => {
+export const Content: FC<SettingContainerProps> = (props) => {
+  const isMobile = useIsMobile();
   /** 获取用户列表 */
   const { data: inviteListResp, isLoading } = useQueryInviteList();
   /** 新增邀请 */
@@ -160,5 +165,39 @@ export const useUserManageContent = () => {
     );
   };
 
-  return { onAddInvite, isAddingInvite, renderContent };
+  if (!isMobile) {
+    return (
+      <>
+        {renderContent()}
+        <div className='flex flex-row-reverse mt-4'>
+          <Space>
+            <Button onClick={props.onClose}>返回</Button>
+            <Button type='primary' onClick={onAddInvite} loading={isAddingInvite}>
+              新增邀请码
+            </Button>
+          </Space>
+        </div>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <PageContent>
+        <div className='m-4 md:m-0'>
+          <Card size='small' className='text-center text-base font-bold mb-4'>
+            {props.title}
+          </Card>
+          {renderContent()}
+        </div>
+      </PageContent>
+
+      <PageAction>
+        <ActionIcon icon={<LeftOutlined />} onClick={props.onClose} />
+        <ActionButton onClick={onAddInvite} loading={isAddingInvite}>
+          新增邀请码
+        </ActionButton>
+      </PageAction>
+    </>
+  );
 };

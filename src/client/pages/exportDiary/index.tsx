@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Content } from './content';
 import { SettingContainer, SettingContainerProps } from '@/client/components/settingContainer';
 
-const TITLE = '修改密码';
+const TITLE = '日记导出';
 
 export default () => {
   /** 是否显示弹窗 */
@@ -16,6 +16,7 @@ export default () => {
       title: TITLE,
       open: visible,
       onClose: () => setVisible(false),
+      modalProps: { width: '80%' },
     };
 
     return (

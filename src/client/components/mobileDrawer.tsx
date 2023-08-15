@@ -56,6 +56,7 @@ export const MobilePageDrawer: FC<MobilePageDrawerProps> = (props) => {
       closable={false}
       bodyStyle={{ padding: 0 }}
       placement='left'
+      destroyOnClose
       width='100%'
       {...restProps}>
       <PageContent>

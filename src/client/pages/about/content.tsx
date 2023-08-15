@@ -1,9 +1,14 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { Card } from 'antd';
 import { GithubOutlined, SendOutlined } from '@ant-design/icons';
 import { Cell } from '@/client/components/cell';
+import { SettingContainerProps } from '@/client/components/settingContainer';
+import { useIsMobile } from '@/client/layouts/responsive';
+import { ActionButton, PageAction, PageContent } from '@/client/layouts/pageWithAction';
 
-export const useAboutContent = () => {
+export const Content: FC<SettingContainerProps> = (props) => {
+  const isMobile = useIsMobile();
+
   const renderContent = () => {
     return (
       <>
@@ -49,5 +54,24 @@ export const useAboutContent = () => {
     );
   };
 
-  return { renderContent };
+  if (!isMobile) {
+    return renderContent();
+  }
+
+  return (
+    <>
+      <PageContent>
+        <div className='m-4 md:m-0'>
+          <Card size='small' className='text-center text-base font-bold mb-4'>
+            {props.title}
+          </Card>
+          {renderContent()}
+        </div>
+      </PageContent>
+
+      <PageAction>
+        <ActionButton onClick={props.onClose}>返回</ActionButton>
+      </PageAction>
+    </>
+  );
 };

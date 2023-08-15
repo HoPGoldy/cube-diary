@@ -32,10 +32,6 @@ export const routes = createHashRouter([
           { path: '/diary/:date', element: <DiaryEdit /> },
           // 日记搜索
           { path: '/search', element: <Search /> },
-          // 导入
-          { path: '/importDiary', element: lazyLoad(() => import('./pages/importDiary')) },
-          // 导出
-          { path: '/exportDiary', element: lazyLoad(() => import('./pages/exportDiary')) },
         ],
         element: (
           <LoginAuth>

@@ -1,13 +1,16 @@
-import React from 'react';
-import { Col, Form, Input, Row } from 'antd';
+import React, { FC } from 'react';
+import { Button, Card, Col, Form, Input, Row, Space } from 'antd';
 import { useChangePassword } from '@/client/services/user';
 import { sha } from '@/utils/crypto';
 import { logout } from '@/client/store/user';
 import { messageSuccess } from '@/client/utils/message';
 import { useIsMobile } from '@/client/layouts/responsive';
 import s from './styles.module.css';
+import { LeftOutlined } from '@ant-design/icons';
+import { SettingContainerProps } from '@/client/components/settingContainer';
+import { ActionButton, ActionIcon, PageAction, PageContent } from '@/client/layouts/pageWithAction';
 
-export const useChangePasswordContent = () => {
+export const Content: FC<SettingContainerProps> = (props) => {
   const [form] = Form.useForm();
   const isMobile = useIsMobile();
   const { mutateAsync: postChangePassword, isLoading: isChangingPassword } = useChangePassword();
@@ -85,5 +88,41 @@ export const useChangePasswordContent = () => {
     );
   };
 
-  return { onSavePassword, isChangingPassword, renderContent };
+  if (!isMobile) {
+    return (
+      <>
+        {renderContent()}
+        <div className='flex flex-row-reverse mt-4'>
+          <Space>
+            <Button onClick={props.onClose}>返回</Button>
+            <Button type='primary' onClick={onSavePassword} loading={isChangingPassword}>
+              修改密码
+            </Button>
+          </Space>
+        </div>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <PageContent>
+        <div className='m-4 md:m-0'>
+          <Card size='small' className='text-center text-base font-bold mb-4'>
+            {props.title}
+          </Card>
+          <Card size='small' className='text-base'>
+            {renderContent()}
+          </Card>
+        </div>
+      </PageContent>
+
+      <PageAction>
+        <ActionIcon icon={<LeftOutlined />} onClick={props.onClose} />
+        <ActionButton onClick={onSavePassword} loading={isChangingPassword}>
+          修改密码
+        </ActionButton>
+      </PageAction>
+    </>
+  );
 };

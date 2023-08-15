@@ -1,164 +1,210 @@
-import React from 'react';
-import Loading from '../../layouts/loading';
-import { Col, Row, Button, List, Card } from 'antd';
-import { UserInviteFrontendDetail } from '@/types/userInvite';
-import {
-  useAddInvite,
-  useBanUser,
-  useDeleteInvite,
-  useQueryInviteList,
-} from '@/client/services/userInvite';
-import copy from 'copy-to-clipboard';
-import { messageSuccess, messageWarning } from '@/client/utils/message';
-import dayjs from 'dayjs';
-import { useJwtPayload } from '@/client/utils/jwt';
+import React, { FC, useState } from 'react';
+import { Button, Card, Col, DatePicker, Form, Input, Radio, Row, Space } from 'antd';
+import { useExportDiary } from '@/client/services/diary';
+import s from './styles.module.css';
 
-const getStatusColor = (item: UserInviteFrontendDetail) => {
-  if (!item.username) return 'bg-yellow-500';
-  if (item.isBanned) return 'bg-red-500';
-  return 'bg-green-500';
+import dayjs, { Dayjs } from 'dayjs';
+import { DiaryExportReqData } from '@/types/diary';
+import Preview from '../monthList/preview';
+import { ActionButton, ActionIcon, PageAction, PageContent } from '@/client/layouts/pageWithAction';
+import { LeftOutlined } from '@ant-design/icons';
+import { SettingContainerProps } from '@/client/components/settingContainer';
+import { messageSuccess } from '@/client/utils/message';
+import { useIsMobile } from '@/client/layouts/responsive';
+
+type JsonExportForm = Omit<DiaryExportReqData, 'startDate' | 'endDate'> & {
+  startDate: Dayjs;
+  endDate: Dayjs;
 };
 
-export const useUserManageContent = () => {
-  /** 获取用户列表 */
-  const { data: inviteListResp, isLoading } = useQueryInviteList();
-  /** 新增邀请 */
-  const { mutateAsync: addInvite, isLoading: isAddingInvite } = useAddInvite();
-  /** 删除邀请 */
-  const { mutateAsync: deleteInvite, isLoading: isDeleteingInvite } = useDeleteInvite();
-  /** 封禁用户 */
-  const { mutateAsync: banUser, isLoading: isBanningUser } = useBanUser();
-  /** 是否为管理员 */
-  const payload = useJwtPayload();
+const saveAsJson = (data: any, fileName = 'data.json') => {
+  const dataStr = JSON.stringify(data);
+  const blob = new Blob([dataStr], { type: 'text/json' });
+  const a = document.createElement('a');
+  a.download = fileName;
+  a.href = URL.createObjectURL(blob);
+  a.dataset.downloadurl = ['text/json', a.download, a.href].join(':');
+  a.click();
+};
 
-  /** 复制注册链接 */
-  const copyRegisterLink = (inviteCode: string) => {
-    const link = `${location.origin}${location.pathname}#/register/${inviteCode}`;
-    copy(link);
-    messageSuccess('复制成功');
+/**
+ * 为导入导出 json 创建示例
+ */
+const createExample = (formValues: JsonExportForm): string => {
+  const newExamples = Array.from({ length: 3 }).map((_, index) => {
+    const date = dayjs().subtract(index, 'd').startOf('day');
+    return {
+      [formValues.dateKey || 'date']: formValues.dateFormatter
+        ? date.format(formValues.dateFormatter)
+        : date.valueOf(),
+      [formValues.contentKey || 'content']: `这是 ${date.format('YYYY 年 MM 月 DD 日的一篇日记')}`,
+      [formValues.colorKey || 'color']: `c0${index + 1}`,
+    };
+  });
+
+  return '```json\n' + JSON.stringify(newExamples, null, 2) + '\n```';
+};
+
+const getFormInitialValues = (): JsonExportForm => {
+  return {
+    range: 'part',
+    startDate: dayjs().subtract(1, 'month'),
+    endDate: dayjs(),
+    dateKey: 'date',
+    contentKey: 'content',
+    colorKey: 'color',
+    dateFormatter: 'YYYY-MM-DD',
+  };
+};
+
+const initialValues = getFormInitialValues();
+
+export const Content: FC<SettingContainerProps> = (props) => {
+  const [form] = Form.useForm();
+  const isMobile = useIsMobile();
+  /** 和用户配置项相符的示例 */
+  const [example, setExample] = useState(() => createExample(getFormInitialValues()));
+  /** 上传接口 */
+  const { mutateAsync: exportJson, isLoading } = useExportDiary();
+  /** 是否为范围导出 */
+  const isRangeExport = Form.useWatch('range', form) === 'part';
+
+  const onFormValueChange = (values: Partial<JsonExportForm>, allValues: JsonExportForm) => {
+    const newExample = createExample(allValues);
+    setExample(newExample);
   };
 
-  /** 封禁用户 */
-  const onBanClick = async (item: UserInviteFrontendDetail) => {
-    if (!item.userId) {
-      messageWarning('该邀请码还未被使用');
-      return;
+  const onExport = async () => {
+    const values = await form.validateFields();
+    const { startDate, endDate, ...rest } = values;
+    const reqData: DiaryExportReqData = { ...rest };
+
+    if (reqData.range === 'part') {
+      reqData.startDate = startDate.format('YYYY-MM-DD');
+      reqData.endDate = endDate.format('YYYY-MM-DD');
     }
 
-    const isBanned = !item.isBanned;
-    await banUser({ userId: item.userId, isBanned });
-    messageSuccess(isBanned ? '用户已封禁' : '用户已解禁');
-  };
+    const resp = await exportJson(reqData);
+    messageSuccess('导出成功');
+    saveAsJson(resp, 'diary.json');
 
-  const onAddInvite = async () => {
-    const resp = await addInvite();
     return resp.code === 200;
   };
 
-  /** 渲染每个邀请卡片的操作栏 */
-  const renderActionBar = (item: UserInviteFrontendDetail) => {
-    if (!item.username)
-      return (
-        <>
-          <Col flex='1'>
-            <Button block onClick={() => copyRegisterLink(item.inviteCode)}>
-              复制注册链接
-            </Button>
-          </Col>
-          <Col flex='1'>
-            <Button block danger onClick={() => deleteInvite(item.id)} loading={isDeleteingInvite}>
-              删除邀请码
-            </Button>
-          </Col>
-        </>
-      );
-
-    if (item.isBanned)
-      return (
-        <Col flex='1'>
-          <Button block onClick={() => onBanClick(item)} loading={isBanningUser}>
-            解禁用户
-          </Button>
-        </Col>
-      );
-    else
-      return (
-        <Col flex='1'>
-          <Button block danger onClick={() => onBanClick(item)} loading={isBanningUser}>
-            封禁用户
-          </Button>
-        </Col>
-      );
-  };
-
-  const renderInviteItem = (item: UserInviteFrontendDetail) => {
-    const statusColor = getStatusColor(item);
-
-    return (
-      <List.Item>
-        <Card
-          title={item.username ? `已使用 - ${item.username}` : '未使用'}
-          size='small'
-          extra={<div className={`w-4 h-4 rounded-full ${statusColor}`}></div>}>
-          <div className=''>
-            <Row>
-              <Col span={24}>
-                <div>
-                  邀请码：
-                  <span className='float-right'>{item.inviteCode}</span>
-                </div>
-              </Col>
-              <Col span={24}>
-                <div>
-                  创建时间：
-                  <span className='float-right'>
-                    {dayjs(item.createTime).format('YYYY-MM-DD HH:mm:ss')}
-                  </span>
-                </div>
-              </Col>
-              {item.username && (
-                <>
-                  <Col span={24}>
-                    <div>
-                      用户名：
-                      <span className='float-right'>{item.username}</span>
-                    </div>
-                  </Col>
-                  <Col span={24}>
-                    <div>
-                      使用时间：
-                      <span className='float-right'>
-                        {dayjs(item.useTime).format('YYYY-MM-DD HH:mm:ss')}
-                      </span>
-                    </div>
-                  </Col>
-                </>
-              )}
-            </Row>
-          </div>
-
-          <Row gutter={[8, 8]} className='mt-2'>
-            {renderActionBar(item)}
-          </Row>
-        </Card>
-      </List.Item>
-    );
-  };
-
   const renderContent = () => {
-    if (isLoading) return <Loading />;
-    if (!payload.isAdmin) return null;
-
     return (
-      <div className='mt-6'>
-        <List
-          grid={{ gutter: 16, column: 1 }}
-          dataSource={inviteListResp?.data || []}
-          renderItem={renderInviteItem}
-        />
-      </div>
+      <Row gutter={[16, 16]}>
+        <Col xs={24} md={24} lg={12}>
+          <Card size='small' title='导出配置'>
+            <Form
+              className={s.importDiaryBox}
+              form={form}
+              initialValues={initialValues}
+              onValuesChange={onFormValueChange}
+              labelAlign='left'>
+              <Row gutter={[16, 16]}>
+                <Col span={9}>导出范围</Col>
+                <Col span={15}>
+                  <Form.Item name='range' noStyle>
+                    <Radio.Group className='float-right'>
+                      <Radio value='all'>全部</Radio>
+                      <Radio value='part'>部分</Radio>
+                    </Radio.Group>
+                  </Form.Item>
+                </Col>
+                {isRangeExport && (
+                  <>
+                    <Col span={9}>开始日期</Col>
+                    <Col span={15}>
+                      <Form.Item
+                        name='startDate'
+                        noStyle
+                        rules={[{ required: true, message: '请选择开始日期' }]}>
+                        <DatePicker className='w-full' />
+                      </Form.Item>
+                    </Col>
+                    <Col span={9}>结束日期</Col>
+                    <Col span={15}>
+                      <Form.Item
+                        name='endDate'
+                        noStyle
+                        rules={[{ required: true, message: '请选择结束日期' }]}>
+                        <DatePicker className='w-full' />
+                      </Form.Item>
+                    </Col>
+                  </>
+                )}
+                <Col span={9}>日期字段名</Col>
+                <Col span={15}>
+                  <Form.Item name='dateKey' noStyle>
+                    <Input placeholder='默认使用 date' />
+                  </Form.Item>
+                </Col>
+                <Col span={9}>日期解析</Col>
+                <Col span={15}>
+                  <Form.Item name='dateFormatter' noStyle>
+                    <Input placeholder='默认解析毫秒时间戳' />
+                  </Form.Item>
+                </Col>
+                <Col span={9}>正文字段名</Col>
+                <Col span={15}>
+                  <Form.Item name='contentKey' noStyle>
+                    <Input placeholder='默认使用 content' />
+                  </Form.Item>
+                </Col>
+                <Col span={9}>颜色字段名</Col>
+                <Col span={15}>
+                  <Form.Item name='colorKey' noStyle>
+                    <Input placeholder='默认使用 color' />
+                  </Form.Item>
+                </Col>
+              </Row>
+            </Form>
+          </Card>
+        </Col>
+
+        <Col xs={24} md={24} lg={12}>
+          <Card size='small' className={s.previewArea} title='示例' extra='将导出为以下格式'>
+            <Preview value={example}></Preview>
+          </Card>
+        </Col>
+      </Row>
     );
   };
 
-  return { onAddInvite, isAddingInvite, renderContent };
+  if (!isMobile) {
+    return (
+      <>
+        {renderContent()}
+        <div className='flex flex-row-reverse mt-4'>
+          <Space>
+            <Button onClick={props.onClose}>返回</Button>
+            <Button type='primary' onClick={onExport} loading={isLoading}>
+              导出
+            </Button>
+          </Space>
+        </div>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <PageContent>
+        <div className='m-4 md:m-0'>
+          <Card size='small' className='text-center text-base font-bold mb-4'>
+            {props.title}
+          </Card>
+          {renderContent()}
+        </div>
+      </PageContent>
+
+      <PageAction>
+        <ActionIcon icon={<LeftOutlined />} onClick={props.onClose} />
+        <ActionButton onClick={onExport} loading={isLoading}>
+          导出
+        </ActionButton>
+      </PageAction>
+    </>
+  );
 };
