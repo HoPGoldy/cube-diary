@@ -1,9 +1,10 @@
 import React, { FC, PropsWithChildren } from 'react';
 import { Drawer, DrawerProps, Modal, ModalProps } from 'antd';
 import { useIsMobile } from '@/client/layouts/responsive';
+import { PageTitle } from '../pageTitle';
 
 export interface SettingContainerProps extends PropsWithChildren {
-  title: string | React.ReactNode;
+  title: string;
   open: boolean;
   onClose: () => void;
   drawerProps?: DrawerProps;
@@ -28,6 +29,7 @@ export const SettingContainer: FC<SettingContainerProps> = (props) => {
         destroyOnClose
         width='100%'
         {...drawerProps}>
+        <PageTitle title={title} />
         {children}
       </Drawer>
     );
@@ -41,6 +43,7 @@ export const SettingContainer: FC<SettingContainerProps> = (props) => {
       title={title}
       destroyOnClose
       {...modalProps}>
+      <PageTitle title={title} />
       {children}
     </Modal>
   );

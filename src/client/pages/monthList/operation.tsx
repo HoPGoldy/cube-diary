@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { ActionButton, ActionIcon } from '@/client/layouts/pageWithAction';
 import { messageWarning } from '@/client/utils/message';
 import {
@@ -28,17 +28,30 @@ export const getDiaryWriteUrl = (datetime?: number) => {
 
 const MONTH_LIST = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 
+const SETTING_PARAM_KEY = 'showSetting';
+
 export const useOperation = () => {
   const params = useParams();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   /** 是否展示设置 */
-  const [showSetting, setShowSetting] = useState(false);
+  const settingVisible = searchParams.get(SETTING_PARAM_KEY) === '1';
   /** 是否显示月份选择器 */
   const [showMonthPicker, setShowMonthPicker] = useState(false);
   /** 当前年份 */
   const [currentYear, setCurrentYear] = useState(dayjs(params.month).year());
   /** 当前显示的月份列表 */
   const [currentMonthList, setCurrentMonthList] = useState<Dayjs[]>([]);
+
+  const showSetting = () => {
+    searchParams.set(SETTING_PARAM_KEY, '1');
+    setSearchParams(searchParams);
+  };
+
+  const closeSetting = () => {
+    searchParams.delete(SETTING_PARAM_KEY);
+    setSearchParams(searchParams, { replace: true });
+  };
 
   useEffect(() => {
     setCurrentYear(dayjs(params.month).year());
@@ -150,15 +163,15 @@ export const useOperation = () => {
       <>
         {renderMonthPicker()}
         <Drawer
-          open={showSetting}
-          onClose={() => setShowSetting(false)}
+          open={settingVisible}
+          onClose={closeSetting}
           closable={false}
           placement='left'
           className={s.settingDrawer}
           width='100%'>
-          <MobileSetting onBack={() => setShowSetting(false)} />
+          <MobileSetting onBack={closeSetting} />
         </Drawer>
-        <ActionIcon icon={<SettingOutlined />} onClick={() => setShowSetting(true)} />
+        <ActionIcon icon={<SettingOutlined />} onClick={showSetting} />
         <ActionIcon icon={<CalendarOutlined />} onClick={() => setShowMonthPicker(true)} />
         <Link to='/search'>
           <ActionIcon icon={<SearchOutlined />} />
