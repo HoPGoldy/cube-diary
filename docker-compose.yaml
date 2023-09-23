@@ -1,0 +1,14 @@
+version: '3'
+services:
+  cube-diary:
+    image: node:slim
+    container_name: cube-diary
+    ports:
+      - 3700:3700
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: >
+      sh -c "cd /app &&
+             npm install -g cube-diary &&
+             cube-diary run"
