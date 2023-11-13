@@ -1,0 +1,43 @@
+name: release
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build-publish-npm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org/
+      - run: yarn install
+      - run: yarn run build
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+
+  build-publish-docker:
+    needs: build-publish-npm
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Get Version
+        uses: rexdefuror/read-package-json@v1.0.5
+
+      - name: Check docker version
+        run: docker -v
+
+      - name: Build the Docker image
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/cube-diary:${{ env.PACKAGE_VERSION }} .
+
+      - name: Log in to Docker Hub
+        run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Push the Docker image
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/cube-diary:${{ env.PACKAGE_VERSION }}
