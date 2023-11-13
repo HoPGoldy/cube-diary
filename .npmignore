@@ -9,3 +9,4 @@ vite.config.ts
 .eslintrc.js
 iconfont.js
 /index.html
+/.storage

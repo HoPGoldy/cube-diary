@@ -53,12 +53,13 @@ export const createDiaryService = (props: Props) => {
       .where('createUserId', userId)
       .andWhereBetween('date', queryRange);
 
-    const originDiaryEnums = keyBy(originDiarys, (diary) => diary.date);
+    const originDiaryEnums = keyBy(originDiarys, (diary) => dayjs(diary.date).format('YYYYMMDD'));
     const existDateList = getMonthExistDate(month);
 
-    const data: DiaryQueryResp = existDateList.map((date) => {
-      if (date.toString() in originDiaryEnums) return originDiaryEnums[date];
-      return { date, undone: true };
+    const data: DiaryQueryResp = existDateList.map((timestamp) => {
+      const date = dayjs(timestamp).format('YYYYMMDD');
+      if (date in originDiaryEnums) return originDiaryEnums[date];
+      return { date: timestamp, undone: true };
     });
 
     return { code: 200, data };
