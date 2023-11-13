@@ -36,7 +36,19 @@
 
 ## 部署
 
-cube-diary 在开发时就以简单部署为目标，不需要配置数据库，不需要安装任何软件。仅需 node（*16+*）环境即可运行。
+### 1. docker 安装（推荐）
+
+cube-diary 不需要 docker compose，单容器即可运行：
+
+```bash
+docker run -d -p 3700:3700 -v ~/cube-diary-storage:/app hopgoldy/cube-diary:1.0.4
+```
+
+执行后数据将会存放在 `~/cube-diary-storage` 目录。
+
+### 2. npm 安装
+
+cube-diary 在开发时就以简单部署为目标，不需要配置数据库，不需要安装任何软件。仅需 node（_16+_）环境即可运行。
 
 ```bash
 # 安装项目
@@ -51,7 +63,7 @@ cube-diary run
 
 服务将默认开启在端口 3700 上，可以通过 `cube-diary run --port=3701` 修改端口。
 
-*使用 `-h` 参数查看更多配置*
+_使用 `-h` 参数查看更多配置_
 
 ## 数据迁移
 
