@@ -92,8 +92,10 @@ interface ReplayAttackData {
  * 从请求中获取防重放攻击数据
  */
 export const getReplayAttackData = (ctx: AppKoaContext): ReplayAttackData | undefined => {
+  const url = 'api' + ctx.url.split('/api')[1].split('?')[0];
+
   const data = {
-    url: 'api' + ctx.url.split('/api')[1],
+    url,
     timestamp: Number(ctx.get('X-cubnote-temestamp')),
     nonce: ctx.get('X-cubnote-nonce'),
     signature: ctx.get('X-cubnote-signature'),
