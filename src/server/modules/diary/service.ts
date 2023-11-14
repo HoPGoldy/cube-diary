@@ -1,9 +1,7 @@
 import { DatabaseAccessor } from '@/server/lib/sqlite';
 import dayjs from 'dayjs';
-import { keyBy } from 'lodash';
 import {
   DiaryExportReqData,
-  DiaryQueryResp,
   DiaryUpdateReqData,
   JsonImportForm,
   JsonImportResult,
@@ -20,26 +18,6 @@ interface Props {
 export const createDiaryService = (props: Props) => {
   const { db } = props;
 
-  /**
-   * 获取指定月份已经过去了多少天
-   *
-   * @param monthStr 要查询的月份，值应如 202203
-   * @returns 一个数组，值为日期的毫秒时间戳
-   */
-  const getMonthExistDate = (monthStr: string) => {
-    const monthStart = dayjs(monthStr, 'YYYYMM').startOf('M').valueOf();
-    const monthEnd = dayjs(monthStr, 'YYYYMM').endOf('M');
-    const now = dayjs();
-
-    const existDay = monthEnd.isBefore(now) ? monthEnd.date() : now.date();
-
-    const allDates = Array.from({ length: existDay }).map((_, index) => {
-      return monthStart + index * 86400000;
-    });
-
-    return allDates;
-  };
-
   const getMonthList = async (month: string, userId: number) => {
     const diaryDate = dayjs(month, 'YYYYMM');
     const queryRange: [number, number] = [
@@ -51,18 +29,10 @@ export const createDiaryService = (props: Props) => {
       .diary()
       .select('date', 'content', 'color')
       .where('createUserId', userId)
-      .andWhereBetween('date', queryRange);
+      .andWhereBetween('date', queryRange)
+      .orderBy('date', 'asc');
 
-    const originDiaryEnums = keyBy(originDiarys, (diary) => dayjs(diary.date).format('YYYYMMDD'));
-    const existDateList = getMonthExistDate(month);
-
-    const data: DiaryQueryResp = existDateList.map((timestamp) => {
-      const date = dayjs(timestamp).format('YYYYMMDD');
-      if (date in originDiaryEnums) return originDiaryEnums[date];
-      return { date: timestamp, undone: true };
-    });
-
-    return { code: 200, data };
+    return { code: 200, data: originDiarys };
   };
 
   const getDetail = async (date: number, userId: number) => {

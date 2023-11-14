@@ -1,4 +1,4 @@
-import React, { FC, MouseEventHandler, useEffect, useRef, useState } from 'react';
+import React, { FC, MouseEventHandler, useEffect, useMemo, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { PageContent, PageAction } from '../../layouts/pageWithAction';
 import Loading from '../../layouts/loading';
@@ -11,6 +11,29 @@ import s from './styles.module.css';
 import { useAtomValue } from 'jotai';
 import { stateFocusDiaryDate } from '@/client/store/global';
 import { useDragPoint } from './useDragPoint';
+import { keyBy } from 'lodash';
+import dayjs from 'dayjs';
+import { DiaryQueryResp } from '@/types/diary';
+
+/**
+ * 获取指定月份已经过去了多少天
+ *
+ * @param monthStr 要查询的月份，值应如 202203
+ * @returns 一个数组，值为日期的毫秒时间戳
+ */
+const getMonthExistDate = (monthStr: string) => {
+  const monthStart = dayjs(monthStr, 'YYYYMM').startOf('M').valueOf();
+  const monthEnd = dayjs(monthStr, 'YYYYMM').endOf('M');
+  const now = dayjs();
+
+  const existDay = monthEnd.isBefore(now) ? monthEnd.date() : now.date();
+
+  const allDates = Array.from({ length: existDay }).map((_, index) => {
+    return monthStart + index * 86400000;
+  });
+
+  return allDates;
+};
 
 /**
  * 日记列表
@@ -39,12 +62,28 @@ const MonthList: FC = () => {
     }
   };
 
+  const diaryList = useMemo(() => {
+    const existList = monthListResp?.data ?? [];
+    if (!existList || !month) return [];
+
+    const existDiaryEnums = keyBy(existList, (diary) => dayjs(diary.date).format('YYYYMMDD'));
+    const allDateList = getMonthExistDate(month);
+
+    const data: DiaryQueryResp = allDateList.map((timestamp) => {
+      const date = dayjs(timestamp).format('YYYYMMDD');
+      if (date in existDiaryEnums) return existDiaryEnums[date];
+      return { date: timestamp, undone: true };
+    });
+
+    return data;
+  }, [monthListResp, month]);
+
   const renderContent = () => {
     if (isLoading) return <Loading />;
 
     return (
       <div className={s.listContainer}>
-        {monthListResp?.data?.map((item) => (
+        {diaryList.map((item) => (
           <div data-diary-date={item.date} key={item.date}>
             <DiaryListItem item={item} />
           </div>
