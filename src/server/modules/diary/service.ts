@@ -21,8 +21,9 @@ export const createDiaryService = (props: Props) => {
   const getMonthList = async (month: string, userId: number) => {
     const diaryDate = dayjs(month, 'YYYYMM');
     const queryRange: [number, number] = [
-      diaryDate.startOf('M').valueOf() - 1,
-      diaryDate.endOf('M').valueOf(),
+      // 前后扩张3天，防止因为跨时区出现某月第一天获取不到的问题
+      diaryDate.startOf('M').subtract(3, 'd').valueOf(),
+      diaryDate.endOf('M').add(3, 'day').valueOf(),
     ];
 
     const originDiarys = await db
