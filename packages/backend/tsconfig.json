@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "removeComments": true,
+    "noEmit": true,
+    "module": "preserve",
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "noImplicitAny": false,
+    "paths": {
+      "@/*": ["./src/*"],
+      "@db/*": ["./prisma/client/*"]
+    }
+  }
+}

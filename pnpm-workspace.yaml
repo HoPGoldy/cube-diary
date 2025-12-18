@@ -1,0 +1,23 @@
+packages:
+  - packages/*
+
+onlyBuiltDependencies:
+  - '@prisma/engines'
+  - '@swc/core'
+  - better-sqlite3
+  - esbuild
+  - prisma
+
+packageExtensions:
+  '@ant-design/icons':
+    peerDependencies:
+      '@types/react': '@18.3.1'
+  antd:
+    peerDependencies:
+      '@types/react': '@18.3.1'
+  react-router:
+    peerDependencies:
+      '@types/react': '@18.3.1'
+  react-router-dom:
+    peerDependencies:
+      '@types/react': '@18.3.1'

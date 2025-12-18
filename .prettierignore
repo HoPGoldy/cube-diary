@@ -1,0 +1,9 @@
+dist
+public
+nginx
+.husky
+coverage
+.gitlab
+.vscode
+node_modules
+.promptx

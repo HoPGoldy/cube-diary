@@ -1,0 +1,69 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "./client/"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+model AppConfig {
+  key       String   @id
+  value     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Attachment {
+  id        String   @id @default(uuid())
+  userId    String
+  filename  String
+  size      Int
+  hash      String
+  path      String
+  thumbPath String? // 图片类型的附件会有缩略图
+  thumbSize Int?
+  type      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+// 文章/笔记 - 树形结构存储
+model Article {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  title          String
+  content        String  @default("")
+  parentPath     String? // 树形路径 "#1#2#3#"
+  tagIds         String? // 标签 ID 列表 "1,2,3"
+  favorite       Boolean @default(false)
+  color          String? // 文章颜色标签
+  listSubarticle Boolean @default(false) // 是否在文章列表中显示子文章
+
+  @@index([parentPath])
+}
+
+// 标签
+model Tag {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  title String  @unique
+  color String?
+}

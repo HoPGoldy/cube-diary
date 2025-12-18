@@ -1,0 +1,17 @@
+.editorContainer :global(.w-md-editor-text-input), :global(.w-md-editor-text-pre > code) {
+  font-size: 16px !important;
+  line-height: 24px !important;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Droid Sans Mono', 'Consolas', monospace !important;
+}
+
+.editorContainer :global(.w-md-editor-toolbar) {
+  padding: 8px 12px;
+}
+
+.editorContainer :global(.w-md-editor-toolbar li > button) {
+  margin: 0 4px;
+}
+
+.editorContainer :global(.w-md-editor-text-input ) {
+  min-height: 800px !important;
+}
