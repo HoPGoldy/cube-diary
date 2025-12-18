@@ -54,7 +54,8 @@ export const ModelName = {
   AppConfig: 'AppConfig',
   Attachment: 'Attachment',
   Article: 'Article',
-  Tag: 'Tag'
+  Tag: 'Tag',
+  Diary: 'Diary'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -122,6 +123,18 @@ export const TagScalarFieldEnum = {
 } as const
 
 export type TagScalarFieldEnum = (typeof TagScalarFieldEnum)[keyof typeof TagScalarFieldEnum]
+
+
+export const DiaryScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  date: 'date',
+  content: 'content',
+  color: 'color'
+} as const
+
+export type DiaryScalarFieldEnum = (typeof DiaryScalarFieldEnum)[keyof typeof DiaryScalarFieldEnum]
 
 
 export const SortOrder = {

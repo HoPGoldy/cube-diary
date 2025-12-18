@@ -387,7 +387,8 @@ export const ModelName = {
   AppConfig: 'AppConfig',
   Attachment: 'Attachment',
   Article: 'Article',
-  Tag: 'Tag'
+  Tag: 'Tag',
+  Diary: 'Diary'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -403,7 +404,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "appConfig" | "attachment" | "article" | "tag"
+    modelProps: "appConfig" | "attachment" | "article" | "tag" | "diary"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -703,6 +704,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Diary: {
+      payload: Prisma.$DiaryPayload<ExtArgs>
+      fields: Prisma.DiaryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.DiaryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DiaryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.DiaryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DiaryPayload>
+        }
+        findFirst: {
+          args: Prisma.DiaryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DiaryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.DiaryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DiaryPayload>
+        }
+        findMany: {
+          args: Prisma.DiaryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DiaryPayload>[]
+        }
+        create: {
+          args: Prisma.DiaryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DiaryPayload>
+        }
+        createMany: {
+          args: Prisma.DiaryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.DiaryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DiaryPayload>[]
+        }
+        delete: {
+          args: Prisma.DiaryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DiaryPayload>
+        }
+        update: {
+          args: Prisma.DiaryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DiaryPayload>
+        }
+        deleteMany: {
+          args: Prisma.DiaryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.DiaryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.DiaryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DiaryPayload>[]
+        }
+        upsert: {
+          args: Prisma.DiaryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DiaryPayload>
+        }
+        aggregate: {
+          args: Prisma.DiaryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDiary>
+        }
+        groupBy: {
+          args: Prisma.DiaryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DiaryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.DiaryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DiaryCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -793,6 +868,18 @@ export const TagScalarFieldEnum = {
 export type TagScalarFieldEnum = (typeof TagScalarFieldEnum)[keyof typeof TagScalarFieldEnum]
 
 
+export const DiaryScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  date: 'date',
+  content: 'content',
+  color: 'color'
+} as const
+
+export type DiaryScalarFieldEnum = (typeof DiaryScalarFieldEnum)[keyof typeof DiaryScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -840,6 +927,13 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
  * Reference to a field of type 'Boolean'
  */
 export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
+ * Reference to a field of type 'BigInt'
+ */
+export type BigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt'>
     
 
 
@@ -932,6 +1026,7 @@ export type GlobalOmitConfig = {
   attachment?: Prisma.AttachmentOmit
   article?: Prisma.ArticleOmit
   tag?: Prisma.TagOmit
+  diary?: Prisma.DiaryOmit
 }
 
 /* Types for Logging */

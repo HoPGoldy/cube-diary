@@ -67,3 +67,16 @@ model Tag {
   title String  @unique
   color String?
 }
+
+// 日记 - 单用户系统
+model Diary {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  date    BigInt  @unique // 毫秒级时间戳 (UTC 0)
+  content String  @default("")
+  color   String? // 颜色标签
+
+  @@index([date])
+}

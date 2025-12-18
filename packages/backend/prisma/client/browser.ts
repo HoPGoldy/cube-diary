@@ -37,3 +37,8 @@ export type Article = Prisma.ArticleModel
  * 
  */
 export type Tag = Prisma.TagModel
+/**
+ * Model Diary
+ * 
+ */
+export type Diary = Prisma.DiaryModel

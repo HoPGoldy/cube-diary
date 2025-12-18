@@ -4,9 +4,11 @@ import { registerController as registerAppConfigController } from "@/modules/app
 import { registerController as registerAttachmentController } from "@/modules/attachment/controller";
 import { registerArticleController } from "@/modules/article/controller";
 import { registerTagController } from "@/modules/tag/controller";
+import { registerDiaryController } from "@/modules/diary/controller";
 import { AppConfigService } from "@/modules/app-config/service";
 import { ArticleService } from "@/modules/article/service";
 import { TagService } from "@/modules/tag/service";
+import { DiaryService } from "@/modules/diary/service";
 import { registerUnifyResponse } from "@/lib/unify-response";
 import type { AppInstance } from "@/types";
 import { AttachmentService } from "@/modules/attachment/service";
@@ -37,6 +39,10 @@ export const registerService = async (instance: AppInstance) => {
     prisma,
   });
 
+  const diaryService = new DiaryService({
+    prisma,
+  });
+
   const appControllerPlugin = async (server: AppInstance) => {
     registerRemoveAdditionalProperties(server);
     registerUnifyResponse(server);
@@ -63,6 +69,11 @@ export const registerService = async (instance: AppInstance) => {
     await registerTagController({
       server,
       tagService,
+    });
+
+    await registerDiaryController({
+      server,
+      diaryService,
     });
   };
 
