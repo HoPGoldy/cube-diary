@@ -1,4 +1,4 @@
-import { utcdayjs } from "@/utils/dayjs";
+import dayjs from "dayjs";
 
 /**
  * 星期数字到汉字的映射
@@ -39,6 +39,6 @@ export const MARK_COLORS = Object.keys(MARK_COLORS_MAP);
 /**
  * 根据日期获取标签文本
  */
-export const getLabelByDate = (timestamp: number) => {
-  return utcdayjs(timestamp).format("MM 月 DD 日 dddd");
+export const getLabelByDate = (dateStr: string) => {
+  return dayjs(dateStr, "YYYYMMDD").format("MM 月 DD 日 dddd");
 };

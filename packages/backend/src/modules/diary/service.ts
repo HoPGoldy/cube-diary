@@ -28,7 +28,8 @@ export class DiaryService {
   }
 
   async getMonthList(month: string) {
-    const diaryDate = dayjs(month, "YYYYMM").utc();
+    // 直接使用 UTC 模式解析日期
+    const diaryDate = dayjs.utc(month, "YYYYMM");
     const startDate = diaryDate.startOf("M").subtract(3, "d").valueOf();
     const endDate = diaryDate.endOf("M").add(3, "day").valueOf();
 
@@ -40,7 +41,7 @@ export class DiaryService {
         },
       },
       select: {
-        date: true,
+        dateStr: true,
         content: true,
         color: true,
       },
@@ -50,18 +51,16 @@ export class DiaryService {
     });
 
     return diaries.map((d) => ({
-      date: Number(d.date),
+      dateStr: d.dateStr,
       content: d.content,
       color: d.color,
     }));
   }
 
-  async getDetail(date: number) {
-    const utcDate = this.toUTCTimestamp(date);
-
+  async getDetail(dateStr: string) {
     const diary = await this.options.prisma.diary.findUnique({
       where: {
-        date: BigInt(utcDate),
+        dateStr,
       },
       select: {
         content: true,
@@ -73,15 +72,15 @@ export class DiaryService {
   }
 
   async updateDetail(data: SchemaDiaryUpdateBodyType) {
-    const { date, content, color } = data;
-    const utcDate = this.toUTCTimestamp(date);
+    const { dateStr, date, content, color } = data;
 
     await this.options.prisma.diary.upsert({
       where: {
-        date: BigInt(utcDate),
+        dateStr,
       },
       create: {
-        date: BigInt(utcDate),
+        dateStr,
+        date: BigInt(date),
         content: content || "",
         color: color,
       },
@@ -116,6 +115,7 @@ export class DiaryService {
       this.options.prisma.diary.findMany({
         where,
         select: {
+          dateStr: true,
           date: true,
           content: true,
           color: true,
@@ -131,6 +131,7 @@ export class DiaryService {
     return {
       total,
       rows: rows.map((r) => ({
+        dateStr: r.dateStr,
         date: Number(r.date),
         content: r.content,
         color: r.color,
@@ -146,48 +147,48 @@ export class DiaryService {
       throw new Error("导入的文件格式不正确，需要是 JSON 数组");
     }
 
-    // 提取需要导入的日记日期（转换为 UTC 0）
-    const needImportDates: number[] = [];
+    // 提取需要导入的日记日期（转换为 dateStr 和 date）
+    const needImportData: Array<{ dateStr: string; date: number }> = [];
     for (const diary of jsonContent) {
-      const date = diary[config.dateKey];
-      if (!date) {
+      const dateValue = diary[config.dateKey];
+      if (!dateValue) {
         throw new Error("导入的日记中没有日期字段");
       }
-      const utcDate = this.toUTCTimestamp(
-        dayjs(date, config.dateFormatter).valueOf(),
-      );
-      needImportDates.push(utcDate);
+      const parsedDate = dayjs(dateValue, config.dateFormatter);
+      const dateStr = parsedDate.format("YYYYMMDD");
+      const utcDate = this.toUTCTimestamp(parsedDate.valueOf());
+      needImportData.push({ dateStr, date: utcDate });
     }
 
     // 查询已存在的日记
     const existDiaries = await this.options.prisma.diary.findMany({
       where: {
-        date: {
-          in: needImportDates.map((d) => BigInt(d)),
+        dateStr: {
+          in: needImportData.map((d) => d.dateStr),
         },
       },
     });
 
-    const existDiaryMap = new Map(existDiaries.map((d) => [Number(d.date), d]));
+    const existDiaryMap = new Map(existDiaries.map((d) => [d.dateStr, d]));
 
     let insertCount = 0;
     let updateCount = 0;
     let insertNumber = 0;
 
     // 处理导入逻辑
-    for (const diary of jsonContent) {
-      const date = this.toUTCTimestamp(
-        dayjs(diary[config.dateKey], config.dateFormatter).valueOf(),
-      );
+    for (let i = 0; i < jsonContent.length; i++) {
+      const diary = jsonContent[i];
+      const { dateStr, date } = needImportData[i];
       const content = diary[config.contentKey] || "";
       const color = diary[config.colorKey] || null;
 
-      const existDiary = existDiaryMap.get(date);
+      const existDiary = existDiaryMap.get(dateStr);
 
       if (!existDiary) {
         // 新增
         await this.options.prisma.diary.create({
           data: {
+            dateStr,
             date: BigInt(date),
             content,
             color,
@@ -208,7 +209,7 @@ export class DiaryService {
 
         await this.options.prisma.diary.update({
           where: {
-            date: BigInt(date),
+            dateStr,
           },
           data: {
             content: newContent,
@@ -242,6 +243,7 @@ export class DiaryService {
     const diaries = await this.options.prisma.diary.findMany({
       where,
       select: {
+        dateStr: true,
         date: true,
         content: true,
         color: true,
@@ -254,7 +256,7 @@ export class DiaryService {
     const data = diaries.map((diary) => ({
       [config.dateKey]: config.dateFormatter
         ? dayjs(Number(diary.date)).utc().format(config.dateFormatter)
-        : Number(diary.date),
+        : diary.dateStr,
       [config.contentKey]: diary.content,
       [config.colorKey]: diary.color,
     }));

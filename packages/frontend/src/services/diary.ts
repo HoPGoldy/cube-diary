@@ -18,7 +18,7 @@ export type DiaryDetail = SchemaDiaryGetDetailResponseType;
 const updateDiaryCache = (updateData: SchemaDiaryUpdateBodyType) => {
   const oldData = queryClient.getQueryData<{ data: DiaryDetail }>([
     "diaryDetail",
-    updateData.date,
+    updateData.dateStr,
   ]);
   if (!oldData) return;
 
@@ -26,7 +26,7 @@ const updateDiaryCache = (updateData: SchemaDiaryUpdateBodyType) => {
     ...oldData,
     data: { ...oldData.data, ...updateData },
   };
-  queryClient.setQueryData(["diaryDetail", updateData.date], newData);
+  queryClient.setQueryData(["diaryDetail", updateData.dateStr], newData);
 };
 
 /** 查询月份日记列表 */
@@ -45,11 +45,11 @@ export const useQueryDiaryList = (month?: string) => {
 };
 
 /** 查询日记详情 */
-export const useQueryDiaryDetail = (date: number) => {
+export const useQueryDiaryDetail = (dateStr: string) => {
   return useQuery({
-    queryKey: ["diaryDetail", date],
+    queryKey: ["diaryDetail", dateStr],
     queryFn: async () => {
-      return requestPost<DiaryDetail>("diary/getDetail", { date });
+      return requestPost<DiaryDetail>("diary/getDetail", { dateStr });
     },
     refetchOnWindowFocus: false,
   });
@@ -69,9 +69,13 @@ export const useUpdateDiary = () => {
 };
 
 /** 自动保存接口 */
-export const autoSaveContent = async (date: number, content: string) => {
-  updateDiaryCache({ date, content });
-  return requestPost("diary/update", { date, content });
+export const autoSaveContent = async (
+  dateStr: string,
+  date: number,
+  content: string,
+) => {
+  updateDiaryCache({ dateStr, date, content });
+  return requestPost("diary/update", { dateStr, date, content });
 };
 
 /** 搜索日记列表 */

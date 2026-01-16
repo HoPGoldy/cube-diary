@@ -10,7 +10,7 @@ export type SchemaDiaryGetMonthListBodyType = Type.Static<
 
 export const SchemaDiaryGetMonthListResponse = Type.Array(
   Type.Object({
-    date: Type.Number({ description: "日期毫秒时间戳 (UTC 0)" }),
+    dateStr: Type.String({ description: "日期字符串，格式: YYYYMMDD" }),
     content: Type.String({ description: "日记内容" }),
     color: Type.Union([Type.String(), Type.Null()], {
       description: "颜色标签",
@@ -23,7 +23,7 @@ export type SchemaDiaryGetMonthListResponseType = Type.Static<
 
 // 获取日记详情
 export const SchemaDiaryGetDetailBody = Type.Object({
-  date: Type.Number({ description: "日期毫秒时间戳 (UTC 0)" }),
+  dateStr: Type.String({ description: "日期字符串，格式: YYYYMMDD" }),
 });
 export type SchemaDiaryGetDetailBodyType = Type.Static<
   typeof SchemaDiaryGetDetailBody
@@ -41,7 +41,8 @@ export type SchemaDiaryGetDetailResponseType = Type.Static<
 
 // 更新/创建日记
 export const SchemaDiaryUpdateBody = Type.Object({
-  date: Type.Number({ description: "日期毫秒时间戳 (UTC 0)" }),
+  dateStr: Type.String({ description: "日期字符串，格式: YYYYMMDD" }),
+  date: Type.Number({ description: "日期毫秒时间戳 (UTC 0)，用于排序" }),
   content: Type.Optional(Type.String({ description: "日记内容" })),
   color: Type.Optional(
     Type.Union([Type.String(), Type.Null()], { description: "颜色标签" }),
@@ -68,6 +69,7 @@ export type SchemaDiarySearchBodyType = Type.Static<
 >;
 
 export const SchemaDiarySearchItem = Type.Object({
+  dateStr: Type.String({ description: "日期字符串，格式: YYYYMMDD" }),
   date: Type.Number({ description: "日期毫秒时间戳 (UTC 0)" }),
   content: Type.String({ description: "日记内容" }),
   color: Type.Union([Type.String(), Type.Null()], {

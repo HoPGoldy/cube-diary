@@ -62,7 +62,7 @@ const DiarySearch: FC = () => {
       <>
         <div className="w-full">
           {diaryListResp?.data?.rows.map((item) => (
-            <DiaryListItem key={item.date} item={item} />
+            <DiaryListItem key={item.dateStr} item={item} />
           ))}
         </div>
         <Pagination

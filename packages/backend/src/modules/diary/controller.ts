@@ -53,7 +53,7 @@ export async function registerDiaryController(options: RegisterOptions) {
       },
     },
     async (request) => {
-      return await diaryService.getDetail(request.body.date);
+      return await diaryService.getDetail(request.body.dateStr);
     },
   );
 

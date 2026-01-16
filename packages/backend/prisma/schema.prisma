@@ -70,11 +70,11 @@ model Tag {
 
 // 日记 - 单用户系统
 model Diary {
-  id        String   @id @default(uuid())
+  dateStr   String   @id // "20251224" - 用户本地日期，作为主键
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  date    BigInt  @unique // 毫秒级时间戳 (UTC 0)
+  date    BigInt  @unique // 毫秒级时间戳 (UTC 0)，用于范围查询和排序
   content String  @default("")
   color   String? // 颜色标签
 

@@ -17,20 +17,14 @@ import styles from "./styles.module.css";
 const DiaryEdit: FC = () => {
   const params = useParams<{ date: string }>();
   const navigate = useNavigate();
-  const diaryDate = dayjs(params.date, "YYYYMMDD")
-    .startOf("day")
-    .utc()
-    .valueOf();
-  console.log(
-    "🚀 ~ DiaryEdit ~ diaryDate:",
-    dayjs(diaryDate).format(),
-    dayjs(diaryDate).utc().format(),
-  );
-  const diaryTitle = getLabelByDate(diaryDate);
+  const dateStr = params.date!; // YYYYMMDD
+  // 解析为 UTC 时区的 0 点时间戳
+  const diaryDate = dayjs(dateStr, "YYYYMMDD").startOf("day").valueOf();
+  const diaryTitle = getLabelByDate(dateStr);
 
   /** 获取详情 */
   const { data: diaryResp, isFetching: isLoadingDiary } =
-    useQueryDiaryDetail(diaryDate);
+    useQueryDiaryDetail(dateStr);
   /** 保存详情 */
   const { mutateAsync: updateDiary, isPending: diaryUpdating } =
     useUpdateDiary();
@@ -44,11 +38,11 @@ const DiaryEdit: FC = () => {
 
   // 自动保存
   const autoSave = useCallback(
-    debounce(async (date: number, newContent: string) => {
+    debounce(async (dateStr: string, date: number, newContent: string) => {
       if (!isContentModified.current) return;
 
       try {
-        await autoSaveContent(date, newContent);
+        await autoSaveContent(dateStr, date, newContent);
         setSaveBtnText(`自动保存于 ${dayjs().format("HH:mm")}`);
       } catch {
         console.error("自动保存失败");
@@ -61,7 +55,7 @@ const DiaryEdit: FC = () => {
   const onContentChange = (newContent: string) => {
     setContent(newContent);
     isContentModified.current = true;
-    autoSave(diaryDate, newContent);
+    autoSave(dateStr, diaryDate, newContent);
   };
 
   /** 点击返回按钮 */
@@ -72,7 +66,7 @@ const DiaryEdit: FC = () => {
   /** 点击保存按钮 */
   const onClickSaveBtn = async () => {
     try {
-      await updateDiary({ date: diaryDate, content });
+      await updateDiary({ dateStr, date: diaryDate, content });
       message.success("保存成功");
       onClickBack();
     } catch {

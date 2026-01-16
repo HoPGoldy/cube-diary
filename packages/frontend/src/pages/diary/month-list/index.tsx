@@ -40,19 +40,18 @@ const MonthList: FC = () => {
     console.log("🚀 ~ MonthList ~ existList:", existList);
     if (!existList || !month) return [];
 
-    const test = existList.map((diary) => {
-      return [utcdayjs(diary.date).format("YYYYMMDD"), diary];
-    });
-    console.log("🚀 ~ MonthList ~ test:", test);
-    const existDiaryMap = new Map(test);
+    // 使用 dateStr 作为键
+    const existDiaryMap = new Map(
+      existList.map((diary) => [diary.dateStr, diary]),
+    );
     const allDateList = getMonthExistDate(month);
 
-    const data: Array<DiaryItem | { date: number; undone: true }> =
+    const data: Array<DiaryItem | { dateStr: string; undone: true }> =
       allDateList.map((timestamp) => {
-        const date = utcdayjs(timestamp).format("YYYYMMDD");
-        const existDiary = existDiaryMap.get(date);
+        const dateStr = utcdayjs(timestamp).format("YYYYMMDD");
+        const existDiary = existDiaryMap.get(dateStr);
         if (existDiary) return existDiary;
-        return { date: timestamp, undone: true };
+        return { dateStr, undone: true };
       });
 
     return data;
@@ -67,7 +66,7 @@ const MonthList: FC = () => {
     return (
       <div className="p-4">
         {diaryList.map((item) => (
-          <div key={item.date}>
+          <div key={item.dateStr}>
             <DiaryListItem item={item} />
           </div>
         ))}

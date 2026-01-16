@@ -35,7 +35,7 @@ export type DiarySumAggregateOutputType = {
 }
 
 export type DiaryMinAggregateOutputType = {
-  id: string | null
+  dateStr: string | null
   createdAt: Date | null
   updatedAt: Date | null
   date: bigint | null
@@ -44,7 +44,7 @@ export type DiaryMinAggregateOutputType = {
 }
 
 export type DiaryMaxAggregateOutputType = {
-  id: string | null
+  dateStr: string | null
   createdAt: Date | null
   updatedAt: Date | null
   date: bigint | null
@@ -53,7 +53,7 @@ export type DiaryMaxAggregateOutputType = {
 }
 
 export type DiaryCountAggregateOutputType = {
-  id: number
+  dateStr: number
   createdAt: number
   updatedAt: number
   date: number
@@ -72,7 +72,7 @@ export type DiarySumAggregateInputType = {
 }
 
 export type DiaryMinAggregateInputType = {
-  id?: true
+  dateStr?: true
   createdAt?: true
   updatedAt?: true
   date?: true
@@ -81,7 +81,7 @@ export type DiaryMinAggregateInputType = {
 }
 
 export type DiaryMaxAggregateInputType = {
-  id?: true
+  dateStr?: true
   createdAt?: true
   updatedAt?: true
   date?: true
@@ -90,7 +90,7 @@ export type DiaryMaxAggregateInputType = {
 }
 
 export type DiaryCountAggregateInputType = {
-  id?: true
+  dateStr?: true
   createdAt?: true
   updatedAt?: true
   date?: true
@@ -186,7 +186,7 @@ export type DiaryGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
 }
 
 export type DiaryGroupByOutputType = {
-  id: string
+  dateStr: string
   createdAt: Date
   updatedAt: Date
   date: bigint
@@ -218,7 +218,7 @@ export type DiaryWhereInput = {
   AND?: Prisma.DiaryWhereInput | Prisma.DiaryWhereInput[]
   OR?: Prisma.DiaryWhereInput[]
   NOT?: Prisma.DiaryWhereInput | Prisma.DiaryWhereInput[]
-  id?: Prisma.StringFilter<"Diary"> | string
+  dateStr?: Prisma.StringFilter<"Diary"> | string
   createdAt?: Prisma.DateTimeFilter<"Diary"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Diary"> | Date | string
   date?: Prisma.BigIntFilter<"Diary"> | bigint | number
@@ -227,7 +227,7 @@ export type DiaryWhereInput = {
 }
 
 export type DiaryOrderByWithRelationInput = {
-  id?: Prisma.SortOrder
+  dateStr?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   date?: Prisma.SortOrder
@@ -236,7 +236,7 @@ export type DiaryOrderByWithRelationInput = {
 }
 
 export type DiaryWhereUniqueInput = Prisma.AtLeast<{
-  id?: string
+  dateStr?: string
   date?: bigint | number
   AND?: Prisma.DiaryWhereInput | Prisma.DiaryWhereInput[]
   OR?: Prisma.DiaryWhereInput[]
@@ -245,10 +245,10 @@ export type DiaryWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Diary"> | Date | string
   content?: Prisma.StringFilter<"Diary"> | string
   color?: Prisma.StringNullableFilter<"Diary"> | string | null
-}, "id" | "date">
+}, "dateStr" | "date">
 
 export type DiaryOrderByWithAggregationInput = {
-  id?: Prisma.SortOrder
+  dateStr?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   date?: Prisma.SortOrder
@@ -265,7 +265,7 @@ export type DiaryScalarWhereWithAggregatesInput = {
   AND?: Prisma.DiaryScalarWhereWithAggregatesInput | Prisma.DiaryScalarWhereWithAggregatesInput[]
   OR?: Prisma.DiaryScalarWhereWithAggregatesInput[]
   NOT?: Prisma.DiaryScalarWhereWithAggregatesInput | Prisma.DiaryScalarWhereWithAggregatesInput[]
-  id?: Prisma.StringWithAggregatesFilter<"Diary"> | string
+  dateStr?: Prisma.StringWithAggregatesFilter<"Diary"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Diary"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Diary"> | Date | string
   date?: Prisma.BigIntWithAggregatesFilter<"Diary"> | bigint | number
@@ -274,7 +274,7 @@ export type DiaryScalarWhereWithAggregatesInput = {
 }
 
 export type DiaryCreateInput = {
-  id?: string
+  dateStr: string
   createdAt?: Date | string
   updatedAt?: Date | string
   date: bigint | number
@@ -283,7 +283,7 @@ export type DiaryCreateInput = {
 }
 
 export type DiaryUncheckedCreateInput = {
-  id?: string
+  dateStr: string
   createdAt?: Date | string
   updatedAt?: Date | string
   date: bigint | number
@@ -292,7 +292,7 @@ export type DiaryUncheckedCreateInput = {
 }
 
 export type DiaryUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  dateStr?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   date?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
@@ -301,7 +301,7 @@ export type DiaryUpdateInput = {
 }
 
 export type DiaryUncheckedUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  dateStr?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   date?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
@@ -310,7 +310,7 @@ export type DiaryUncheckedUpdateInput = {
 }
 
 export type DiaryCreateManyInput = {
-  id?: string
+  dateStr: string
   createdAt?: Date | string
   updatedAt?: Date | string
   date: bigint | number
@@ -319,7 +319,7 @@ export type DiaryCreateManyInput = {
 }
 
 export type DiaryUpdateManyMutationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  dateStr?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   date?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
@@ -328,7 +328,7 @@ export type DiaryUpdateManyMutationInput = {
 }
 
 export type DiaryUncheckedUpdateManyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  dateStr?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   date?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
@@ -337,7 +337,7 @@ export type DiaryUncheckedUpdateManyInput = {
 }
 
 export type DiaryCountOrderByAggregateInput = {
-  id?: Prisma.SortOrder
+  dateStr?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   date?: Prisma.SortOrder
@@ -350,7 +350,7 @@ export type DiaryAvgOrderByAggregateInput = {
 }
 
 export type DiaryMaxOrderByAggregateInput = {
-  id?: Prisma.SortOrder
+  dateStr?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   date?: Prisma.SortOrder
@@ -359,7 +359,7 @@ export type DiaryMaxOrderByAggregateInput = {
 }
 
 export type DiaryMinOrderByAggregateInput = {
-  id?: Prisma.SortOrder
+  dateStr?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   date?: Prisma.SortOrder
@@ -382,7 +382,7 @@ export type BigIntFieldUpdateOperationsInput = {
 
 
 export type DiarySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
+  dateStr?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   date?: boolean
@@ -391,7 +391,7 @@ export type DiarySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
 }, ExtArgs["result"]["diary"]>
 
 export type DiarySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
+  dateStr?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   date?: boolean
@@ -400,7 +400,7 @@ export type DiarySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 }, ExtArgs["result"]["diary"]>
 
 export type DiarySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
+  dateStr?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   date?: boolean
@@ -409,7 +409,7 @@ export type DiarySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 }, ExtArgs["result"]["diary"]>
 
 export type DiarySelectScalar = {
-  id?: boolean
+  dateStr?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   date?: boolean
@@ -417,13 +417,13 @@ export type DiarySelectScalar = {
   color?: boolean
 }
 
-export type DiaryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "date" | "content" | "color", ExtArgs["result"]["diary"]>
+export type DiaryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"dateStr" | "createdAt" | "updatedAt" | "date" | "content" | "color", ExtArgs["result"]["diary"]>
 
 export type $DiaryPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Diary"
   objects: {}
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: string
+    dateStr: string
     createdAt: Date
     updatedAt: Date
     date: bigint
@@ -512,8 +512,8 @@ export interface DiaryDelegate<ExtArgs extends runtime.Types.Extensions.Internal
    * // Get first 10 Diaries
    * const diaries = await prisma.diary.findMany({ take: 10 })
    * 
-   * // Only select the `id`
-   * const diaryWithIdOnly = await prisma.diary.findMany({ select: { id: true } })
+   * // Only select the `dateStr`
+   * const diaryWithDateStrOnly = await prisma.diary.findMany({ select: { dateStr: true } })
    * 
    */
   findMany<T extends DiaryFindManyArgs>(args?: Prisma.SelectSubset<T, DiaryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DiaryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -557,9 +557,9 @@ export interface DiaryDelegate<ExtArgs extends runtime.Types.Extensions.Internal
    *   ]
    * })
    * 
-   * // Create many Diaries and only return the `id`
-   * const diaryWithIdOnly = await prisma.diary.createManyAndReturn({
-   *   select: { id: true },
+   * // Create many Diaries and only return the `dateStr`
+   * const diaryWithDateStrOnly = await prisma.diary.createManyAndReturn({
+   *   select: { dateStr: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -648,9 +648,9 @@ export interface DiaryDelegate<ExtArgs extends runtime.Types.Extensions.Internal
    *   ]
    * })
    * 
-   * // Update zero or more Diaries and only return the `id`
-   * const diaryWithIdOnly = await prisma.diary.updateManyAndReturn({
-   *   select: { id: true },
+   * // Update zero or more Diaries and only return the `dateStr`
+   * const diaryWithDateStrOnly = await prisma.diary.updateManyAndReturn({
+   *   select: { dateStr: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -852,7 +852,7 @@ export interface Prisma__DiaryClient<T, Null = never, ExtArgs extends runtime.Ty
  * Fields of the Diary model
  */
 export interface DiaryFieldRefs {
-  readonly id: Prisma.FieldRef<"Diary", 'String'>
+  readonly dateStr: Prisma.FieldRef<"Diary", 'String'>
   readonly createdAt: Prisma.FieldRef<"Diary", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Diary", 'DateTime'>
   readonly date: Prisma.FieldRef<"Diary", 'BigInt'>

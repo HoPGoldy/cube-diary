@@ -8,7 +8,7 @@ import styles from "./styles.module.css";
 import { utcdayjsFormat } from "@/utils/dayjs";
 
 interface Props {
-  item: DiaryItem | { date: number; undone: true };
+  item: DiaryItem | { dateStr: string; undone: true };
 }
 
 /**
@@ -17,10 +17,10 @@ interface Props {
 export const DiaryListItem: FC<Props> = ({ item }) => {
   const navigate = useNavigate();
 
-  const title = getLabelByDate(item.date);
+  const title = getLabelByDate(item.dateStr);
 
   const onEdit = () => {
-    const dateStr = utcdayjsFormat(item.date, "YYYYMMDD");
+    const dateStr = utcdayjsFormat(item.dateStr, "YYYYMMDD");
     navigate(`/diary/${dateStr}`);
   };
 

@@ -869,7 +869,7 @@ export type TagScalarFieldEnum = (typeof TagScalarFieldEnum)[keyof typeof TagSca
 
 
 export const DiaryScalarFieldEnum = {
-  id: 'id',
+  dateStr: 'dateStr',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   date: 'date',
