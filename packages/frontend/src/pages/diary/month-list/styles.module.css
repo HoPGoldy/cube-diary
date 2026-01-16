@@ -1,0 +1,23 @@
+.listItem {
+  @apply mb-4 cursor-pointer hover:shadow-md transition-shadow;
+}
+
+.listItem :global(.ant-card-head) {
+  @apply border-b-0 pb-0;
+}
+
+.listItem :global(.ant-card-body) {
+  @apply pt-2;
+}
+
+.mdArea :global(img) {
+  @apply cursor-pointer;
+}
+
+.mdArea :global(pre) {
+  @apply bg-gray-100;
+}
+
+.mdArea :global(code) {
+  @apply bg-gray-100 px-1 rounded;
+}

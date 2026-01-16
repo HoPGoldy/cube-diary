@@ -12,6 +12,7 @@ import AttachmentDemo from "./pages/attachment-demo";
 import MarkdownEditorDemo from "./pages/markdown-editor-demo";
 import { TagDetailModal } from "./pages/tag-detail";
 import { ArticleConfigModal } from "./pages/article-config";
+import { DiaryEdit, MonthList } from "./pages/diary";
 
 const lazyLoad = (
   compLoader: () => Promise<{ default: ComponentType<any> }>,
@@ -30,6 +31,8 @@ export const routes = createBrowserRouter(
       path: "/",
       children: [
         { index: true, element: <Entry /> },
+        { path: "month/:month", element: <MonthList /> },
+        { path: "diary/:date", element: <DiaryEdit /> },
         // 笔记详情
         { path: "/article/:articleId", element: <Article /> },
         // 笔记搜索

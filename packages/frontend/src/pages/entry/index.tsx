@@ -1,15 +1,11 @@
 import { Navigate } from "react-router-dom";
-import { useGetAppConfig } from "@/services/app-config";
-import { PageLoading } from "@/components/page-loading";
+import dayjs from "dayjs";
 
 const JumpToDefaultDataEntry = () => {
-  const { appConfig } = useGetAppConfig();
+  // 获取当前月份
+  const month = dayjs().format("YYYYMM");
 
-  if (!appConfig.ROOT_ARTICLE_ID) {
-    return <PageLoading />;
-  }
-
-  return <Navigate to={`/article/${appConfig.ROOT_ARTICLE_ID}`} replace />;
+  return <Navigate to={`/month/${month}`} replace />;
 };
 
 export default JumpToDefaultDataEntry;

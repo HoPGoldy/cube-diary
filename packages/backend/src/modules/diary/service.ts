@@ -9,7 +9,6 @@ import {
   SchemaDiaryExportBodyType,
 } from "@/types/diary";
 
-// 启用 dayjs UTC 插件
 dayjs.extend(utc);
 
 interface ServiceOptions {
@@ -25,7 +24,7 @@ export class DiaryService {
    * 将日期转换为 UTC 0 时区的开始时间戳
    */
   private toUTCTimestamp(date: number): number {
-    return dayjs(date).utc().startOf("day").valueOf();
+    return dayjs(date).utc().valueOf();
   }
 
   async getMonthList(month: string) {

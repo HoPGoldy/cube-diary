@@ -1,7 +1,11 @@
 import { Flex, FlexProps, Modal } from "antd";
 import { FC } from "react";
 import s from "./styles.module.css";
-import { MARK_COLORS_WITH_EMPTY, MARK_COLORS_MAP } from "./constants";
+import {
+  MARK_COLORS_WITH_EMPTY,
+  MARK_COLORS_MAP,
+  MARK_COLORS,
+} from "./constants";
 
 interface ColorItemProps {
   colorCode: string;
@@ -78,5 +82,39 @@ export const ColorPicker: FC<ColorPickerProps> = (props) => {
         flexProps={{ gap: 48, justify: "center" }}
       />
     </Modal>
+  );
+};
+
+interface ColorMultiplePickerProps {
+  value?: string[];
+  onChange?: (value: string[]) => void;
+}
+
+export const ColorMultiplePicker: FC<ColorMultiplePickerProps> = (props) => {
+  const { value = [], onChange } = props;
+
+  const onClickItem = (colorCode: string) => {
+    if (value.includes(colorCode)) {
+      onChange?.(value.filter((item) => item !== colorCode));
+    } else {
+      onChange?.([...value, colorCode]);
+    }
+  };
+
+  const renderMarkColor = (colorCode: string) => {
+    return (
+      <ColorItem
+        key={colorCode}
+        colorCode={colorCode}
+        selected={value.includes(colorCode)}
+        onClick={onClickItem}
+      />
+    );
+  };
+
+  return (
+    <Flex wrap gap={8} justify="flex-start">
+      {MARK_COLORS.map(renderMarkColor)}
+    </Flex>
   );
 };

@@ -1,5 +1,4 @@
 import { Type } from "typebox";
-import { createCommonListSchema } from "./schema";
 
 // 获取月份日记列表
 export const SchemaDiaryGetMonthListBody = Type.Object({

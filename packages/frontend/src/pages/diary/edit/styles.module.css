@@ -1,0 +1,15 @@
+.editorArea {
+  @apply h-full;
+}
+
+.editorArea :global(.w-md-editor) {
+  @apply h-full;
+}
+
+.editorArea :global(.w-md-editor-text) {
+  @apply h-full;
+}
+
+.editorArea :global(.w-md-editor-content) {
+  @apply h-full;
+}

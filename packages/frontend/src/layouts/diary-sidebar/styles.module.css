@@ -1,0 +1,24 @@
+.sidebarBox {
+  @apply h-full flex flex-col p-3 bg-white;
+}
+
+.yearPicker {
+  @apply w-full;
+}
+
+.menuItem {
+  @apply flex items-center justify-between px-3 py-2 rounded-md cursor-pointer transition-colors;
+  @apply hover:bg-gray-100;
+}
+
+.menuItemActive {
+  @apply bg-blue-50 text-blue-600;
+}
+
+.menuItem span {
+  @apply flex-1 truncate;
+}
+
+.toolBtn {
+  @apply w-full;
+}

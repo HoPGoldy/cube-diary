@@ -35,7 +35,6 @@ export async function registerDiaryController(options: RegisterOptions) {
       },
     },
     async (request) => {
-      // JWT 认证已在 preHandler 中完成
       return await diaryService.getMonthList(request.body.month);
     },
   );

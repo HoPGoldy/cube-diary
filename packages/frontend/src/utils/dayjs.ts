@@ -8,8 +8,6 @@ import weekYear from "dayjs/plugin/weekYear";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import "dayjs/locale/zh-cn";
-import "dayjs/locale/en";
-import "dayjs/locale/ja";
 import { DATE_FORMATTER } from "@/config";
 
 export const initDayjs = () => {
@@ -21,6 +19,7 @@ export const initDayjs = () => {
   dayjs.extend(weekYear);
   dayjs.extend(utc);
   dayjs.extend(timezone);
+  dayjs.locale("zh-cn");
 };
 
 export const utcdayjs = (date?: string | number | Dayjs | Date) => {

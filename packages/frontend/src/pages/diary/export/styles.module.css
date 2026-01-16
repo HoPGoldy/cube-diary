@@ -1,0 +1,11 @@
+.formBox {
+  @apply w-full;
+}
+
+.previewArea {
+  @apply min-h-[300px];
+}
+
+.previewArea :global(.ant-card-body) {
+  @apply max-h-[500px] overflow-y-auto;
+}
