@@ -33,14 +33,22 @@ export const MarkdownPreview: FC<Parameters<typeof MDEditor.Markdown>[0]> = (
       <div className="w-full h-full" onClick={onClickDetail}>
         <MDEditor.Markdown {...restProps} components={mergedComponents} />
       </div>
-      <Image
-        style={{ display: "none" }}
-        preview={{
-          visible: !!visibleImgSrc,
-          src: visibleImgSrc,
-          onVisibleChange: () => setVisibleImgSrc(""),
+      <div
+        style={{
+          position: "absolute",
+          visibility: "hidden",
+          pointerEvents: "none",
         }}
-      />
+      >
+        <Image
+          style={{ display: "none" }}
+          preview={{
+            visible: !!visibleImgSrc,
+            src: visibleImgSrc,
+            onVisibleChange: () => setVisibleImgSrc(""),
+          }}
+        />
+      </div>
     </>
   );
 };

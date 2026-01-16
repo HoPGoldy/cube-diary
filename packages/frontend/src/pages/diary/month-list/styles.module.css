@@ -1,5 +1,5 @@
 .listItem {
-  @apply mb-4 cursor-pointer hover:shadow-md transition-shadow;
+  @apply mb-4 cursor-pointer hover:ring-2 ring-gray-300 dark:ring-neutral-500 transition-all;
 }
 
 .listItem :global(.ant-card-head) {
