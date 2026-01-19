@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { PageContent, PageAction } from "@/layouts/page-with-action";
 import { useQueryDiaryList } from "@/services/diary";
 import { DiaryListItem } from "./list-item";
+import { Operation } from "./operation";
 import dayjs from "dayjs";
 import type { DiaryItem } from "@/services/diary";
 import { utcdayjs } from "@/utils/dayjs";
@@ -81,7 +82,9 @@ const MonthList: FC = () => {
         <div ref={listBottomRef} />
       </PageContent>
 
-      <PageAction>{/* 底部操作栏，后续可以添加新增、搜索等按钮 */}</PageAction>
+      <PageAction>
+        <Operation />
+      </PageAction>
     </>
   );
 };

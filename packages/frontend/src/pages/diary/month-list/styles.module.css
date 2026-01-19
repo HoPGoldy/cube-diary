@@ -6,10 +6,6 @@
   @apply border-b-0 pb-0;
 }
 
-.listItem :global(.ant-card-body) {
-  @apply pt-2;
-}
-
 .mdArea :global(img) {
   @apply cursor-pointer;
 }
@@ -20,4 +16,18 @@
 
 .mdArea :global(code) {
   @apply bg-gray-100 px-1 rounded;
+}
+
+/* 月份选择器条目 */
+.monthPickerItem {
+  @apply text-center py-1 dark:text-neutral-200 cursor-pointer;
+}
+
+.monthPickerItemActive {
+  @apply rounded text-white;
+  background: var(--cube-diary-primary-button-color);
+}
+
+.monthPickerItemDisabled {
+  @apply text-gray-300 dark:text-neutral-500 cursor-not-allowed;
 }

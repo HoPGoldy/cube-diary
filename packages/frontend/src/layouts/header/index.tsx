@@ -11,7 +11,6 @@ import { DesktopSetting } from "@/pages/user-setting";
 import { useAtomValue } from "jotai";
 import { stateUserJwtData } from "@/store/user";
 import { statePageTitle } from "@/store/global";
-import { useBreadcrumb } from "@/hooks/use-breadcrumb";
 import { Link } from "react-router-dom";
 
 interface Props {
@@ -28,16 +27,15 @@ const Header: FC<Props> = (props) => {
   /** 侧边栏展开按钮 */
   const CollasedIcon = collapsed ? MenuUnfoldOutlined : MenuFoldOutlined;
   const currentPageTitle = useAtomValue(statePageTitle);
-  const { renderBreadcrumb } = useBreadcrumb();
 
   return (
     <header className={s.headerBox}>
       <div className="flex flex-nowrap flex-grow overflow-hidden">
         <CollasedIcon onClick={onClickCollasedIcon} className="text-xl mr-4" />
-        <div>{currentPageTitle || renderBreadcrumb()}</div>
+        <div>{currentPageTitle}</div>
       </div>
       <div className="flex flex-nowrap flex-shrink-0 ml-2">
-        <Tooltip title="搜索文章 Ctrl + F">
+        <Tooltip title="搜索日记 Ctrl + F">
           <Link to="/search">
             <Button icon={<SearchOutlined />} className="w-60">
               搜索

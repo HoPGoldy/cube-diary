@@ -6,12 +6,10 @@ import { AppContainer } from "./layouts/app-container";
 import { Error403 } from "./pages/e403";
 import Login from "./pages/login";
 import Entry from "./pages/entry";
-import Article from "./pages/article";
 import Search from "./pages/search/search";
 import AttachmentDemo from "./pages/attachment-demo";
 import MarkdownEditorDemo from "./pages/markdown-editor-demo";
 import { TagDetailModal } from "./pages/tag-detail";
-import { ArticleConfigModal } from "./pages/article-config";
 import { DiaryEdit, MonthList } from "./pages/diary";
 
 const lazyLoad = (
@@ -33,9 +31,7 @@ export const routes = createBrowserRouter(
         { index: true, element: <Entry /> },
         { path: "month/:month", element: <MonthList /> },
         { path: "diary/:date", element: <DiaryEdit /> },
-        // 笔记详情
-        { path: "/article/:articleId", element: <Article /> },
-        // 笔记搜索
+        // 日记搜索
         { path: "/search", element: <Search /> },
         // 标签管理
         {
@@ -47,7 +43,6 @@ export const routes = createBrowserRouter(
         <LoginAuth>
           <AppContainer />
           <TagDetailModal />
-          <ArticleConfigModal />
         </LoginAuth>
       ),
     },
