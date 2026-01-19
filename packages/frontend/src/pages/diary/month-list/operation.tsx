@@ -173,7 +173,7 @@ export const Operation: FC<OperationProps> = (props) => {
         icon={<CalendarOutlined />}
         onClick={() => setShowMonthPicker(true)}
       />
-      <Link to="/diary/search">
+      <Link to="/search">
         <ActionIcon icon={<SearchOutlined />} />
       </Link>
       <ActionButton onClick={() => onClickWrite()}>写点什么</ActionButton>

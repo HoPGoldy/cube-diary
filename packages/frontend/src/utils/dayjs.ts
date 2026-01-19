@@ -39,3 +39,8 @@ export const formatSecondsToMinutesAndSeconds = (seconds: number) => {
   const remainingSeconds = seconds % 60;
   return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
 };
+
+/** 把 YYYYMMDD 格式的日期字符串格式化为 YYYY年M月D日 */
+export const formatDateStr = (dateStr: string) => {
+  return dayjs(dateStr, "YYYYMMDD").format("YYYY年M月D日");
+};

@@ -1,4 +1,4 @@
-import { useQueryArticleList } from "@/services/article";
+import { useSearchDiary } from "@/services/diary";
 import { FC, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import {
@@ -7,26 +7,28 @@ import {
   ActionIcon,
   ActionSearch,
 } from "@/layouts/page-with-action";
-import { useQueryTagList } from "@/services/tag";
-import { useTagDict } from "@/pages/tag-manager/use-tag-dict";
-import { Tag } from "@/components/tag";
-import { Button, Card, Col, Flex, Input, Pagination, Row, Space } from "antd";
+import { Button, Card, Col, Flex, Input, Pagination, Row } from "antd";
 import { DEFAULT_PAGE_SIZE } from "@/config";
 import { DesktopArea } from "@/layouts/responsive";
-import { LeftOutlined, TagOutlined } from "@ant-design/icons";
+import {
+  LeftOutlined,
+  BgColorsOutlined,
+  ArrowUpOutlined,
+  ArrowDownOutlined,
+} from "@ant-design/icons";
 import { usePageTitle } from "@/store/global";
-import { getColorValue } from "@/components/color-picker/color-dot";
 import { ColorList } from "@/components/color-picker";
 import { EmptyTip } from "@/components/empty-tip";
 import { MobileDrawer } from "@/components/mobile-drawer";
-import type { SchemaArticleSearchItemType } from "@shared-types/article";
+import type { SchemaDiarySearchItemType } from "@shared-types/diary";
+import { formatDateStr } from "@/utils/dayjs";
 
 /**
  * 搜索页面
- * 可以通过关键字和标签来搜索笔记
+ * 可以通过关键字和颜色来搜索日记
  */
-const SearchArticle: FC = () => {
-  usePageTitle("搜索笔记");
+const SearchDiary: FC = () => {
+  usePageTitle("搜索日记");
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   // 搜索关键字
@@ -34,38 +36,24 @@ const SearchArticle: FC = () => {
     () => searchParams.get("keyword") || "",
   );
   const [openFilterDrawer, setOpenFilterDrawer] = useState(false);
-  // 获取标签列表
-  const { tagList } = useQueryTagList();
-  // 标签映射
-  const tagDict = useTagDict();
   // 当前分页
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedTag, setSelectedTag] = useState<string[]>([]);
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
+  // 是否降序排列
+  const [desc, setDesc] = useState(true);
 
   // 搜索结果列表
-  const {
-    status: searchStatus,
-    articleList,
-    total,
-    isLoading: isSearching,
-  } = useQueryArticleList({
+  const { data: searchResult, isLoading: isSearching } = useSearchDiary({
     keyword,
-    tagIds: selectedTag,
     colors: selectedColors,
+    desc,
     page: currentPage,
   });
 
-  const renderTagItem = (tagId: string) => {
-    const item = tagDict.get(tagId);
-    if (!item) return null;
-
-    return (
-      <Tag key={item.id} color={item.color}>
-        {item.title}
-      </Tag>
-    );
-  };
+  const diaryList = searchResult?.data?.rows || [];
+  const total = searchResult?.data?.total || 0;
+  const searchStatus =
+    keyword || selectedColors.length > 0 ? "success" : "pending";
 
   const onKeywordSearch = (value: string) => {
     setKeyword(value);
@@ -77,40 +65,29 @@ const SearchArticle: FC = () => {
     setSearchParams(searchParams, { replace: true });
   };
 
-  const renderSearchItem = (item: SchemaArticleSearchItemType) => {
-    const colorfulTitle = item.title.replace(
-      keyword,
-      `<span class='text-red-500'>${keyword}</span>`,
-    );
-    const colorfulContent = item.content.replace(
-      keyword,
-      `<span class='text-red-500'>${keyword}</span>`,
-    );
+  const renderSearchItem = (item: SchemaDiarySearchItemType) => {
+    // 格式化日期作为标题
+    const title = formatDateStr(item.dateStr);
+    const colorfulContent = keyword
+      ? item.content.replace(
+          new RegExp(keyword, "gi"),
+          `<span class='text-red-500'>${keyword}</span>`,
+        )
+      : item.content;
+
     return (
-      <Link to={`/article/${item.id}`} key={item.id} className="w-full">
+      <Link to={`/diary/${item.dateStr}`} key={item.dateStr} className="w-full">
         <Card
           className="mb-4 hover:ring-2 ring-gray-300 dark:ring-neutral-500 transition-shadow"
           size="small"
         >
-          <Row justify="space-between">
-            <Col xs={24} md={{ flex: "auto", span: 12 }}>
-              <div
-                className="font-bold text-lg"
-                dangerouslySetInnerHTML={{ __html: colorfulTitle }}
-              />
-            </Col>
-            <Col xs={24} md={{ flex: "1", span: 12 }}>
-              <Space
-                wrap
-                size={[0, 8]}
-                className="flex flex-wrap md:flex-row-reverse mt-2 md:mt-0"
-              >
-                {item.tagIds?.map(renderTagItem)}
-              </Space>
+          <Row>
+            <Col span={24}>
+              <div className="font-bold text-lg">{title}</div>
             </Col>
             <Col span={24}>
               <div
-                className="text-sm text-gray-600 dark:text-neutral-300 mt-2"
+                className="text-sm text-gray-600 dark:text-neutral-300 mt-2 line-clamp-3"
                 dangerouslySetInnerHTML={{ __html: colorfulContent }}
               />
             </Col>
@@ -118,21 +95,6 @@ const SearchArticle: FC = () => {
         </Card>
       </Link>
     );
-  };
-
-  const onSelectTag = (id: string) => {
-    // 如果有了就删除，没有就添加
-    const newTags = selectedTag.includes(id)
-      ? selectedTag.filter((item) => item !== id)
-      : [...selectedTag, id];
-
-    setSelectedTag(newTags);
-    setCurrentPage(1);
-
-    // 更新 url 参数
-    if (newTags.length > 0) searchParams.set("tagIds", newTags.join(","));
-    else searchParams.delete("tagIds");
-    setSearchParams(searchParams, { replace: true });
   };
 
   // 目前只支持单选
@@ -148,25 +110,6 @@ const SearchArticle: FC = () => {
     setSearchParams(searchParams, { replace: true });
   };
 
-  const renderTagArea = () => {
-    return (
-      <Flex wrap gap={8}>
-        {tagList.map((tag) => {
-          return (
-            <Tag
-              key={tag.id}
-              color={getColorValue(tag.color)}
-              selected={selectedTag.includes(tag.id)}
-              onClick={() => onSelectTag(tag.id)}
-            >
-              {tag.title}
-            </Tag>
-          );
-        })}
-      </Flex>
-    );
-  };
-
   const renderColorList = () => {
     return (
       <ColorList value={selectedColors[0] || ""} onChange={onSelectColor} />
@@ -178,17 +121,15 @@ const SearchArticle: FC = () => {
       return <EmptyTip title="正在搜索中..." subTitle="请稍候" />;
     }
     if (searchStatus === "pending") {
-      return <EmptyTip subTitle="可使用关键词、标签和颜色进行搜索" />;
+      return <EmptyTip subTitle="可使用关键词和颜色进行搜索" />;
     }
-    if (articleList.length === 0) {
-      return (
-        <EmptyTip title="没有找到相关笔记" subTitle="请尝试其他关键字或标签" />
-      );
+    if (diaryList.length === 0) {
+      return <EmptyTip title="没有找到相关日记" subTitle="请尝试其他关键字" />;
     }
 
     return (
       <Flex vertical align="center" gap={8} className="w-full">
-        {articleList.map(renderSearchItem)}
+        {diaryList.map(renderSearchItem)}
         <Pagination
           total={total}
           pageSize={DEFAULT_PAGE_SIZE}
@@ -200,12 +141,7 @@ const SearchArticle: FC = () => {
   };
 
   const renderFilterArea = () => {
-    return (
-      <>
-        {renderColorList()}
-        {renderTagArea()}
-      </>
-    );
+    return renderColorList();
   };
 
   const renderContent = () => {
@@ -213,7 +149,7 @@ const SearchArticle: FC = () => {
       <Flex vertical gap={16} align="center" className="p-4">
         <DesktopArea>
           <Input.Search
-            placeholder="请输入标题或者正文，回车搜索"
+            placeholder="请输入正文内容，回车搜索"
             enterButton="搜索"
             autoFocus
             size="large"
@@ -226,12 +162,17 @@ const SearchArticle: FC = () => {
     );
   };
 
+  const onToggleSort = () => {
+    setDesc(!desc);
+    setCurrentPage(1);
+  };
+
   return (
     <>
       <PageContent>{renderContent()}</PageContent>
 
       <MobileDrawer
-        title="笔记筛选"
+        title="日记筛选"
         open={openFilterDrawer}
         onClose={() => setOpenFilterDrawer(false)}
         footer={
@@ -256,7 +197,12 @@ const SearchArticle: FC = () => {
       <PageAction>
         <ActionIcon icon={<LeftOutlined />} onClick={() => navigate(-1)} />
         <ActionIcon
-          icon={<TagOutlined />}
+          icon={desc ? <ArrowDownOutlined /> : <ArrowUpOutlined />}
+          onClick={onToggleSort}
+          title={desc ? "当前降序，点击切换为升序" : "当前升序，点击切换为降序"}
+        />
+        <ActionIcon
+          icon={<BgColorsOutlined />}
           onClick={() => setOpenFilterDrawer(true)}
         />
         <ActionSearch onSearch={onKeywordSearch} />
@@ -265,4 +211,4 @@ const SearchArticle: FC = () => {
   );
 };
 
-export default SearchArticle;
+export default SearchDiary;
