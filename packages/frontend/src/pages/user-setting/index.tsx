@@ -10,6 +10,8 @@ import { Cell, SplitLine } from "@/components/cell";
 import { SettingLinkItem, useSettingMenu } from "./use-setting-menu";
 import { AboutModal } from "../about";
 import { DiaryImport, DiaryExport } from "../diary";
+import { AccessTokenModal } from "../access-token";
+import { McpSettingsModal } from "../mcp-settings";
 
 interface DesktopProps {
   onClick: () => void;
@@ -90,6 +92,20 @@ export const DesktopSetting: FC<DesktopProps> = (props) => {
       >
         <DiaryExport onClose={() => settingHook.setExportVisible(false)} />
       </Modal>
+
+      <AccessTokenModal
+        open={settingHook.accessTokenVisible}
+        onClose={() => settingHook.setAccessTokenVisible(false)}
+      />
+
+      <McpSettingsModal
+        open={settingHook.mcpSettingsVisible}
+        onClose={() => settingHook.setMcpSettingsVisible(false)}
+        onOpenTokenManager={() => {
+          settingHook.setMcpSettingsVisible(false);
+          settingHook.setAccessTokenVisible(true);
+        }}
+      />
     </div>
   );
 };
@@ -207,6 +223,20 @@ export const MobileSetting: FC<MobileProps> = (props) => {
       >
         <DiaryExport onClose={() => settingHook.setExportVisible(false)} />
       </Drawer>
+
+      <AccessTokenModal
+        open={settingHook.accessTokenVisible}
+        onClose={() => settingHook.setAccessTokenVisible(false)}
+      />
+
+      <McpSettingsModal
+        open={settingHook.mcpSettingsVisible}
+        onClose={() => settingHook.setMcpSettingsVisible(false)}
+        onOpenTokenManager={() => {
+          settingHook.setMcpSettingsVisible(false);
+          settingHook.setAccessTokenVisible(true);
+        }}
+      />
     </Drawer>
   );
 };

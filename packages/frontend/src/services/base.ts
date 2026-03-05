@@ -83,4 +83,12 @@ export const requestPost = async <T = any, D = any>(
   return resp.data;
 };
 
+export const requestDelete = async <T = any>(
+  url: string,
+  config?: AxiosRequestConfig,
+) => {
+  const resp = await axiosInstance.delete<AppResponse<T>>(url, config);
+  return resp.data;
+};
+
 export const queryClient = new QueryClient();

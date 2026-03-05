@@ -53,6 +53,7 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   AppConfig: 'AppConfig',
   Attachment: 'Attachment',
+  AccessToken: 'AccessToken',
   Diary: 'Diary'
 } as const
 
@@ -94,6 +95,18 @@ export const AttachmentScalarFieldEnum = {
 } as const
 
 export type AttachmentScalarFieldEnum = (typeof AttachmentScalarFieldEnum)[keyof typeof AttachmentScalarFieldEnum]
+
+
+export const AccessTokenScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  tokenHash: 'tokenHash',
+  tokenPrefix: 'tokenPrefix',
+  createdAt: 'createdAt',
+  lastUsedAt: 'lastUsedAt'
+} as const
+
+export type AccessTokenScalarFieldEnum = (typeof AccessTokenScalarFieldEnum)[keyof typeof AccessTokenScalarFieldEnum]
 
 
 export const DiaryScalarFieldEnum = {

@@ -31,6 +31,7 @@
     "@fastify/swagger": "^9.5.2",
     "@fastify/swagger-ui": "^5.2.3",
     "@fastify/type-provider-typebox": "^6.1.0",
+    "@modelcontextprotocol/sdk": "^1.27.1",
     "@prisma/adapter-better-sqlite3": "^7.0.1",
     "@prisma/client": "7.0.1",
     "axios": "^1.8.4",
@@ -46,7 +47,8 @@
     "pino": "^10.1.0",
     "prisma": "^7.0.1",
     "tsx": "^4.19.3",
-    "typebox": "^1.0.49"
+    "typebox": "^1.0.49",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@types/node": "^24.9.2",

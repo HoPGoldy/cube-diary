@@ -8,6 +8,9 @@ import { DiaryService } from "@/modules/diary/service";
 import { registerUnifyResponse } from "@/lib/unify-response";
 import type { AppInstance } from "@/types";
 import { AttachmentService } from "@/modules/attachment/service";
+import { AccessTokenService } from "@/modules/access-token/service";
+import { registerAccessTokenController } from "@/modules/access-token/controller";
+import { registerMcpController } from "@/modules/mcp/controller";
 import { registerRemoveAdditionalProperties } from "@/lib/security";
 
 /**
@@ -28,6 +31,10 @@ export const registerService = async (instance: AppInstance) => {
   });
 
   const diaryService = new DiaryService({
+    prisma,
+  });
+
+  const accessTokenService = new AccessTokenService({
     prisma,
   });
 
@@ -52,6 +59,19 @@ export const registerService = async (instance: AppInstance) => {
     await registerDiaryController({
       server,
       diaryService,
+    });
+
+    registerAccessTokenController({
+      server,
+      accessTokenService,
+    });
+
+    await registerMcpController({
+      server,
+      accessTokenService,
+      appConfigService,
+      diaryService,
+      attachmentService,
     });
   };
 

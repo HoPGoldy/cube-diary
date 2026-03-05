@@ -28,6 +28,11 @@ export type AppConfig = Prisma.AppConfigModel
  */
 export type Attachment = Prisma.AttachmentModel
 /**
+ * Model AccessToken
+ * 
+ */
+export type AccessToken = Prisma.AccessTokenModel
+/**
  * Model Diary
  * 
  */

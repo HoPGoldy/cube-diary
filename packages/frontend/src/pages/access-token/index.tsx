@@ -1,0 +1,203 @@
+import { FC, useState } from "react";
+import {
+  Button,
+  Flex,
+  Form,
+  Input,
+  Modal,
+  Popconfirm,
+  Space,
+  Table,
+  Tag,
+  Typography,
+  Alert,
+} from "antd";
+import { PlusOutlined, DeleteOutlined, CopyOutlined } from "@ant-design/icons";
+import {
+  useAccessTokenList,
+  useCreateAccessToken,
+  useDeleteAccessToken,
+} from "@/services/access-token";
+import { useQueryClient } from "@tanstack/react-query";
+
+interface Props {
+  open: boolean;
+  onClose: () => void;
+}
+
+export const AccessTokenModal: FC<Props> = ({ open, onClose }) => {
+  const queryClient = useQueryClient();
+  const { data: listResp, isLoading } = useAccessTokenList();
+  const { mutateAsync: createToken } = useCreateAccessToken();
+  const { mutateAsync: deleteToken } = useDeleteAccessToken();
+
+  const [createVisible, setCreateVisible] = useState(false);
+  const [newTokenVisible, setNewTokenVisible] = useState(false);
+  const [newToken, setNewToken] = useState<{
+    name: string;
+    token: string;
+    tokenPrefix: string;
+  } | null>(null);
+  const [form] = Form.useForm();
+
+  const tokenList = listResp?.data || [];
+
+  const handleCreate = async () => {
+    const values = await form.validateFields();
+    const resp = await createToken(values.name);
+    if (resp?.success && resp.data) {
+      setNewToken({
+        name: resp.data.name,
+        token: resp.data.token,
+        tokenPrefix: resp.data.tokenPrefix,
+      });
+      setCreateVisible(false);
+      setNewTokenVisible(true);
+      form.resetFields();
+      queryClient.invalidateQueries({ queryKey: ["access-tokens"] });
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    await deleteToken(id);
+    queryClient.invalidateQueries({ queryKey: ["access-tokens"] });
+  };
+
+  const columns = [
+    {
+      title: "名称",
+      dataIndex: "name",
+      key: "name",
+    },
+    {
+      title: "Token 前缀",
+      dataIndex: "tokenPrefix",
+      key: "tokenPrefix",
+      render: (val: string) => <Typography.Text code>{val}...</Typography.Text>,
+    },
+    {
+      title: "创建时间",
+      dataIndex: "createdAt",
+      key: "createdAt",
+      render: (val: string) => new Date(val).toLocaleDateString(),
+    },
+    {
+      title: "最后使用",
+      dataIndex: "lastUsedAt",
+      key: "lastUsedAt",
+      render: (val: string | null) =>
+        val ? new Date(val).toLocaleDateString() : <Tag>从未使用</Tag>,
+    },
+    {
+      title: "操作",
+      key: "action",
+      render: (_: any, record: any) => (
+        <Popconfirm
+          title="确认删除该 Token？"
+          description="删除后无法恢复，使用该 Token 的 MCP 接入将立即失效。"
+          onConfirm={() => handleDelete(record.id)}
+          okText="删除"
+          cancelText="取消"
+          okButtonProps={{ danger: true }}
+        >
+          <Button danger size="small" icon={<DeleteOutlined />}>
+            删除
+          </Button>
+        </Popconfirm>
+      ),
+    },
+  ];
+
+  return (
+    <>
+      <Modal
+        open={open}
+        title="Access Token 管理"
+        onCancel={onClose}
+        footer={null}
+        width={700}
+      >
+        <Flex vertical gap={12}>
+          <Alert
+            type="info"
+            showIcon
+            message="Access Token 仅用于 MCP 接入，不可用于其他 API 请求。"
+          />
+          <Flex justify="flex-end">
+            <Button
+              type="primary"
+              icon={<PlusOutlined />}
+              onClick={() => setCreateVisible(true)}
+            >
+              新建 Token
+            </Button>
+          </Flex>
+          <Table
+            dataSource={tokenList}
+            columns={columns}
+            rowKey="id"
+            loading={isLoading}
+            pagination={false}
+            size="small"
+          />
+        </Flex>
+      </Modal>
+
+      {/* 新建 Token 表单 */}
+      <Modal
+        open={createVisible}
+        title="新建 Access Token"
+        onCancel={() => {
+          setCreateVisible(false);
+          form.resetFields();
+        }}
+        onOk={handleCreate}
+        okText="创建"
+        cancelText="取消"
+      >
+        <Form form={form} layout="vertical">
+          <Form.Item
+            label="备注名称"
+            name="name"
+            rules={[{ required: true, message: "请输入备注名称" }]}
+          >
+            <Input placeholder="例如：Claude Desktop" />
+          </Form.Item>
+        </Form>
+      </Modal>
+
+      {/* 展示新生成的 Token（仅一次） */}
+      <Modal
+        open={newTokenVisible}
+        title="Token 已创建"
+        onCancel={() => setNewTokenVisible(false)}
+        footer={
+          <Button type="primary" onClick={() => setNewTokenVisible(false)}>
+            我已复制，关闭
+          </Button>
+        }
+        closable={false}
+      >
+        <Flex vertical gap={12}>
+          <Alert
+            type="warning"
+            showIcon
+            message="请立即复制此 Token，关闭后将无法再次查看完整内容。"
+          />
+          <div>
+            <Typography.Text type="secondary">Token 名称：</Typography.Text>
+            <Typography.Text strong>{newToken?.name}</Typography.Text>
+          </div>
+          <div>
+            <Typography.Text type="secondary">完整 Token：</Typography.Text>
+            <Space>
+              <Typography.Text code copyable>
+                {newToken?.token}
+              </Typography.Text>
+            </Space>
+          </div>
+        </Flex>
+      </Modal>
+    </>
+  );
+};

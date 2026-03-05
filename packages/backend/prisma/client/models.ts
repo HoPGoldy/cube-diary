@@ -10,5 +10,6 @@
  */
 export type * from './models/AppConfig'
 export type * from './models/Attachment'
+export type * from './models/AccessToken'
 export type * from './models/Diary'
 export type * from './commonInputTypes'

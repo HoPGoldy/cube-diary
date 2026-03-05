@@ -41,6 +41,16 @@ model Attachment {
   @@index([userId])
 }
 
+// MCP 访问令牌
+model AccessToken {
+  id          String    @id @default(uuid())
+  name        String
+  tokenHash   String    @unique
+  tokenPrefix String // 明文前8位，仅用于展示
+  createdAt   DateTime  @default(now())
+  lastUsedAt  DateTime?
+}
+
 // 日记 - 单用户系统
 model Diary {
   dateStr   String   @id // "20251224" - 用户本地日期，作为主键

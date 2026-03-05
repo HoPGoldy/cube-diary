@@ -4,6 +4,8 @@ import {
   SmileOutlined,
   DatabaseOutlined,
   ExportOutlined,
+  ApiOutlined,
+  KeyOutlined,
 } from "@ant-design/icons";
 import { useAtomValue } from "jotai";
 import { useQueryDiaryCount } from "@/services/diary";
@@ -22,6 +24,10 @@ export const useSettingMenu = () => {
   const [importVisible, setImportVisible] = useState(false);
   /** 是否展示导出弹窗 */
   const [exportVisible, setExportVisible] = useState(false);
+  /** 是否展示 MCP 设置弹窗 */
+  const [mcpSettingsVisible, setMcpSettingsVisible] = useState(false);
+  /** 是否展示 Access Token 管理弹窗 */
+  const [accessTokenVisible, setAccessTokenVisible] = useState(false);
 
   const { data: countInfo } = useQueryDiaryCount();
 
@@ -40,6 +46,16 @@ export const useSettingMenu = () => {
       label: "关于",
       icon: <SmileOutlined />,
       onClick: () => setAboutVisible(true),
+    },
+    {
+      label: "MCP 设置",
+      icon: <ApiOutlined />,
+      onClick: () => setMcpSettingsVisible(true),
+    },
+    {
+      label: "Access Token",
+      icon: <KeyOutlined />,
+      onClick: () => setAccessTokenVisible(true),
     },
   ].filter(Boolean) as SettingLinkItem[];
 
@@ -62,6 +78,10 @@ export const useSettingMenu = () => {
     setImportVisible,
     exportVisible,
     setExportVisible,
+    mcpSettingsVisible,
+    setMcpSettingsVisible,
+    accessTokenVisible,
+    setAccessTokenVisible,
     settingConfig,
   };
 };
