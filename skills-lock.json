@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "spec-flow": {
+      "source": "echovic/spec-flow",
+      "sourceType": "github",
+      "computedHash": "f6d6aa803393d17deadaf02e94d5aab2f033b6a1b2395744ee593384a81adab1"
+    }
+  }
+}
