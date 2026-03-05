@@ -7,6 +7,7 @@ import {
   SchemaDiaryUpdateBodyType,
   SchemaDiaryImportBodyType,
   SchemaDiaryExportBodyType,
+  SchemaDiaryStatisticBodyType,
 } from "@/types/diary";
 
 dayjs.extend(utc);
@@ -282,5 +283,20 @@ export class DiaryService {
     }));
 
     return data;
+  }
+
+  async statisticDiaries() {
+    const countResult = await this.options.prisma.diary.aggregate({
+      _count: { dateStr: true },
+    });
+
+    const sumResult = await this.options.prisma.$queryRaw<
+      { totalLength: number | null }[]
+    >`SELECT SUM(LENGTH(content)) AS totalLength FROM "Diary"`;
+
+    return {
+      diaryCount: countResult._count.dateStr,
+      diaryLength: Number(sumResult[0]?.totalLength) || 0,
+    };
   }
 }

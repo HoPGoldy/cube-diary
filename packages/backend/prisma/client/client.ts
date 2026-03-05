@@ -50,11 +50,6 @@ export type AppConfig = Prisma.AppConfigModel
  */
 export type Attachment = Prisma.AttachmentModel
 /**
- * Model Article
- * 
- */
-export type Article = Prisma.ArticleModel
-/**
  * Model Tag
  * 
  */

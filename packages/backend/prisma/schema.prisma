@@ -41,23 +41,6 @@ model Attachment {
   @@index([userId])
 }
 
-// 文章/笔记 - 树形结构存储
-model Article {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  title          String
-  content        String  @default("")
-  parentPath     String? // 树形路径 "#1#2#3#"
-  tagIds         String? // 标签 ID 列表 "1,2,3"
-  favorite       Boolean @default(false)
-  color          String? // 文章颜色标签
-  listSubarticle Boolean @default(false) // 是否在文章列表中显示子文章
-
-  @@index([parentPath])
-}
-
 // 标签
 model Tag {
   id        String   @id @default(uuid())

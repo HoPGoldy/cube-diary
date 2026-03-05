@@ -35,15 +35,15 @@ export const DesktopSetting: FC<DesktopProps> = (props) => {
         <Row gutter={[16, 16]} justify="space-around">
           <Col>
             <Statistic
-              title="笔记数量"
-              value={settingHook.articleCount}
+              title="日记数量"
+              value={settingHook.diaryCount}
               prefix={<SnippetsOutlined />}
             />
           </Col>
           <Col>
             <Statistic
               title="总字数"
-              value={settingHook.articleLength}
+              value={settingHook.diaryLength}
               prefix={<HighlightOutlined />}
             />
           </Col>
@@ -148,15 +148,15 @@ export const MobileSetting: FC<MobileProps> = (props) => {
             <Row justify="space-around">
               <Col>
                 <Statistic
-                  title="笔记数量"
-                  value={settingHook.articleCount}
+                  title="日记数量"
+                  value={settingHook.diaryCount}
                   prefix={<SnippetsOutlined />}
                 />
               </Col>
               <Col>
                 <Statistic
                   title="总字数"
-                  value={settingHook.articleLength}
+                  value={settingHook.diaryLength}
                   prefix={<HighlightOutlined />}
                 />
               </Col>

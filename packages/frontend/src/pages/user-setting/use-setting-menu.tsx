@@ -8,7 +8,7 @@ import {
 } from "@ant-design/icons";
 import { useAtomValue } from "jotai";
 import { useNavigate } from "react-router-dom";
-import { useQueryArticleCount } from "@/services/article";
+import { useQueryDiaryCount } from "@/services/diary";
 
 export interface SettingLinkItem {
   label: string;
@@ -26,7 +26,7 @@ export const useSettingMenu = () => {
   /** 是否展示导出弹窗 */
   const [exportVisible, setExportVisible] = useState(false);
 
-  const { data: countInfo } = useQueryArticleCount();
+  const { data: countInfo } = useQueryDiaryCount();
 
   const settingConfig = [
     {
@@ -57,13 +57,13 @@ export const useSettingMenu = () => {
     logout();
   };
 
-  const articleCount = countInfo?.data?.articleCount || "---";
-  const articleLength = countInfo?.data?.articleLength || "---";
+  const diaryCount = countInfo?.data?.diaryCount || "---";
+  const diaryLength = countInfo?.data?.diaryLength || "---";
   const userName = userInfo?.username || "---";
 
   return {
-    articleCount,
-    articleLength,
+    diaryCount,
+    diaryLength,
     userName,
     onLogout,
     aboutVisible,

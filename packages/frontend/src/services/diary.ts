@@ -9,6 +9,7 @@ import type {
   SchemaDiaryImportBodyType,
   SchemaDiaryImportResponseType,
   SchemaDiaryExportBodyType,
+  SchemaDiaryStatisticResponseType,
 } from "@shared-types/diary";
 
 export type DiaryItem = SchemaDiaryGetMonthListResponseType[number];
@@ -118,6 +119,19 @@ export const useExportDiary = () => {
   return useMutation({
     mutationFn: (data: SchemaDiaryExportBodyType) => {
       return requestPost("diary/export", data);
+    },
+  });
+};
+
+/** 查询日记统计数据（总数 & 总字数） */
+export const useQueryDiaryCount = () => {
+  return useQuery({
+    queryKey: ["diaryStatistic"],
+    queryFn: () => {
+      return requestPost<SchemaDiaryStatisticResponseType>(
+        "diary/statistic",
+        {},
+      );
     },
   });
 };

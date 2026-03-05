@@ -9,6 +9,8 @@ import {
   SchemaDiaryImportBody,
   SchemaDiaryImportResponse,
   SchemaDiaryExportBody,
+  SchemaDiaryStatisticBody,
+  SchemaDiaryStatisticResponse,
 } from "@/types/diary";
 import { DiaryService } from "./service";
 import { AppInstance } from "@/types";
@@ -140,6 +142,24 @@ export async function registerDiaryController(options: RegisterOptions) {
     },
     async (request) => {
       return await diaryService.exportDiary(request.body);
+    },
+  );
+
+  // 统计日记
+  server.post(
+    "/diary/statistic",
+    {
+      schema: {
+        description: "统计日记数量和总字数",
+        tags: ["diary"],
+        body: SchemaDiaryStatisticBody,
+        response: {
+          200: SchemaDiaryStatisticResponse,
+        },
+      },
+    },
+    async () => {
+      return await diaryService.statisticDiaries();
     },
   );
 }

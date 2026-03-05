@@ -53,7 +53,6 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   AppConfig: 'AppConfig',
   Attachment: 'Attachment',
-  Article: 'Article',
   Tag: 'Tag',
   Diary: 'Diary'
 } as const
@@ -96,22 +95,6 @@ export const AttachmentScalarFieldEnum = {
 } as const
 
 export type AttachmentScalarFieldEnum = (typeof AttachmentScalarFieldEnum)[keyof typeof AttachmentScalarFieldEnum]
-
-
-export const ArticleScalarFieldEnum = {
-  id: 'id',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  title: 'title',
-  content: 'content',
-  parentPath: 'parentPath',
-  tagIds: 'tagIds',
-  favorite: 'favorite',
-  color: 'color',
-  listSubarticle: 'listSubarticle'
-} as const
-
-export type ArticleScalarFieldEnum = (typeof ArticleScalarFieldEnum)[keyof typeof ArticleScalarFieldEnum]
 
 
 export const TagScalarFieldEnum = {

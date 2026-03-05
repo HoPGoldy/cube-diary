@@ -386,7 +386,6 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   AppConfig: 'AppConfig',
   Attachment: 'Attachment',
-  Article: 'Article',
   Tag: 'Tag',
   Diary: 'Diary'
 } as const
@@ -404,7 +403,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "appConfig" | "attachment" | "article" | "tag" | "diary"
+    modelProps: "appConfig" | "attachment" | "tag" | "diary"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -553,80 +552,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.AttachmentCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.AttachmentCountAggregateOutputType> | number
-        }
-      }
-    }
-    Article: {
-      payload: Prisma.$ArticlePayload<ExtArgs>
-      fields: Prisma.ArticleFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.ArticleFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ArticlePayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.ArticleFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ArticlePayload>
-        }
-        findFirst: {
-          args: Prisma.ArticleFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ArticlePayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.ArticleFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ArticlePayload>
-        }
-        findMany: {
-          args: Prisma.ArticleFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ArticlePayload>[]
-        }
-        create: {
-          args: Prisma.ArticleCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ArticlePayload>
-        }
-        createMany: {
-          args: Prisma.ArticleCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.ArticleCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ArticlePayload>[]
-        }
-        delete: {
-          args: Prisma.ArticleDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ArticlePayload>
-        }
-        update: {
-          args: Prisma.ArticleUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ArticlePayload>
-        }
-        deleteMany: {
-          args: Prisma.ArticleDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.ArticleUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.ArticleUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ArticlePayload>[]
-        }
-        upsert: {
-          args: Prisma.ArticleUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ArticlePayload>
-        }
-        aggregate: {
-          args: Prisma.ArticleAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateArticle>
-        }
-        groupBy: {
-          args: Prisma.ArticleGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.ArticleGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.ArticleCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.ArticleCountAggregateOutputType> | number
         }
       }
     }
@@ -841,22 +766,6 @@ export const AttachmentScalarFieldEnum = {
 export type AttachmentScalarFieldEnum = (typeof AttachmentScalarFieldEnum)[keyof typeof AttachmentScalarFieldEnum]
 
 
-export const ArticleScalarFieldEnum = {
-  id: 'id',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  title: 'title',
-  content: 'content',
-  parentPath: 'parentPath',
-  tagIds: 'tagIds',
-  favorite: 'favorite',
-  color: 'color',
-  listSubarticle: 'listSubarticle'
-} as const
-
-export type ArticleScalarFieldEnum = (typeof ArticleScalarFieldEnum)[keyof typeof ArticleScalarFieldEnum]
-
-
 export const TagScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
@@ -920,13 +829,6 @@ export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel
  * Reference to a field of type 'Int'
  */
 export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
-
-
-/**
- * Reference to a field of type 'Boolean'
- */
-export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -1024,7 +926,6 @@ export type PrismaClientOptions = ({
 export type GlobalOmitConfig = {
   appConfig?: Prisma.AppConfigOmit
   attachment?: Prisma.AttachmentOmit
-  article?: Prisma.ArticleOmit
   tag?: Prisma.TagOmit
   diary?: Prisma.DiaryOmit
 }

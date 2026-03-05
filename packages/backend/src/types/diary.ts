@@ -112,6 +112,20 @@ export type SchemaDiaryImportResponseType = Type.Static<
   typeof SchemaDiaryImportResponse
 >;
 
+// 统计日记
+export const SchemaDiaryStatisticBody = Type.Object({});
+export type SchemaDiaryStatisticBodyType = Type.Static<
+  typeof SchemaDiaryStatisticBody
+>;
+
+export const SchemaDiaryStatisticResponse = Type.Object({
+  diaryCount: Type.Number({ description: "日记总数" }),
+  diaryLength: Type.Number({ description: "日记总字数" }),
+});
+export type SchemaDiaryStatisticResponseType = Type.Static<
+  typeof SchemaDiaryStatisticResponse
+>;
+
 // 导出日记配置
 export const SchemaDiaryExportBody = Type.Object({
   range: Type.Union([Type.Literal("all"), Type.Literal("part")], {
