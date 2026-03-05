@@ -105,7 +105,7 @@ export const TagDetailModal: FC = () => {
             name="title"
             rules={[{ required: true, message: "请输入标签名称" }]}
           >
-            <Input placeholder="请输入标签名称" />
+            <Input placeholder="请输入标签名称" data-testid="tag-title-input" />
           </Form.Item>
 
           <Form.Item label="颜色" name="color">

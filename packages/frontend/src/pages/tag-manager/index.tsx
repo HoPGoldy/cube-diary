@@ -158,6 +158,7 @@ const TagManager: FC = () => {
               onClick={tagDetailActions.onAdd}
               type="primary"
               icon={<PlusOutlined />}
+              data-testid="tag-add-btn"
             >
               新增标签
             </Button>
@@ -193,7 +194,11 @@ const TagManager: FC = () => {
           icon={isBatch ? <DownSquareOutlined /> : <BuildOutlined />}
           onClick={() => setIsBatch(!isBatch)}
         />
-        <ActionButton onClick={tagDetailActions.onAdd} icon={<PlusOutlined />}>
+        <ActionButton
+          onClick={tagDetailActions.onAdd}
+          icon={<PlusOutlined />}
+          data-testid="tag-add-btn-mobile"
+        >
           新增标签
         </ActionButton>
       </PageAction>

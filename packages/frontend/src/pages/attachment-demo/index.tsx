@@ -31,7 +31,7 @@ export default function AttachmentDemo() {
     <div style={{ padding: 24 }}>
       <h2>附件功能演示</h2>
 
-      <div style={{ marginBottom: 16 }}>
+      <div style={{ marginBottom: 16 }} data-testid="file-upload-area">
         <Upload beforeUpload={handleUpload} showUploadList={false}>
           <Button icon={<UploadOutlined />}>上传文件</Button>
         </Upload>

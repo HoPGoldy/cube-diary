@@ -6,6 +6,7 @@
     "start:backend": "pnpm --filter backend start:dev",
     "start:frontend": "pnpm --filter frontend start:dev",
     "init:dev": "pnpm --filter backend run init:dev",
+    "test:e2e": "pnpm --filter e2e test",
     "lint": "eslint .",
     "prepare": "node -e \"import('husky').then(m=>m.default()).catch(()=>{})\"",
     "release": "commit-and-tag-version"

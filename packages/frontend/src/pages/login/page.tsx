@@ -65,6 +65,7 @@ export const LoginPage = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           onKeyUp={onPasswordInputKeyUp}
+          data-testid="login-password-input"
         />
 
         <Button
@@ -74,6 +75,7 @@ export const LoginPage = () => {
           type="primary"
           style={{ background: THEME_BUTTON_COLOR }}
           onClick={onPasswordSubmit}
+          data-testid="login-submit-btn"
         >
           登 录
         </Button>

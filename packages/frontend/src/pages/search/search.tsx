@@ -124,11 +124,21 @@ const SearchDiary: FC = () => {
       return <EmptyTip subTitle="可使用关键词和颜色进行搜索" />;
     }
     if (diaryList.length === 0) {
-      return <EmptyTip title="没有找到相关日记" subTitle="请尝试其他关键字" />;
+      return (
+        <div data-testid="search-empty-tip">
+          <EmptyTip title="没有找到相关日记" subTitle="请尝试其他关键字" />
+        </div>
+      );
     }
 
     return (
-      <Flex vertical align="center" gap={8} className="w-full">
+      <Flex
+        vertical
+        align="center"
+        gap={8}
+        className="w-full"
+        data-testid="search-result-list"
+      >
         {diaryList.map(renderSearchItem)}
         <Pagination
           total={total}
@@ -154,6 +164,7 @@ const SearchDiary: FC = () => {
             autoFocus
             size="large"
             onSearch={onKeywordSearch}
+            data-testid="search-keyword-input"
           />
         </DesktopArea>
         <DesktopArea>{renderFilterArea()}</DesktopArea>

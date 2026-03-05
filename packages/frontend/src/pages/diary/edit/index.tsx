@@ -102,6 +102,7 @@ const DiaryEdit: FC = () => {
                 icon={<SaveOutlined />}
                 onClick={onClickSaveBtn}
                 loading={diaryUpdating}
+                data-testid="diary-save-btn"
               >
                 保存
               </Button>
@@ -109,7 +110,10 @@ const DiaryEdit: FC = () => {
           </div>
         </div>
 
-        <div className={`flex-1 ${styles.editorArea}`}>
+        <div
+          className={`flex-1 ${styles.editorArea}`}
+          data-testid="diary-editor-area"
+        >
           <Editor value={content} onChange={onContentChange} />
         </div>
       </div>
@@ -136,6 +140,7 @@ const DiaryEdit: FC = () => {
           icon={<SaveOutlined />}
           onClick={onClickSaveBtn}
           loading={diaryUpdating}
+          data-testid="diary-save-btn"
         >
           保存
         </Button>
