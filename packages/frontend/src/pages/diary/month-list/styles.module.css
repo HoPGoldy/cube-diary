@@ -1,5 +1,11 @@
+.listContainer {
+  @apply columns-1 md:columns-2 lg:columns-3 gap-x-2 relative;
+}
+
 .listItem {
-  @apply mb-4 cursor-pointer hover:ring-2 ring-gray-300 dark:ring-neutral-500 transition-all;
+  page-break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+  @apply mb-2 cursor-pointer hover:ring-2 ring-gray-300 dark:ring-neutral-500 transition-all;
 }
 
 .listItem :global(.ant-card-head) {

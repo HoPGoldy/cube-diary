@@ -7,6 +7,7 @@ import { Operation } from "./operation";
 import dayjs from "dayjs";
 import type { DiaryItem } from "@/services/diary";
 import { utcdayjs } from "@/utils/dayjs";
+import styles from "./styles.module.css";
 
 /**
  * 获取指定月份已经过去了多少天
@@ -65,7 +66,7 @@ const MonthList: FC = () => {
     }
 
     return (
-      <div className="p-4">
+      <div className={styles.listContainer}>
         {diaryList.map((item) => (
           <div key={item.dateStr}>
             <DiaryListItem item={item} />
@@ -78,7 +79,7 @@ const MonthList: FC = () => {
   return (
     <>
       <PageContent>
-        <div>{renderContent()}</div>
+        <div className="mx-4 mt-4">{renderContent()}</div>
         <div ref={listBottomRef} />
       </PageContent>
 
