@@ -26,8 +26,9 @@ type JsonExportForm = Omit<
   endDate?: Dayjs;
 };
 
-const saveAsJson = (data: string, fileName = "diary.json") => {
-  const blob = new Blob([data], { type: "application/json" });
+const saveAsJson = (data: unknown, fileName = "diary.json") => {
+  const jsonStr = JSON.stringify(data, null, 2);
+  const blob = new Blob([jsonStr], { type: "application/json" });
   const a = document.createElement("a");
   a.download = fileName;
   a.href = URL.createObjectURL(blob);
@@ -47,7 +48,7 @@ const createExample = (formValues: JsonExportForm): string => {
         ? date.format(formValues.dateFormatter)
         : date.valueOf(),
       [formValues.contentKey || "content"]: `这是 ${date.format(
-        "年 MM 月 DD 日的一篇日记",
+        "YYYY 年 MM 月 DD 日的一篇日记",
       )}`,
       [formValues.colorKey || "color"]: `c0${index + 1}`,
     };
@@ -112,7 +113,7 @@ export const DiaryExport: FC<Props> = ({ onClose }) => {
   };
 
   return (
-    <div className="p-6">
+    <div className="p-3">
       <Row gutter={[16, 16]}>
         <Col xs={24} md={24} lg={12}>
           <Card size="small" title="导出配置">

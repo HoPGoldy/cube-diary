@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import { logout, stateUserJwtData } from "@/store/user";
-import { SmileOutlined, BellOutlined } from "@ant-design/icons";
+import {
+  SmileOutlined,
+  BellOutlined,
+  DatabaseOutlined,
+  ExportOutlined,
+} from "@ant-design/icons";
 import { useAtomValue } from "jotai";
 import { useNavigate } from "react-router-dom";
 import { useQueryArticleCount } from "@/services/article";
@@ -16,6 +21,10 @@ export const useSettingMenu = () => {
   const navigate = useNavigate();
   /** 是否展示关于弹窗 */
   const [aboutVisible, setAboutVisible] = useState(false);
+  /** 是否展示导入弹窗 */
+  const [importVisible, setImportVisible] = useState(false);
+  /** 是否展示导出弹窗 */
+  const [exportVisible, setExportVisible] = useState(false);
 
   const { data: countInfo } = useQueryArticleCount();
 
@@ -26,6 +35,16 @@ export const useSettingMenu = () => {
       onClick: () => {
         navigate("/tags");
       },
+    },
+    {
+      label: "导入",
+      icon: <DatabaseOutlined />,
+      onClick: () => setImportVisible(true),
+    },
+    {
+      label: "导出",
+      icon: <ExportOutlined />,
+      onClick: () => setExportVisible(true),
     },
     {
       label: "关于",
@@ -49,6 +68,10 @@ export const useSettingMenu = () => {
     onLogout,
     aboutVisible,
     setAboutVisible,
+    importVisible,
+    setImportVisible,
+    exportVisible,
+    setExportVisible,
     settingConfig,
   };
 };

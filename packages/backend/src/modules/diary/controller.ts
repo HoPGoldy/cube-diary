@@ -98,22 +98,32 @@ export async function registerDiaryController(options: RegisterOptions) {
       schema: {
         description: "导入日记",
         tags: ["diary"],
-        body: SchemaDiaryImportBody,
+        consumes: ["multipart/form-data"],
         response: {
           200: SchemaDiaryImportResponse,
         },
       },
     },
     async (request) => {
-      // 注意：文件上传需要前端配合处理，这里假设文件已上传到临时位置
-      // 实际使用时需要配合文件上传中间件或 attachment 模块
-      const { filePath, ...config } = request.body as any;
+      const body = request.body as any;
 
-      if (!filePath) {
-        throw new Error("未找到上传的文件路径");
+      const fileField = body?.file;
+      if (!fileField) {
+        throw new Error("未找到上传的文件");
       }
 
-      const result = await diaryService.importDiary(filePath, config);
+      const configField = body?.config;
+      if (!configField?.value) {
+        throw new Error("未找到导入配置");
+      }
+
+      const fileBuffer = await fileField.toBuffer();
+      const config = JSON.parse(configField.value);
+
+      const result = await diaryService.importDiaryFromBuffer(
+        fileBuffer,
+        config,
+      );
       return result;
     },
   );
@@ -128,15 +138,8 @@ export async function registerDiaryController(options: RegisterOptions) {
         body: SchemaDiaryExportBody,
       },
     },
-    async (request, reply) => {
-      const jsonString = await diaryService.exportDiary(request.body);
-
-      reply.header("Content-Type", "application/json; charset=utf-8");
-      reply.header(
-        "Content-Disposition",
-        `attachment; filename="diary-export-${Date.now()}.json"`,
-      );
-      return jsonString;
+    async (request) => {
+      return await diaryService.exportDiary(request.body);
     },
   );
 }

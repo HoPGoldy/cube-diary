@@ -32,7 +32,7 @@ export const createExample = (
         ? date.format(formValues.dateFormatter)
         : date.valueOf(),
       [formValues.contentKey || "content"]: `这是 ${date.format(
-        "年 MM 月 DD 日的一篇日记",
+        "YYYY 年 MM 月 DD 日的一篇日记",
       )}`,
       [formValues.colorKey || "color"]: `c0${index + 1}`,
     };
@@ -148,7 +148,7 @@ export const DiaryImport: FC<Props> = ({ onClose }) => {
   };
 
   return (
-    <div className="p-6">
+    <div className="p-3">
       {contextHolder}
       <Row gutter={[16, 16]}>
         <Col xs={24} md={24} lg={12}>

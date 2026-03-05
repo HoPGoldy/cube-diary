@@ -31,7 +31,7 @@ export const registerController = (options: RegisterOptions) => {
       },
     },
     async (request) => {
-      const data = await request.file();
+      const data = (request.body as any)?.file;
 
       if (!data) {
         throw new ErrorNoFile();

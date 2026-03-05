@@ -13,6 +13,7 @@ export const registerPlugin = async (server: AppInstance) => {
     limits: {
       fileSize: 512 * 1024 * 1024,
     },
+    attachFieldsToBody: true,
   });
 
   await server.register(fastifyJwt, {

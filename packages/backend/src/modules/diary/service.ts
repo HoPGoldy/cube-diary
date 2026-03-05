@@ -139,11 +139,31 @@ export class DiaryService {
     };
   }
 
+  async importDiaryFromBuffer(
+    fileBuffer: Buffer,
+    config: SchemaDiaryImportBodyType,
+  ) {
+    const jsonContent = JSON.parse(fileBuffer.toString());
+    return this.processImport(jsonContent, config);
+  }
+
   async importDiary(filePath: string, config: SchemaDiaryImportBodyType) {
     const jsonFile = await readFile(filePath);
     const jsonContent = JSON.parse(jsonFile.toString());
+    return this.processImport(jsonContent, config);
+  }
 
-    if (!Array.isArray(jsonContent)) {
+  private async processImport(
+    jsonContent: any,
+    config: SchemaDiaryImportBodyType,
+  ) {
+    // 兼容两种格式：纯数组 或 { data: [...] }
+    let diaryArray = jsonContent;
+    if (!Array.isArray(jsonContent) && Array.isArray(jsonContent?.data)) {
+      diaryArray = jsonContent.data;
+    }
+
+    if (!Array.isArray(diaryArray)) {
       throw new Error("导入的文件格式不正确，需要是 JSON 数组");
     }
 
@@ -261,6 +281,6 @@ export class DiaryService {
       [config.colorKey]: diary.color,
     }));
 
-    return JSON.stringify(data, null, 2);
+    return data;
   }
 }

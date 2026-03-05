@@ -1,5 +1,5 @@
 import { FC, Fragment } from "react";
-import { Button, Card, Col, Drawer, Flex, Row, Statistic } from "antd";
+import { Button, Card, Col, Drawer, Flex, Modal, Row, Statistic } from "antd";
 import {
   CloseCircleOutlined,
   HighlightOutlined,
@@ -9,6 +9,7 @@ import { UserOutlined, RightOutlined, LogoutOutlined } from "@ant-design/icons";
 import { Cell, SplitLine } from "@/components/cell";
 import { SettingLinkItem, useSettingMenu } from "./use-setting-menu";
 import { AboutModal } from "../about";
+import { DiaryImport, DiaryExport } from "../diary";
 
 interface DesktopProps {
   onClick: () => void;
@@ -67,6 +68,28 @@ export const DesktopSetting: FC<DesktopProps> = (props) => {
         open={settingHook.aboutVisible}
         onClose={() => settingHook.setAboutVisible(false)}
       />
+
+      <Modal
+        open={settingHook.importVisible}
+        onCancel={() => settingHook.setImportVisible(false)}
+        footer={null}
+        title="日记导入"
+        width="80%"
+        destroyOnClose
+      >
+        <DiaryImport onClose={() => settingHook.setImportVisible(false)} />
+      </Modal>
+
+      <Modal
+        open={settingHook.exportVisible}
+        onCancel={() => settingHook.setExportVisible(false)}
+        footer={null}
+        title="日记导出"
+        width="80%"
+        destroyOnClose
+      >
+        <DiaryExport onClose={() => settingHook.setExportVisible(false)} />
+      </Modal>
     </div>
   );
 };
@@ -162,6 +185,28 @@ export const MobileSetting: FC<MobileProps> = (props) => {
         open={settingHook.aboutVisible}
         onClose={() => settingHook.setAboutVisible(false)}
       />
+
+      <Drawer
+        open={settingHook.importVisible}
+        onClose={() => settingHook.setImportVisible(false)}
+        width="100%"
+        placement="left"
+        title="日记导入"
+        destroyOnClose
+      >
+        <DiaryImport onClose={() => settingHook.setImportVisible(false)} />
+      </Drawer>
+
+      <Drawer
+        open={settingHook.exportVisible}
+        onClose={() => settingHook.setExportVisible(false)}
+        width="100%"
+        placement="left"
+        title="日记导出"
+        destroyOnClose
+      >
+        <DiaryExport onClose={() => settingHook.setExportVisible(false)} />
+      </Drawer>
     </Drawer>
   );
 };
