@@ -85,8 +85,11 @@ export const AboutModal: FC<AboutModalModalProps> = (props) => {
     >
       <Flex gap={16} vertical className="mb-4">
         <div className="mt-4 mb-2 text-base">
-          专为个人构建的轻量级笔记应用。包含支持文件上传的 Markdown
-          编辑器、双端响应式布局、数据自托管、支持搜索、标签、笔记嵌套等功能。
+          又快又好用的简单日记本 APP。
+          <br />
+          <br />
+          包含支持图片上传的 Markdown
+          编辑器、双端响应式布局、数据自托管、导入导出等功能。
         </div>
 
         {aboutItems.map(renderAboutItem)}
