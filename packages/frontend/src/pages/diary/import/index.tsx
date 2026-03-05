@@ -107,7 +107,7 @@ export const DiaryImport: FC<Props> = ({ onClose }) => {
             </div>
           ),
           onOk: () => {
-            navigate("/diary/month/" + dayjs().format("YYYYMM"));
+            navigate("/month/" + dayjs().format("YYYYMM"));
           },
         });
       }
@@ -148,7 +148,7 @@ export const DiaryImport: FC<Props> = ({ onClose }) => {
   };
 
   return (
-    <div className="p-3">
+    <div className="py-2">
       {contextHolder}
       <Row gutter={[16, 16]}>
         <Col xs={24} md={24} lg={12}>

@@ -113,7 +113,7 @@ export const DiaryExport: FC<Props> = ({ onClose }) => {
   };
 
   return (
-    <div className="p-3">
+    <div className="py-2">
       <Row gutter={[16, 16]}>
         <Col xs={24} md={24} lg={12}>
           <Card size="small" title="导出配置">
