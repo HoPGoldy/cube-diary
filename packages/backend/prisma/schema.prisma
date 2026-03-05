@@ -41,16 +41,6 @@ model Attachment {
   @@index([userId])
 }
 
-// 标签
-model Tag {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  title String  @unique
-  color String?
-}
-
 // 日记 - 单用户系统
 model Diary {
   dateStr   String   @id // "20251224" - 用户本地日期，作为主键

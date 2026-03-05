@@ -9,7 +9,6 @@ import Entry from "./pages/entry";
 import Search from "./pages/search/search";
 import AttachmentDemo from "./pages/attachment-demo";
 import MarkdownEditorDemo from "./pages/markdown-editor-demo";
-import { TagDetailModal } from "./pages/tag-detail";
 import { DiaryEdit, MonthList } from "./pages/diary";
 
 const lazyLoad = (
@@ -33,16 +32,10 @@ export const routes = createBrowserRouter(
         { path: "diary/:date", element: <DiaryEdit /> },
         // 日记搜索
         { path: "/search", element: <Search /> },
-        // 标签管理
-        {
-          path: "/tags",
-          element: lazyLoad(() => import("./pages/tag-manager")),
-        },
       ],
       element: (
         <LoginAuth>
           <AppContainer />
-          <TagDetailModal />
         </LoginAuth>
       ),
     },

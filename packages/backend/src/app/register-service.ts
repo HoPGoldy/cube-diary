@@ -2,10 +2,8 @@ import { PrismaService } from "@/modules/prisma";
 import { registerController as registerAuthController } from "@/modules/auth/controller";
 import { registerController as registerAppConfigController } from "@/modules/app-config/controller";
 import { registerController as registerAttachmentController } from "@/modules/attachment/controller";
-import { registerTagController } from "@/modules/tag/controller";
 import { registerDiaryController } from "@/modules/diary/controller";
 import { AppConfigService } from "@/modules/app-config/service";
-import { TagService } from "@/modules/tag/service";
 import { DiaryService } from "@/modules/diary/service";
 import { registerUnifyResponse } from "@/lib/unify-response";
 import type { AppInstance } from "@/types";
@@ -29,10 +27,6 @@ export const registerService = async (instance: AppInstance) => {
     prisma,
   });
 
-  const tagService = new TagService({
-    prisma,
-  });
-
   const diaryService = new DiaryService({
     prisma,
   });
@@ -53,11 +47,6 @@ export const registerService = async (instance: AppInstance) => {
     registerAppConfigController({
       appConfigService,
       server,
-    });
-
-    await registerTagController({
-      server,
-      tagService,
     });
 
     await registerDiaryController({
