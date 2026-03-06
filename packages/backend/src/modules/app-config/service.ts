@@ -38,13 +38,6 @@ export class AppConfigService {
     return configs as SchemaAppConfigType;
   }
 
-  async getMcpEnabled(): Promise<boolean> {
-    const record = await this.options.prisma.appConfig.findUnique({
-      where: { key: "mcp.enabled" },
-    });
-    return record?.value === "true";
-  }
-
   async setConfigValues(configs: Record<string, string>) {
     if (!Object.keys(configs).length) {
       return;

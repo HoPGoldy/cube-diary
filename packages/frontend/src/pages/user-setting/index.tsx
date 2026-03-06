@@ -11,7 +11,7 @@ import { SettingLinkItem, useSettingMenu } from "./use-setting-menu";
 import { AboutModal } from "../about";
 import { DiaryImport, DiaryExport } from "../diary";
 import { AccessTokenModal } from "../access-token";
-import { McpSettingsModal } from "../mcp-settings";
+import { AiSkillSettingsModal } from "../ai-skill-settings";
 
 interface DesktopProps {
   onClick: () => void;
@@ -98,11 +98,11 @@ export const DesktopSetting: FC<DesktopProps> = (props) => {
         onClose={() => settingHook.setAccessTokenVisible(false)}
       />
 
-      <McpSettingsModal
-        open={settingHook.mcpSettingsVisible}
-        onClose={() => settingHook.setMcpSettingsVisible(false)}
+      <AiSkillSettingsModal
+        open={settingHook.aiSkillSettingsVisible}
+        onClose={() => settingHook.setAiSkillSettingsVisible(false)}
         onOpenTokenManager={() => {
-          settingHook.setMcpSettingsVisible(false);
+          settingHook.setAiSkillSettingsVisible(false);
           settingHook.setAccessTokenVisible(true);
         }}
       />
@@ -229,11 +229,11 @@ export const MobileSetting: FC<MobileProps> = (props) => {
         onClose={() => settingHook.setAccessTokenVisible(false)}
       />
 
-      <McpSettingsModal
-        open={settingHook.mcpSettingsVisible}
-        onClose={() => settingHook.setMcpSettingsVisible(false)}
+      <AiSkillSettingsModal
+        open={settingHook.aiSkillSettingsVisible}
+        onClose={() => settingHook.setAiSkillSettingsVisible(false)}
         onOpenTokenManager={() => {
-          settingHook.setMcpSettingsVisible(false);
+          settingHook.setAiSkillSettingsVisible(false);
           settingHook.setAccessTokenVisible(true);
         }}
       />

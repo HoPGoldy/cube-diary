@@ -32,6 +32,22 @@ export type SchemaAccessTokenListItemType = Type.Static<
   typeof SchemaAccessTokenListItem
 >;
 
+// 兑换 JWT 请求体
+export const SchemaAccessTokenExchange = Type.Object({
+  token: Type.String({ description: "Access Token 明文" }),
+});
+export type SchemaAccessTokenExchangeType = Type.Static<
+  typeof SchemaAccessTokenExchange
+>;
+
+// 兑换 JWT 响应
+export const SchemaAccessTokenExchangeResponse = Type.Object({
+  accessToken: Type.String({ description: "短期 JWT（有效期 2 天）" }),
+});
+export type SchemaAccessTokenExchangeResponseType = Type.Static<
+  typeof SchemaAccessTokenExchangeResponse
+>;
+
 // 列表响应
 export const SchemaAccessTokenList = Type.Array(SchemaAccessTokenListItem);
 export type SchemaAccessTokenListType = Type.Static<

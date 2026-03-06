@@ -70,36 +70,28 @@ test.describe("Access Token 模块", () => {
     expect(found.token).toBeUndefined();
   });
 
-  test("MCP 接口用有效 access token 访问返回非 401/503", async ({ page }) => {
-    // MCP 服务默认未开启，期望是 503，说明 token 验证通过了，只是服务被禁用
-    const resp = await page.request.post(`${BASE}/mcp`, {
-      data: {
-        jsonrpc: "2.0",
-        id: 1,
-        method: "tools/list",
-        params: {},
-      },
-      headers: {
-        Authorization: `Bearer ${createdTokenPlain}`,
-        "Content-Type": "application/json",
-      },
+  test("exchange 端点用有效 access token 换取 JWT 成功", async ({ page }) => {
+    const resp = await page.request.post(`${BASE}/access-tokens/exchange`, {
+      data: { token: createdTokenPlain },
+      headers: { "Content-Type": "application/json" },
     });
-    // 不是 401（token 验证通过），是 503（mcp 未开启）或 200（已开启）
-    expect(resp.status()).not.toBe(401);
+    expect(resp.status()).toBe(200);
+    const body = await resp.json();
+    expect(body.success).toBe(true);
+    expect(typeof body.data.accessToken).toBe("string");
+    expect(body.data.accessToken.length).toBeGreaterThan(0);
+
+    // 验证兑换出的 JWT 可访问受保护接口
+    const diaryResp = await page.request.get(`${BASE}/diary`, {
+      headers: { Authorization: `Bearer ${body.data.accessToken}` },
+    });
+    expect(diaryResp.status()).not.toBe(401);
   });
 
-  test("MCP 接口用无效 token 访问返回 401", async ({ page }) => {
-    const resp = await page.request.post(`${BASE}/mcp`, {
-      data: {
-        jsonrpc: "2.0",
-        id: 1,
-        method: "tools/list",
-        params: {},
-      },
-      headers: {
-        Authorization: "Bearer invalid-token-that-does-not-exist",
-        "Content-Type": "application/json",
-      },
+  test("exchange 端点用无效 token 返回 401", async ({ page }) => {
+    const resp = await page.request.post(`${BASE}/access-tokens/exchange`, {
+      data: { token: "invalid-token-that-does-not-exist" },
+      headers: { "Content-Type": "application/json" },
     });
     expect(resp.status()).toBe(401);
   });
@@ -131,18 +123,10 @@ test.describe("Access Token 模块", () => {
     expect(found).toBeUndefined();
   });
 
-  test("删除后原 token 调用 MCP 返回 401", async ({ page }) => {
-    const resp = await page.request.post(`${BASE}/mcp`, {
-      data: {
-        jsonrpc: "2.0",
-        id: 1,
-        method: "tools/list",
-        params: {},
-      },
-      headers: {
-        Authorization: `Bearer ${createdTokenPlain}`,
-        "Content-Type": "application/json",
-      },
+  test("删除后原 token 兑换 JWT 返回 401", async ({ page }) => {
+    const resp = await page.request.post(`${BASE}/access-tokens/exchange`, {
+      data: { token: createdTokenPlain },
+      headers: { "Content-Type": "application/json" },
     });
     expect(resp.status()).toBe(401);
   });

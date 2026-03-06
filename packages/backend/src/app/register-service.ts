@@ -10,7 +10,8 @@ import type { AppInstance } from "@/types";
 import { AttachmentService } from "@/modules/attachment/service";
 import { AccessTokenService } from "@/modules/access-token/service";
 import { registerAccessTokenController } from "@/modules/access-token/controller";
-import { registerMcpController } from "@/modules/mcp/controller";
+import { SkillService } from "@/modules/skill/service";
+import { registerSkillController } from "@/modules/skill/controller";
 import { registerRemoveAdditionalProperties } from "@/lib/security";
 
 /**
@@ -37,6 +38,8 @@ export const registerService = async (instance: AppInstance) => {
   const accessTokenService = new AccessTokenService({
     prisma,
   });
+
+  const skillService = new SkillService();
 
   const appControllerPlugin = async (server: AppInstance) => {
     registerRemoveAdditionalProperties(server);
@@ -66,12 +69,9 @@ export const registerService = async (instance: AppInstance) => {
       accessTokenService,
     });
 
-    await registerMcpController({
+    registerSkillController({
       server,
-      accessTokenService,
-      appConfigService,
-      diaryService,
-      attachmentService,
+      skillService,
     });
   };
 

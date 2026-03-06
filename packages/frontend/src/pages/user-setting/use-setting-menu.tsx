@@ -24,8 +24,8 @@ export const useSettingMenu = () => {
   const [importVisible, setImportVisible] = useState(false);
   /** 是否展示导出弹窗 */
   const [exportVisible, setExportVisible] = useState(false);
-  /** 是否展示 MCP 设置弹窗 */
-  const [mcpSettingsVisible, setMcpSettingsVisible] = useState(false);
+  /** 是否展示 AI Skill 设置弹窗 */
+  const [aiSkillSettingsVisible, setAiSkillSettingsVisible] = useState(false);
   /** 是否展示 Access Token 管理弹窗 */
   const [accessTokenVisible, setAccessTokenVisible] = useState(false);
 
@@ -48,9 +48,9 @@ export const useSettingMenu = () => {
       onClick: () => setAboutVisible(true),
     },
     {
-      label: "MCP 设置",
+      label: "AI Skill 设置",
       icon: <ApiOutlined />,
-      onClick: () => setMcpSettingsVisible(true),
+      onClick: () => setAiSkillSettingsVisible(true),
     },
     {
       label: "Access Token",
@@ -78,8 +78,8 @@ export const useSettingMenu = () => {
     setImportVisible,
     exportVisible,
     setExportVisible,
-    mcpSettingsVisible,
-    setMcpSettingsVisible,
+    aiSkillSettingsVisible,
+    setAiSkillSettingsVisible,
     accessTokenVisible,
     setAccessTokenVisible,
     settingConfig,

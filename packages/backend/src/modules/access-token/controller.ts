@@ -1,10 +1,13 @@
 import { Type } from "typebox";
 import type { AppInstance } from "@/types";
 import type { AccessTokenService } from "./service";
+import { ErrorUnauthorized } from "@/types/error";
 import {
   SchemaAccessTokenCreate,
   SchemaAccessTokenCreateResponse,
   SchemaAccessTokenList,
+  SchemaAccessTokenExchange,
+  SchemaAccessTokenExchangeResponse,
 } from "@/types/access-token";
 
 interface RegisterOptions {
@@ -67,6 +70,39 @@ export const registerAccessTokenController = (options: RegisterOptions) => {
       const { id } = request.params;
       await accessTokenService.delete(id);
       return { success: true };
+    },
+  );
+
+  server.post(
+    "/access-tokens/exchange",
+    {
+      config: { disableAuth: true },
+      schema: {
+        description: "使用 Access Token 兑换短期 JWT（有效期 2 天）",
+        tags: ["access-token"],
+        body: SchemaAccessTokenExchange,
+        response: {
+          200: SchemaAccessTokenExchangeResponse,
+        },
+        security: [],
+      },
+    },
+    async (request) => {
+      const { token } = request.body;
+      const accessToken = await accessTokenService.verify(token);
+      if (!accessToken) {
+        throw new ErrorUnauthorized("Invalid access token");
+      }
+      const jwt = server.jwt.sign(
+        {
+          id: "access-token-user",
+          username: "",
+          role: "user",
+          source: "access-token",
+        },
+        { expiresIn: "2d" },
+      );
+      return { accessToken: jwt };
     },
   );
 };
