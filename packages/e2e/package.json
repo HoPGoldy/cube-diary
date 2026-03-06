@@ -10,6 +10,7 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.50.0",
+    "@types/node": "^25.3.5",
     "dayjs": "^1.11.4",
     "dotenv-flow": "^4.1.0"
   }
