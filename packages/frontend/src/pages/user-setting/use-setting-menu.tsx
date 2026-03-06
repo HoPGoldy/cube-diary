@@ -4,7 +4,6 @@ import {
   SmileOutlined,
   DatabaseOutlined,
   ExportOutlined,
-  ApiOutlined,
   KeyOutlined,
 } from "@ant-design/icons";
 import { useAtomValue } from "jotai";
@@ -24,8 +23,6 @@ export const useSettingMenu = () => {
   const [importVisible, setImportVisible] = useState(false);
   /** 是否展示导出弹窗 */
   const [exportVisible, setExportVisible] = useState(false);
-  /** 是否展示 AI Skill 设置弹窗 */
-  const [aiSkillSettingsVisible, setAiSkillSettingsVisible] = useState(false);
   /** 是否展示 Access Token 管理弹窗 */
   const [accessTokenVisible, setAccessTokenVisible] = useState(false);
 
@@ -46,11 +43,6 @@ export const useSettingMenu = () => {
       label: "关于",
       icon: <SmileOutlined />,
       onClick: () => setAboutVisible(true),
-    },
-    {
-      label: "AI Skill 设置",
-      icon: <ApiOutlined />,
-      onClick: () => setAiSkillSettingsVisible(true),
     },
     {
       label: "Access Token",
@@ -78,8 +70,6 @@ export const useSettingMenu = () => {
     setImportVisible,
     exportVisible,
     setExportVisible,
-    aiSkillSettingsVisible,
-    setAiSkillSettingsVisible,
     accessTokenVisible,
     setAccessTokenVisible,
     settingConfig,

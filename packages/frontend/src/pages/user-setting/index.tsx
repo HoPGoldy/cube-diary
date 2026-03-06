@@ -11,7 +11,6 @@ import { SettingLinkItem, useSettingMenu } from "./use-setting-menu";
 import { AboutModal } from "../about";
 import { DiaryImport, DiaryExport } from "../diary";
 import { AccessTokenModal } from "../access-token";
-import { AiSkillSettingsModal } from "../ai-skill-settings";
 
 interface DesktopProps {
   onClick: () => void;
@@ -96,15 +95,6 @@ export const DesktopSetting: FC<DesktopProps> = (props) => {
       <AccessTokenModal
         open={settingHook.accessTokenVisible}
         onClose={() => settingHook.setAccessTokenVisible(false)}
-      />
-
-      <AiSkillSettingsModal
-        open={settingHook.aiSkillSettingsVisible}
-        onClose={() => settingHook.setAiSkillSettingsVisible(false)}
-        onOpenTokenManager={() => {
-          settingHook.setAiSkillSettingsVisible(false);
-          settingHook.setAccessTokenVisible(true);
-        }}
       />
     </div>
   );
@@ -227,15 +217,6 @@ export const MobileSetting: FC<MobileProps> = (props) => {
       <AccessTokenModal
         open={settingHook.accessTokenVisible}
         onClose={() => settingHook.setAccessTokenVisible(false)}
-      />
-
-      <AiSkillSettingsModal
-        open={settingHook.aiSkillSettingsVisible}
-        onClose={() => settingHook.setAiSkillSettingsVisible(false)}
-        onOpenTokenManager={() => {
-          settingHook.setAiSkillSettingsVisible(false);
-          settingHook.setAccessTokenVisible(true);
-        }}
       />
     </Drawer>
   );
