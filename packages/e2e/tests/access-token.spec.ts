@@ -38,10 +38,8 @@ test.describe("Access Token 模块", () => {
     expect(body.data).toMatchObject({
       name: "e2e-test-token",
     });
-    // 明文 token 存在（64 位 hex）
-    expect(body.data.token).toMatch(/^[0-9a-f]{64}$/);
-    // prefix 是 token 的前 8 位
-    expect(body.data.token.startsWith(body.data.tokenPrefix)).toBe(true);
+    // 明文 token 以 csk- 开头，后接 64 位 hex
+    expect(body.data.token).toMatch(/^csk-[0-9a-f]{64}$/);
     // 有 id 和 createdAt
     expect(body.data.id).toBeTruthy();
     expect(body.data.createdAt).toBeTruthy();
@@ -70,28 +68,21 @@ test.describe("Access Token 模块", () => {
     expect(found.token).toBeUndefined();
   });
 
-  test("exchange 端点用有效 access token 换取 JWT 成功", async ({ page }) => {
-    const resp = await page.request.post(`${BASE}/access-tokens/exchange`, {
-      data: { token: createdTokenPlain },
-      headers: { "Content-Type": "application/json" },
+  test("Access Token 可直接作为 Bearer 令牌访问受保护接口", async ({
+    page,
+  }) => {
+    const resp = await page.request.get(`${BASE}/access-tokens`, {
+      headers: { Authorization: `Bearer ${createdTokenPlain}` },
     });
-    expect(resp.status()).toBe(200);
-    const body = await resp.json();
-    expect(body.success).toBe(true);
-    expect(typeof body.data.accessToken).toBe("string");
-    expect(body.data.accessToken.length).toBeGreaterThan(0);
-
-    // 验证兑换出的 JWT 可访问受保护接口
-    const diaryResp = await page.request.get(`${BASE}/diary`, {
-      headers: { Authorization: `Bearer ${body.data.accessToken}` },
-    });
-    expect(diaryResp.status()).not.toBe(401);
+    expect(resp.status()).not.toBe(401);
   });
 
-  test("exchange 端点用无效 token 返回 401", async ({ page }) => {
-    const resp = await page.request.post(`${BASE}/access-tokens/exchange`, {
-      data: { token: "invalid-token-that-does-not-exist" },
-      headers: { "Content-Type": "application/json" },
+  test("无效 Access Token 直接请求返回 401", async ({ page }) => {
+    const resp = await page.request.get(`${BASE}/access-tokens`, {
+      headers: {
+        Authorization:
+          "Bearer csk-0000000000000000000000000000000000000000000000000000000000000000",
+      },
     });
     expect(resp.status()).toBe(401);
   });
@@ -123,10 +114,9 @@ test.describe("Access Token 模块", () => {
     expect(found).toBeUndefined();
   });
 
-  test("删除后原 token 兑换 JWT 返回 401", async ({ page }) => {
-    const resp = await page.request.post(`${BASE}/access-tokens/exchange`, {
-      data: { token: createdTokenPlain },
-      headers: { "Content-Type": "application/json" },
+  test("删除后 Access Token 直接请求返回 401", async ({ page }) => {
+    const resp = await page.request.get(`${BASE}/access-tokens`, {
+      headers: { Authorization: `Bearer ${createdTokenPlain}` },
     });
     expect(resp.status()).toBe(401);
   });

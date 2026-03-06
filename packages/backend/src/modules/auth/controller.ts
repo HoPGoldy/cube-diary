@@ -12,6 +12,8 @@ import { ErrorUnauthorized } from "@/types/error";
 import { ErrorAuthFailed, ErrorBanned } from "./error";
 import { hashPassword, shaWithSalt } from "@/lib/crypto";
 import { ENV_BACKEND_LOGIN_PASSWORD } from "@/config/env";
+import type { AccessTokenService } from "@/modules/access-token/service";
+import { ACCESS_TOKEN_PREFIX } from "@/modules/access-token/service";
 
 declare module "fastify" {
   interface FastifyContextConfig {
@@ -37,10 +39,11 @@ declare module "@fastify/jwt" {
 
 interface RegisterOptions {
   server: AppInstance;
+  accessTokenService: AccessTokenService;
 }
 
 export const registerController = (options: RegisterOptions) => {
-  const { server } = options;
+  const { server, accessTokenService } = options;
 
   // 根据配置给路由添加 swagger 安全定义
   server.addHook("onRoute", (routeOptions) => {
@@ -55,11 +58,29 @@ export const registerController = (options: RegisterOptions) => {
   server.addHook("preHandler", async (request) => {
     const { disableAuth, requireAdmin } = request.routeOptions.config;
     if (!disableAuth) {
-      try {
-        await request.jwtVerify();
-      } catch (err) {
-        console.error(err);
-        throw new ErrorUnauthorized();
+      const authHeader = request.headers.authorization;
+      const bearerToken = authHeader?.startsWith("Bearer ")
+        ? authHeader.slice(7)
+        : null;
+
+      if (bearerToken?.startsWith(ACCESS_TOKEN_PREFIX)) {
+        // csk- 前缀 → Access Token 路径（内存缓存 + DB）
+        const plain = bearerToken.slice(ACCESS_TOKEN_PREFIX.length);
+        const record = await accessTokenService.verify(plain);
+        if (!record) throw new ErrorUnauthorized();
+        request.user = {
+          id: "access-token-user",
+          username: "",
+          role: "user",
+          source: "access-token",
+        };
+      } else {
+        // 其他 → JWT 路径（纯 crypto，无 DB）
+        try {
+          await request.jwtVerify();
+        } catch {
+          throw new ErrorUnauthorized();
+        }
       }
 
       if (requireAdmin && request.user.role !== UserRole.ADMIN) {

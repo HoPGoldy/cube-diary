@@ -48,6 +48,7 @@ export const registerService = async (instance: AppInstance) => {
 
     registerAuthController({
       server,
+      accessTokenService,
     });
 
     registerAppConfigController({

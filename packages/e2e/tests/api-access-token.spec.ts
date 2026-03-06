@@ -18,10 +18,8 @@ test.describe("Access Token API", () => {
     expect(body.data).toHaveProperty("token");
     expect(body.data).toHaveProperty("tokenPrefix");
     expect(body.data.name).toBe("api-e2e-test-token");
-    // 明文 token 为 64 位 hex
-    expect(body.data.token).toMatch(/^[0-9a-f]{64}$/);
-    // prefix 是 token 前 8 位
-    expect(body.data.token.startsWith(body.data.tokenPrefix)).toBe(true);
+    // 明文 token 以 csk- 开头，后接 64 位 hex
+    expect(body.data.token).toMatch(/^csk-[0-9a-f]{64}$/);
 
     createdTokenId = body.data.id;
     createdTokenPlain = body.data.token;
@@ -49,34 +47,20 @@ test.describe("Access Token API", () => {
     expect(found.token).toBeUndefined();
   });
 
-  test("POST /api/access-tokens/exchange 有效令牌兑换 JWT", async ({
+  test("Access Token 可直接作为 Bearer 令牌访问受保护接口", async ({
     request,
   }) => {
-    const resp = await request.post(`${BASE}/access-tokens/exchange`, {
-      data: { token: createdTokenPlain },
+    const resp = await request.get(`${BASE}/config/version`, {
+      headers: authHeader(createdTokenPlain),
     });
     expect(resp.status()).toBe(200);
-
-    const body = await resp.json();
-    expect(body.success).toBe(true);
-    expect(typeof body.data.accessToken).toBe("string");
-    expect(body.data.accessToken.length).toBeGreaterThan(0);
-
-    // 兑换出的 JWT 可以访问受保护接口
-    const testResp = await request.get(`${BASE}/config/version`, {
-      headers: authHeader(body.data.accessToken),
-    });
-    expect(testResp.status()).toBe(200);
   });
 
-  test("POST /api/access-tokens/exchange 无效令牌返回 401", async ({
-    request,
-  }) => {
-    const resp = await request.post(`${BASE}/access-tokens/exchange`, {
-      data: {
-        token:
-          "0000000000000000000000000000000000000000000000000000000000000000",
-      },
+  test("无效 Access Token 直接请求返回 401", async ({ request }) => {
+    const resp = await request.get(`${BASE}/config/version`, {
+      headers: authHeader(
+        "csk-0000000000000000000000000000000000000000000000000000000000000000",
+      ),
     });
     expect(resp.status()).toBe(401);
   });
@@ -105,9 +89,9 @@ test.describe("Access Token API", () => {
     expect(found).toBeUndefined();
   });
 
-  test("删除后令牌兑换 JWT 返回 401", async ({ request }) => {
-    const resp = await request.post(`${BASE}/access-tokens/exchange`, {
-      data: { token: createdTokenPlain },
+  test("删除后 Access Token 直接请求返回 401", async ({ request }) => {
+    const resp = await request.get(`${BASE}/config/version`, {
+      headers: authHeader(createdTokenPlain),
     });
     expect(resp.status()).toBe(401);
   });
