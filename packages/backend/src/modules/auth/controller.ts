@@ -8,7 +8,7 @@ import {
   SchemaAuthRenewResponse,
   SchemaAuthRenewErrorResponse,
 } from "@/types/auth";
-import { ErrorUnauthorized } from "@/types/error";
+import { ErrorUnauthorized, ErrorForbidden } from "@/types/error";
 import { ErrorAuthFailed, ErrorBanned } from "./error";
 import { hashPassword, shaWithSalt } from "@/lib/crypto";
 import { ENV_BACKEND_LOGIN_PASSWORD } from "@/config/env";
@@ -27,13 +27,29 @@ declare module "fastify" {
      * @default false
      */
     requireAdmin?: boolean;
+    /**
+     * 该路由所需的 access token scope 列表
+     */
+    requiredScopes?: string[];
   }
 }
 
 declare module "@fastify/jwt" {
   interface FastifyJWT {
-    payload: { id: string; username: string; role: string; source?: string };
-    user: { id: string; username: string; role: string; source?: string };
+    payload: {
+      id: string;
+      username: string;
+      role: string;
+      source?: string;
+      scopes?: string[];
+    };
+    user: {
+      id: string;
+      username: string;
+      role: string;
+      source?: string;
+      scopes?: string[];
+    };
   }
 }
 
@@ -56,7 +72,8 @@ export const registerController = (options: RegisterOptions) => {
   });
 
   server.addHook("preHandler", async (request) => {
-    const { disableAuth, requireAdmin } = request.routeOptions.config;
+    const { disableAuth, requireAdmin, requiredScopes } =
+      request.routeOptions.config;
     if (!disableAuth) {
       const authHeader = request.headers.authorization;
       const bearerToken = authHeader?.startsWith("Bearer ")
@@ -73,6 +90,7 @@ export const registerController = (options: RegisterOptions) => {
           username: "",
           role: "user",
           source: "access-token",
+          scopes: record.scopes,
         };
       } else {
         // 其他 → JWT 路径（纯 crypto，无 DB）
@@ -85,6 +103,20 @@ export const registerController = (options: RegisterOptions) => {
 
       if (requireAdmin && request.user.role !== UserRole.ADMIN) {
         throw new ErrorBanned();
+      }
+
+      // scope 校验：仅对 access-token 来源生效
+      if (
+        requiredScopes &&
+        request.user.source === "access-token" &&
+        request.user.scopes
+      ) {
+        const hasAll = requiredScopes.every((s) =>
+          request.user.scopes!.includes(s),
+        );
+        if (!hasAll) {
+          throw new ErrorForbidden("Insufficient scope");
+        }
       }
     }
   });

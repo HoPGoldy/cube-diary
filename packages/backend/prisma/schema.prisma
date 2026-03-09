@@ -47,6 +47,7 @@ model AccessToken {
   name        String
   tokenHash   String    @unique
   tokenPrefix String // 明文前8位，仅用于展示
+  scopes      String    @default("[]") // JSON 数组，如 '["diary:read","diary:write"]'
   createdAt   DateTime  @default(now())
   lastUsedAt  DateTime?
 }

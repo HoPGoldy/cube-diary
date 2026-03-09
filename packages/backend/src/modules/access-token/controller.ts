@@ -5,6 +5,7 @@ import {
   SchemaAccessTokenCreate,
   SchemaAccessTokenCreateResponse,
   SchemaAccessTokenList,
+  SchemaAccessTokenUpdate,
 } from "@/types/access-token";
 
 interface RegisterOptions {
@@ -28,8 +29,30 @@ export const registerAccessTokenController = (options: RegisterOptions) => {
       },
     },
     async (request) => {
-      const { name } = request.body;
-      return accessTokenService.create(name);
+      const { name, scopes } = request.body;
+      return accessTokenService.create(name, scopes);
+    },
+  );
+
+  server.post(
+    "/access-tokens/update",
+    {
+      schema: {
+        description: "更新访问令牌（名称和权限）",
+        tags: ["access-token"],
+        body: SchemaAccessTokenUpdate,
+        response: {
+          200: Type.Object({
+            id: Type.String(),
+            name: Type.String(),
+            scopes: Type.Array(Type.String()),
+          }),
+        },
+      },
+    },
+    async (request) => {
+      const { id, name, scopes } = request.body;
+      return accessTokenService.update(id, name, scopes);
     },
   );
 

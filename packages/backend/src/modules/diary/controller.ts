@@ -27,6 +27,7 @@ export async function registerDiaryController(options: RegisterOptions) {
   server.post(
     "/diary/getMonthList",
     {
+      config: { requiredScopes: ["diary:read"] },
       schema: {
         description: "获取指定月份的日记列表",
         tags: ["diary"],
@@ -45,6 +46,7 @@ export async function registerDiaryController(options: RegisterOptions) {
   server.post(
     "/diary/getDetail",
     {
+      config: { requiredScopes: ["diary:read"] },
       schema: {
         description: "获取指定日期的日记详情",
         tags: ["diary"],
@@ -63,6 +65,7 @@ export async function registerDiaryController(options: RegisterOptions) {
   server.post(
     "/diary/update",
     {
+      config: { requiredScopes: ["diary:write"] },
       schema: {
         description: "更新或创建日记",
         tags: ["diary"],
@@ -79,6 +82,7 @@ export async function registerDiaryController(options: RegisterOptions) {
   server.post(
     "/diary/search",
     {
+      config: { requiredScopes: ["diary:read"] },
       schema: {
         description: "搜索日记",
         tags: ["diary"],
@@ -97,6 +101,7 @@ export async function registerDiaryController(options: RegisterOptions) {
   server.post(
     "/diary/import",
     {
+      config: { requiredScopes: ["diary:import"] },
       schema: {
         description: "导入日记",
         tags: ["diary"],
@@ -134,6 +139,7 @@ export async function registerDiaryController(options: RegisterOptions) {
   server.post(
     "/diary/export",
     {
+      config: { requiredScopes: ["diary:export"] },
       schema: {
         description: "导出日记为 JSON 文件",
         tags: ["diary"],
@@ -149,6 +155,7 @@ export async function registerDiaryController(options: RegisterOptions) {
   server.post(
     "/diary/statistic",
     {
+      config: { requiredScopes: ["diary:read"] },
       schema: {
         description: "统计日记数量和总字数",
         tags: ["diary"],
