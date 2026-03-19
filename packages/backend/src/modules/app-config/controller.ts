@@ -60,7 +60,10 @@ export const registerController = (options: RegisterOptions) => {
       },
     },
     async () => {
-      const packageJson = await import(PATH_PACKAGE_JSON);
+      const { readFile } = await import("fs/promises");
+      const packageJson = JSON.parse(
+        await readFile(PATH_PACKAGE_JSON, "utf-8"),
+      );
       return {
         version: packageJson.version,
         name: packageJson.name,

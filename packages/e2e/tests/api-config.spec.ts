@@ -14,6 +14,21 @@ test.describe("Config API", () => {
     expect(typeof body.data.name).toBe("string");
     // 版本号格式: x.y.z
     expect(body.data.version).toMatch(/^\d+\.\d+\.\d+/);
+    // repository 字段存在
+    expect(body.data.repository).toBeDefined();
+  });
+
+  test("GET /api/config/version 不应返回模块导入错误", async ({
+    request,
+    jwt,
+  }) => {
+    const resp = await request.get(`${BASE}/config/version`, {
+      headers: authHeader(jwt),
+    });
+    const body = await resp.json();
+    expect(body.success).toBe(true);
+    // 确保没有 ERR_IMPORT_ASSERTION_TYPE_MISSING 错误
+    expect(body.code).toBeUndefined();
   });
 
   test("POST /api/config 获取配置列表", async ({ request, jwt }) => {
