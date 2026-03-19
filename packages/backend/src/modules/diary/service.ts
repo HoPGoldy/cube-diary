@@ -1,6 +1,6 @@
 import { PrismaClient } from "@db/client";
 import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
+import utc from "dayjs/plugin/utc.js";
 import { readFile } from "fs/promises";
 import {
   SchemaDiarySearchBodyType,
