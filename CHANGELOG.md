@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.1.2](https://github.com/HoPGoldy/cube-diary/compare/v3.1.1...v3.1.2) (2026-03-19)
+
+
+### Bug Fixes
+
+* use readFile instead of dynamic import for package.json ([14f3565](https://github.com/HoPGoldy/cube-diary/commit/14f35654a568ed6f8babebc12fc0ef1df19f42fa))
+
 ## [3.1.1](https://github.com/HoPGoldy/cube-diary/compare/v3.1.0...v3.1.1) (2026-03-19)
 
 
