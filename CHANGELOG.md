@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.1.1](https://github.com/HoPGoldy/cube-diary/compare/v3.1.0...v3.1.1) (2026-03-19)
+
+
+### Bug Fixes
+
+* resolve build errors for access-token scopes and set tsconfig target ([2fb5e08](https://github.com/HoPGoldy/cube-diary/commit/2fb5e08ad10177c80946bab7bd0790b3f02c6eeb))
+
 ## [3.1.0](https://github.com/HoPGoldy/cube-diary/compare/v3.0.0...v3.1.0) (2026-03-19)
 
 
