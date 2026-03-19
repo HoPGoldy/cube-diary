@@ -9,8 +9,8 @@
  * 🟢 You can import this file directly.
  */
 import type * as runtime from "@prisma/client/runtime/client"
-import type * as $Enums from "../enums"
-import type * as Prisma from "../internal/prismaNamespace"
+import type * as $Enums from "../enums.js"
+import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model AccessToken
@@ -29,6 +29,7 @@ export type AccessTokenMinAggregateOutputType = {
   name: string | null
   tokenHash: string | null
   tokenPrefix: string | null
+  scopes: string | null
   createdAt: Date | null
   lastUsedAt: Date | null
 }
@@ -38,6 +39,7 @@ export type AccessTokenMaxAggregateOutputType = {
   name: string | null
   tokenHash: string | null
   tokenPrefix: string | null
+  scopes: string | null
   createdAt: Date | null
   lastUsedAt: Date | null
 }
@@ -47,6 +49,7 @@ export type AccessTokenCountAggregateOutputType = {
   name: number
   tokenHash: number
   tokenPrefix: number
+  scopes: number
   createdAt: number
   lastUsedAt: number
   _all: number
@@ -58,6 +61,7 @@ export type AccessTokenMinAggregateInputType = {
   name?: true
   tokenHash?: true
   tokenPrefix?: true
+  scopes?: true
   createdAt?: true
   lastUsedAt?: true
 }
@@ -67,6 +71,7 @@ export type AccessTokenMaxAggregateInputType = {
   name?: true
   tokenHash?: true
   tokenPrefix?: true
+  scopes?: true
   createdAt?: true
   lastUsedAt?: true
 }
@@ -76,6 +81,7 @@ export type AccessTokenCountAggregateInputType = {
   name?: true
   tokenHash?: true
   tokenPrefix?: true
+  scopes?: true
   createdAt?: true
   lastUsedAt?: true
   _all?: true
@@ -158,6 +164,7 @@ export type AccessTokenGroupByOutputType = {
   name: string
   tokenHash: string
   tokenPrefix: string
+  scopes: string
   createdAt: Date
   lastUsedAt: Date | null
   _count: AccessTokenCountAggregateOutputType | null
@@ -188,6 +195,7 @@ export type AccessTokenWhereInput = {
   name?: Prisma.StringFilter<"AccessToken"> | string
   tokenHash?: Prisma.StringFilter<"AccessToken"> | string
   tokenPrefix?: Prisma.StringFilter<"AccessToken"> | string
+  scopes?: Prisma.StringFilter<"AccessToken"> | string
   createdAt?: Prisma.DateTimeFilter<"AccessToken"> | Date | string
   lastUsedAt?: Prisma.DateTimeNullableFilter<"AccessToken"> | Date | string | null
 }
@@ -197,6 +205,7 @@ export type AccessTokenOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   tokenHash?: Prisma.SortOrder
   tokenPrefix?: Prisma.SortOrder
+  scopes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   lastUsedAt?: Prisma.SortOrderInput | Prisma.SortOrder
 }
@@ -209,6 +218,7 @@ export type AccessTokenWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.AccessTokenWhereInput | Prisma.AccessTokenWhereInput[]
   name?: Prisma.StringFilter<"AccessToken"> | string
   tokenPrefix?: Prisma.StringFilter<"AccessToken"> | string
+  scopes?: Prisma.StringFilter<"AccessToken"> | string
   createdAt?: Prisma.DateTimeFilter<"AccessToken"> | Date | string
   lastUsedAt?: Prisma.DateTimeNullableFilter<"AccessToken"> | Date | string | null
 }, "id" | "tokenHash">
@@ -218,6 +228,7 @@ export type AccessTokenOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   tokenHash?: Prisma.SortOrder
   tokenPrefix?: Prisma.SortOrder
+  scopes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   lastUsedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.AccessTokenCountOrderByAggregateInput
@@ -233,6 +244,7 @@ export type AccessTokenScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"AccessToken"> | string
   tokenHash?: Prisma.StringWithAggregatesFilter<"AccessToken"> | string
   tokenPrefix?: Prisma.StringWithAggregatesFilter<"AccessToken"> | string
+  scopes?: Prisma.StringWithAggregatesFilter<"AccessToken"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"AccessToken"> | Date | string
   lastUsedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"AccessToken"> | Date | string | null
 }
@@ -242,6 +254,7 @@ export type AccessTokenCreateInput = {
   name: string
   tokenHash: string
   tokenPrefix: string
+  scopes?: string
   createdAt?: Date | string
   lastUsedAt?: Date | string | null
 }
@@ -251,6 +264,7 @@ export type AccessTokenUncheckedCreateInput = {
   name: string
   tokenHash: string
   tokenPrefix: string
+  scopes?: string
   createdAt?: Date | string
   lastUsedAt?: Date | string | null
 }
@@ -260,6 +274,7 @@ export type AccessTokenUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   tokenPrefix?: Prisma.StringFieldUpdateOperationsInput | string
+  scopes?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
@@ -269,6 +284,7 @@ export type AccessTokenUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   tokenPrefix?: Prisma.StringFieldUpdateOperationsInput | string
+  scopes?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
@@ -278,6 +294,7 @@ export type AccessTokenCreateManyInput = {
   name: string
   tokenHash: string
   tokenPrefix: string
+  scopes?: string
   createdAt?: Date | string
   lastUsedAt?: Date | string | null
 }
@@ -287,6 +304,7 @@ export type AccessTokenUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   tokenPrefix?: Prisma.StringFieldUpdateOperationsInput | string
+  scopes?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
@@ -296,6 +314,7 @@ export type AccessTokenUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   tokenHash?: Prisma.StringFieldUpdateOperationsInput | string
   tokenPrefix?: Prisma.StringFieldUpdateOperationsInput | string
+  scopes?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastUsedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
@@ -305,6 +324,7 @@ export type AccessTokenCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   tokenHash?: Prisma.SortOrder
   tokenPrefix?: Prisma.SortOrder
+  scopes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   lastUsedAt?: Prisma.SortOrder
 }
@@ -314,6 +334,7 @@ export type AccessTokenMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   tokenHash?: Prisma.SortOrder
   tokenPrefix?: Prisma.SortOrder
+  scopes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   lastUsedAt?: Prisma.SortOrder
 }
@@ -323,6 +344,7 @@ export type AccessTokenMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   tokenHash?: Prisma.SortOrder
   tokenPrefix?: Prisma.SortOrder
+  scopes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   lastUsedAt?: Prisma.SortOrder
 }
@@ -338,6 +360,7 @@ export type AccessTokenSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   name?: boolean
   tokenHash?: boolean
   tokenPrefix?: boolean
+  scopes?: boolean
   createdAt?: boolean
   lastUsedAt?: boolean
 }, ExtArgs["result"]["accessToken"]>
@@ -347,6 +370,7 @@ export type AccessTokenSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   name?: boolean
   tokenHash?: boolean
   tokenPrefix?: boolean
+  scopes?: boolean
   createdAt?: boolean
   lastUsedAt?: boolean
 }, ExtArgs["result"]["accessToken"]>
@@ -356,6 +380,7 @@ export type AccessTokenSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   name?: boolean
   tokenHash?: boolean
   tokenPrefix?: boolean
+  scopes?: boolean
   createdAt?: boolean
   lastUsedAt?: boolean
 }, ExtArgs["result"]["accessToken"]>
@@ -365,11 +390,12 @@ export type AccessTokenSelectScalar = {
   name?: boolean
   tokenHash?: boolean
   tokenPrefix?: boolean
+  scopes?: boolean
   createdAt?: boolean
   lastUsedAt?: boolean
 }
 
-export type AccessTokenOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "tokenHash" | "tokenPrefix" | "createdAt" | "lastUsedAt", ExtArgs["result"]["accessToken"]>
+export type AccessTokenOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "tokenHash" | "tokenPrefix" | "scopes" | "createdAt" | "lastUsedAt", ExtArgs["result"]["accessToken"]>
 
 export type $AccessTokenPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "AccessToken"
@@ -379,6 +405,7 @@ export type $AccessTokenPayload<ExtArgs extends runtime.Types.Extensions.Interna
     name: string
     tokenHash: string
     tokenPrefix: string
+    scopes: string
     createdAt: Date
     lastUsedAt: Date | null
   }, ExtArgs["result"]["accessToken"]>
@@ -808,6 +835,7 @@ export interface AccessTokenFieldRefs {
   readonly name: Prisma.FieldRef<"AccessToken", 'String'>
   readonly tokenHash: Prisma.FieldRef<"AccessToken", 'String'>
   readonly tokenPrefix: Prisma.FieldRef<"AccessToken", 'String'>
+  readonly scopes: Prisma.FieldRef<"AccessToken", 'String'>
   readonly createdAt: Prisma.FieldRef<"AccessToken", 'DateTime'>
   readonly lastUsedAt: Prisma.FieldRef<"AccessToken", 'DateTime'>
 }

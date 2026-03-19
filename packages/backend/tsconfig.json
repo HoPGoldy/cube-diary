@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "target": "ES2023",
     "esModuleInterop": true,
     "isolatedModules": true,
     "removeComments": true,

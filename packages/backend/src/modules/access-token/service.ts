@@ -93,7 +93,7 @@ export class AccessTokenService {
     });
 
     // 更新缓存
-    const entry = [...this.cache.entries()].find(([, v]) => v.id === id);
+    const entry = Array.from(this.cache.entries()).find(([, v]) => v.id === id);
     if (entry) {
       this.cache.set(entry[0], { id, scopes });
     }

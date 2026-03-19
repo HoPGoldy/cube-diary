@@ -8,8 +8,8 @@
  *
  * 🟢 You can import this file directly.
  */
-export type * from './models/AppConfig'
-export type * from './models/Attachment'
-export type * from './models/AccessToken'
-export type * from './models/Diary'
-export type * from './commonInputTypes'
+export type * from './models/AppConfig.js'
+export type * from './models/Attachment.js'
+export type * from './models/AccessToken.js'
+export type * from './models/Diary.js'
+export type * from './commonInputTypes.js'
