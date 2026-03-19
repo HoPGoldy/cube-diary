@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.1.0](https://github.com/HoPGoldy/cube-diary/compare/v3.0.0...v3.1.0) (2026-03-19)
+
+
+### Features
+
+* add scopes to access token ([34d7ea7](https://github.com/HoPGoldy/cube-diary/commit/34d7ea7b8c69dd738f438019a2751272e4a281f9))
+* add unified dev command with concurrently ([b3e1378](https://github.com/HoPGoldy/cube-diary/commit/b3e13788a754f9a8dd412b6231edbdfd14b86112))
+* support direct access token auth with csk- prefix and in-memory cache ([7edcab9](https://github.com/HoPGoldy/cube-diary/commit/7edcab9a7e52ec7867b1d97ed0f63cb2e2a0c05d))
+
+
+### Bug Fixes
+
+* add .js extension to dayjs/plugin/utc import for ESM compatibility ([8b710b8](https://github.com/HoPGoldy/cube-diary/commit/8b710b832a2eee764a6865485eeabf73ec5fe4e7))
+
 ## 3.0.0 (2026-03-06)
 
 
