@@ -23,7 +23,7 @@ export const useSettingMenu = () => {
   const [importVisible, setImportVisible] = useState(false);
   /** 是否展示导出弹窗 */
   const [exportVisible, setExportVisible] = useState(false);
-  /** 是否展示 Access Token 管理弹窗 */
+  /** 是否展示访问令牌管理弹窗 */
   const [accessTokenVisible, setAccessTokenVisible] = useState(false);
 
   const { data: countInfo } = useQueryDiaryCount();
@@ -45,7 +45,7 @@ export const useSettingMenu = () => {
       onClick: () => setAboutVisible(true),
     },
     {
-      label: "Access Token",
+      label: "访问令牌",
       icon: <KeyOutlined />,
       onClick: () => setAccessTokenVisible(true),
     },

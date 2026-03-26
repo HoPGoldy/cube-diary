@@ -70,7 +70,7 @@ export const AccessTokenModal: FC<Props> = ({ open, onClose }) => {
       key: "name",
     },
     {
-      title: "Token 前缀",
+      title: "令牌前缀",
       dataIndex: "tokenPrefix",
       key: "tokenPrefix",
       render: (val: string) => <Typography.Text code>{val}...</Typography.Text>,
@@ -93,8 +93,8 @@ export const AccessTokenModal: FC<Props> = ({ open, onClose }) => {
       key: "action",
       render: (_: any, record: any) => (
         <Popconfirm
-          title="确认删除该 Token？"
-          description="删除后无法恢复，使用该 Token 的 MCP 接入将立即失效。"
+          title="确认删除该访问令牌？"
+          description="删除后无法恢复，使用该访问令牌的 MCP 接入将立即失效。"
           onConfirm={() => handleDelete(record.id)}
           okText="删除"
           cancelText="取消"
@@ -112,7 +112,7 @@ export const AccessTokenModal: FC<Props> = ({ open, onClose }) => {
     <>
       <Modal
         open={open}
-        title="Access Token 管理"
+        title="访问令牌管理"
         onCancel={onClose}
         footer={null}
         width={700}
@@ -121,7 +121,7 @@ export const AccessTokenModal: FC<Props> = ({ open, onClose }) => {
           <Alert
             type="info"
             showIcon
-            message="Access Token 仅用于 MCP 接入，不可用于其他 API 请求。"
+            message="访问令牌仅用于 MCP 接入，不可用于其他 API 请求。"
           />
           <Flex justify="flex-end">
             <Button
@@ -129,7 +129,7 @@ export const AccessTokenModal: FC<Props> = ({ open, onClose }) => {
               icon={<PlusOutlined />}
               onClick={() => setCreateVisible(true)}
             >
-              新建 Token
+              新建访问令牌
             </Button>
           </Flex>
           <Table
@@ -143,10 +143,10 @@ export const AccessTokenModal: FC<Props> = ({ open, onClose }) => {
         </Flex>
       </Modal>
 
-      {/* 新建 Token 表单 */}
+      {/* 新建访问令牌表单 */}
       <Modal
         open={createVisible}
-        title="新建 Access Token"
+        title="新建访问令牌"
         onCancel={() => {
           setCreateVisible(false);
           form.resetFields();
@@ -166,10 +166,10 @@ export const AccessTokenModal: FC<Props> = ({ open, onClose }) => {
         </Form>
       </Modal>
 
-      {/* 展示新生成的 Token（仅一次） */}
+      {/* 展示新生成的访问令牌（仅一次） */}
       <Modal
         open={newTokenVisible}
-        title="Token 已创建"
+        title="访问令牌已创建"
         onCancel={() => setNewTokenVisible(false)}
         footer={
           <Button type="primary" onClick={() => setNewTokenVisible(false)}>
@@ -182,14 +182,14 @@ export const AccessTokenModal: FC<Props> = ({ open, onClose }) => {
           <Alert
             type="warning"
             showIcon
-            message="请立即复制此 Token，关闭后将无法再次查看完整内容。"
+            message="请立即复制此访问令牌，关闭后将无法再次查看完整内容。"
           />
           <div>
-            <Typography.Text type="secondary">Token 名称：</Typography.Text>
+            <Typography.Text type="secondary">令牌名称：</Typography.Text>
             <Typography.Text strong>{newToken?.name}</Typography.Text>
           </div>
           <div>
-            <Typography.Text type="secondary">完整 Token：</Typography.Text>
+            <Typography.Text type="secondary">完整令牌：</Typography.Text>
             <Space>
               <Typography.Text code copyable>
                 {newToken?.token}
