@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import { test, expect, authHeader, BASE } from "../fixtures/api";
 import { test as rawTest } from "@playwright/test";
 
@@ -108,5 +109,98 @@ rawTest.describe("Access Token API - 未认证拦截", () => {
   rawTest("未登录获取列表返回 401", async ({ request }) => {
     const resp = await request.get(`${BASE}/access-tokens`);
     expect(resp.status()).toBe(401);
+  });
+});
+
+test.describe("Access Token API - Scope 权限控制", () => {
+  const dateStr = "20990101";
+  const date = dayjs(dateStr, "YYYYMMDD").startOf("day").valueOf();
+
+  test("缺少 diary:write scope 时无法调用写接口", async ({ request, jwt }) => {
+    const createResp = await request.post(`${BASE}/access-tokens`, {
+      data: {
+        name: "api-e2e-read-only-token",
+        scopes: ["diary:read"],
+      },
+      headers: authHeader(jwt),
+    });
+    expect(createResp.status()).toBe(200);
+
+    const createBody = await createResp.json();
+    const token = createBody.data.token as string;
+    const tokenId = createBody.data.id as string;
+
+    const readResp = await request.post(`${BASE}/diary/getDetail`, {
+      data: { dateStr },
+      headers: authHeader(token),
+    });
+    expect(readResp.status()).toBe(200);
+
+    const writeResp = await request.post(`${BASE}/diary/update`, {
+      data: {
+        dateStr,
+        date,
+        content: "scope read only should not write",
+      },
+      headers: authHeader(token),
+    });
+    expect(writeResp.status()).toBe(403);
+
+    const writeBody = await writeResp.json();
+    expect(writeBody.success).toBe(false);
+    expect(writeBody.code).toBe(40300);
+    expect(writeBody.message).toBe("Insufficient scope");
+
+    const deleteResp = await request.delete(
+      `${BASE}/access-tokens/${tokenId}`,
+      {
+        headers: authHeader(jwt),
+      },
+    );
+    expect(deleteResp.status()).toBe(200);
+  });
+
+  test("缺少 diary:read scope 时无法调用读接口", async ({ request, jwt }) => {
+    const createResp = await request.post(`${BASE}/access-tokens`, {
+      data: {
+        name: "api-e2e-write-only-token",
+        scopes: ["diary:write"],
+      },
+      headers: authHeader(jwt),
+    });
+    expect(createResp.status()).toBe(200);
+
+    const createBody = await createResp.json();
+    const token = createBody.data.token as string;
+    const tokenId = createBody.data.id as string;
+
+    const writeResp = await request.post(`${BASE}/diary/update`, {
+      data: {
+        dateStr,
+        date,
+        content: "scope write only can write",
+      },
+      headers: authHeader(token),
+    });
+    expect(writeResp.status()).toBe(200);
+
+    const readResp = await request.post(`${BASE}/diary/getDetail`, {
+      data: { dateStr },
+      headers: authHeader(token),
+    });
+    expect(readResp.status()).toBe(403);
+
+    const readBody = await readResp.json();
+    expect(readBody.success).toBe(false);
+    expect(readBody.code).toBe(40300);
+    expect(readBody.message).toBe("Insufficient scope");
+
+    const deleteResp = await request.delete(
+      `${BASE}/access-tokens/${tokenId}`,
+      {
+        headers: authHeader(jwt),
+      },
+    );
+    expect(deleteResp.status()).toBe(200);
   });
 });
