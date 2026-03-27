@@ -36,7 +36,7 @@ export const useQueryDiaryList = (month?: string) => {
     queryKey: ["month", month],
     queryFn: async () => {
       return requestPost<SchemaDiaryGetMonthListResponseType>(
-        "diary/getMonthList",
+        "diary/get-month-list",
         { month },
       );
     },
@@ -50,7 +50,7 @@ export const useQueryDiaryDetail = (dateStr: string) => {
   return useQuery({
     queryKey: ["diaryDetail", dateStr],
     queryFn: async () => {
-      return requestPost<DiaryDetail>("diary/getDetail", { dateStr });
+      return requestPost<DiaryDetail>("diary/get-detail", { dateStr });
     },
     refetchOnWindowFocus: false,
   });

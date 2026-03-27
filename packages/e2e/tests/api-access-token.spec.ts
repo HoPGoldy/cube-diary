@@ -130,7 +130,7 @@ test.describe("Access Token API - Scope 权限控制", () => {
     const token = createBody.data.token as string;
     const tokenId = createBody.data.id as string;
 
-    const readResp = await request.post(`${BASE}/diary/getDetail`, {
+    const readResp = await request.post(`${BASE}/diary/get-detail`, {
       data: { dateStr },
       headers: authHeader(token),
     });
@@ -184,7 +184,7 @@ test.describe("Access Token API - Scope 权限控制", () => {
     });
     expect(writeResp.status()).toBe(200);
 
-    const readResp = await request.post(`${BASE}/diary/getDetail`, {
+    const readResp = await request.post(`${BASE}/diary/get-detail`, {
       data: { dateStr },
       headers: authHeader(token),
     });

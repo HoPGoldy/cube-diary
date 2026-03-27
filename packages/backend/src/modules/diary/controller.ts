@@ -25,7 +25,7 @@ export async function registerDiaryController(options: RegisterOptions) {
 
   // 获取月份日记列表
   server.post(
-    "/diary/getMonthList",
+    "/diary/get-month-list",
     {
       config: { requiredScopes: ["diary:read"] },
       schema: {
@@ -44,7 +44,7 @@ export async function registerDiaryController(options: RegisterOptions) {
 
   // 获取日记详情
   server.post(
-    "/diary/getDetail",
+    "/diary/get-detail",
     {
       config: { requiredScopes: ["diary:read"] },
       schema: {

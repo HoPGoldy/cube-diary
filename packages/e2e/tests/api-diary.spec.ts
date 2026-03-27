@@ -22,7 +22,7 @@ test.describe("Diary API - 日记增删改查", () => {
     expect(body.success).toBe(true);
   });
 
-  test("POST /api/diary/getDetail 获取日记详情", async ({ request, jwt }) => {
+  test("POST /api/diary/get-detail 获取日记详情", async ({ request, jwt }) => {
     // 先写入
     await request.post(`${BASE}/diary/update`, {
       data: {
@@ -34,7 +34,7 @@ test.describe("Diary API - 日记增删改查", () => {
     });
 
     // 再读取
-    const resp = await request.post(`${BASE}/diary/getDetail`, {
+    const resp = await request.post(`${BASE}/diary/get-detail`, {
       data: { dateStr: TODAY },
       headers: authHeader(jwt),
     });
@@ -45,11 +45,11 @@ test.describe("Diary API - 日记增删改查", () => {
     expect(body.data.content).toBe("详情测试内容");
   });
 
-  test("POST /api/diary/getDetail 不存在的日期返回空内容", async ({
+  test("POST /api/diary/get-detail 不存在的日期返回空内容", async ({
     request,
     jwt,
   }) => {
-    const resp = await request.post(`${BASE}/diary/getDetail`, {
+    const resp = await request.post(`${BASE}/diary/get-detail`, {
       data: { dateStr: "19000101" },
       headers: authHeader(jwt),
     });
@@ -84,7 +84,7 @@ test.describe("Diary API - 日记增删改查", () => {
     expect(resp.status()).toBe(200);
   });
 
-  test("POST /api/diary/getMonthList 获取月份日记列表", async ({
+  test("POST /api/diary/get-month-list 获取月份日记列表", async ({
     request,
     jwt,
   }) => {
@@ -98,7 +98,7 @@ test.describe("Diary API - 日记增删改查", () => {
       headers: authHeader(jwt),
     });
 
-    const resp = await request.post(`${BASE}/diary/getMonthList`, {
+    const resp = await request.post(`${BASE}/diary/get-month-list`, {
       data: { month: THIS_MONTH },
       headers: authHeader(jwt),
     });
