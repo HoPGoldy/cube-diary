@@ -70,13 +70,9 @@ export const useUpdateDiary = () => {
 };
 
 /** 自动保存接口 */
-export const autoSaveContent = async (
-  dateStr: string,
-  date: number,
-  content: string,
-) => {
-  updateDiaryCache({ dateStr, date, content });
-  return requestPost("diary/update", { dateStr, date, content });
+export const autoSaveContent = async (dateStr: string, content: string) => {
+  updateDiaryCache({ dateStr, content });
+  return requestPost("diary/update", { dateStr, content });
 };
 
 /** 搜索日记列表 */

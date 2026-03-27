@@ -21,8 +21,6 @@ const DiaryEdit: FC = () => {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
   const dateStr = params.date!; // YYYYMMDD
-  // 解析为 UTC 时区的 0 点时间戳
-  const diaryDate = dayjs(dateStr, "YYYYMMDD").startOf("day").valueOf();
   const diaryTitle = getLabelByDate(dateStr);
 
   /** 获取详情 */
@@ -41,11 +39,11 @@ const DiaryEdit: FC = () => {
 
   // 自动保存
   const autoSave = useCallback(
-    debounce(async (dateStr: string, date: number, newContent: string) => {
+    debounce(async (dateStr: string, newContent: string) => {
       if (!isContentModified.current) return;
 
       try {
-        await autoSaveContent(dateStr, date, newContent);
+        await autoSaveContent(dateStr, newContent);
         setSaveBtnText(`自动保存于 ${dayjs().format("HH:mm")}`);
       } catch {
         console.error("自动保存失败");
@@ -58,7 +56,7 @@ const DiaryEdit: FC = () => {
   const onContentChange = (newContent: string) => {
     setContent(newContent);
     isContentModified.current = true;
-    autoSave(dateStr, diaryDate, newContent);
+    autoSave(dateStr, newContent);
   };
 
   /** 点击返回按钮 */
@@ -69,7 +67,7 @@ const DiaryEdit: FC = () => {
   /** 点击保存按钮 */
   const onClickSaveBtn = async () => {
     try {
-      await updateDiary({ dateStr, date: diaryDate, content });
+      await updateDiary({ dateStr, content });
       message.success("保存成功");
       onClickBack();
     } catch {

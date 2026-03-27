@@ -73,7 +73,8 @@ export class DiaryService {
   }
 
   async updateDetail(data: SchemaDiaryUpdateBodyType) {
-    const { dateStr, date, content, color } = data;
+    const { dateStr, content, color } = data;
+    const date = dayjs.utc(dateStr, "YYYYMMDD").valueOf();
 
     await this.options.prisma.diary.upsert({
       where: {

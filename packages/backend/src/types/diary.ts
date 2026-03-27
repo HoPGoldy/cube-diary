@@ -42,7 +42,6 @@ export type SchemaDiaryGetDetailResponseType = Type.Static<
 // 更新/创建日记
 export const SchemaDiaryUpdateBody = Type.Object({
   dateStr: Type.String({ description: "日期字符串，格式: YYYYMMDD" }),
-  date: Type.Number({ description: "日期毫秒时间戳 (UTC 0)，用于排序" }),
   content: Type.Optional(Type.String({ description: "日记内容" })),
   color: Type.Optional(
     Type.Union([Type.String(), Type.Null()], { description: "颜色标签" }),
