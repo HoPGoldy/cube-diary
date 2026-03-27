@@ -40,14 +40,14 @@ export const useSettingMenu = () => {
       onClick: () => setExportVisible(true),
     },
     {
-      label: "关于",
-      icon: <SmileOutlined />,
-      onClick: () => setAboutVisible(true),
-    },
-    {
       label: "访问令牌",
       icon: <KeyOutlined />,
       onClick: () => setAccessTokenVisible(true),
+    },
+    {
+      label: "关于",
+      icon: <SmileOutlined />,
+      onClick: () => setAboutVisible(true),
     },
   ].filter(Boolean) as SettingLinkItem[];
 

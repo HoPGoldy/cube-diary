@@ -14,10 +14,8 @@ export const useAccessTokenList = () => {
 
 export const useCreateAccessToken = () => {
   return useMutation({
-    mutationFn: (name: string) =>
-      requestPost<SchemaAccessTokenCreateResponseType>("access-tokens", {
-        name,
-      }),
+    mutationFn: (data: { name: string; scopes: string[] }) =>
+      requestPost<SchemaAccessTokenCreateResponseType>("access-tokens", data),
   });
 };
 

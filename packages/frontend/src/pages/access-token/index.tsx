@@ -1,6 +1,7 @@
 import { FC, useState } from "react";
 import {
   Button,
+  Checkbox,
   Flex,
   Form,
   Input,
@@ -12,7 +13,7 @@ import {
   Typography,
   Alert,
 } from "antd";
-import { PlusOutlined, DeleteOutlined, CopyOutlined } from "@ant-design/icons";
+import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
 import {
   useAccessTokenList,
   useCreateAccessToken,
@@ -42,9 +43,19 @@ export const AccessTokenModal: FC<Props> = ({ open, onClose }) => {
 
   const tokenList = listResp?.data || [];
 
+  const scopeOptions = [
+    { label: "读取日记", value: "diary:read" },
+    { label: "写入日记", value: "diary:write" },
+    { label: "导出日记", value: "diary:export" },
+    { label: "导入日记", value: "diary:import" },
+  ];
+
   const handleCreate = async () => {
     const values = await form.validateFields();
-    const resp = await createToken(values.name);
+    const resp = await createToken({
+      name: values.name,
+      scopes: values.scopes,
+    });
     if (resp?.success && resp.data) {
       setNewToken({
         name: resp.data.name,
@@ -76,6 +87,20 @@ export const AccessTokenModal: FC<Props> = ({ open, onClose }) => {
       render: (val: string) => <Typography.Text code>{val}...</Typography.Text>,
     },
     {
+      title: "权限范围",
+      dataIndex: "scopes",
+      key: "scopes",
+      render: (scopes: string[]) =>
+        scopes?.map((s: string) => {
+          const label = scopeOptions.find((o) => o.value === s)?.label ?? s;
+          return (
+            <Tag key={s} style={{ marginBottom: 2 }}>
+              {label}
+            </Tag>
+          );
+        }),
+    },
+    {
       title: "创建时间",
       dataIndex: "createdAt",
       key: "createdAt",
@@ -94,13 +119,13 @@ export const AccessTokenModal: FC<Props> = ({ open, onClose }) => {
       render: (_: any, record: any) => (
         <Popconfirm
           title="确认删除该访问令牌？"
-          description="删除后无法恢复，使用该访问令牌的 MCP 接入将立即失效。"
+          description="删除后无法恢复，使用该访问令牌的服务接入将立即失效。"
           onConfirm={() => handleDelete(record.id)}
           okText="删除"
           cancelText="取消"
           okButtonProps={{ danger: true }}
         >
-          <Button danger size="small" icon={<DeleteOutlined />}>
+          <Button type="link" danger size="small" icon={<DeleteOutlined />}>
             删除
           </Button>
         </Popconfirm>
@@ -118,11 +143,6 @@ export const AccessTokenModal: FC<Props> = ({ open, onClose }) => {
         width={700}
       >
         <Flex vertical gap={12}>
-          <Alert
-            type="info"
-            showIcon
-            message="访问令牌仅用于 MCP 接入，不可用于其他 API 请求。"
-          />
           <Flex justify="flex-end">
             <Button
               type="primary"
@@ -155,13 +175,24 @@ export const AccessTokenModal: FC<Props> = ({ open, onClose }) => {
         okText="创建"
         cancelText="取消"
       >
-        <Form form={form} layout="vertical">
+        <Form
+          form={form}
+          layout="vertical"
+          initialValues={{ scopes: ["diary:read", "diary:write"] }}
+        >
           <Form.Item
             label="备注名称"
             name="name"
             rules={[{ required: true, message: "请输入备注名称" }]}
           >
             <Input placeholder="例如：Claude Desktop" />
+          </Form.Item>
+          <Form.Item
+            label="权限范围"
+            name="scopes"
+            rules={[{ required: true, message: "请至少选择一项权限" }]}
+          >
+            <Checkbox.Group options={scopeOptions} />
           </Form.Item>
         </Form>
       </Modal>
