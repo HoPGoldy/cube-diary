@@ -1,6 +1,10 @@
 import { PrismaClient } from "@db/client";
 import { createHash, randomBytes } from "crypto";
-import { ACCESS_TOKEN_SCOPES, type AccessTokenScope } from "./scopes";
+import {
+  ACCESS_TOKEN_SCOPES,
+  DEFAULT_SCOPES,
+  type AccessTokenScope,
+} from "./scopes";
 import { ErrorBadRequest } from "@/types/error";
 
 export const ACCESS_TOKEN_PREFIX = "csk-";
@@ -57,8 +61,9 @@ export class AccessTokenService {
     this.cacheLoaded = true;
   }
 
-  async create(name: string, scopes: AccessTokenScope[]) {
-    this.validateScopes(scopes);
+  async create(name: string, scopes: AccessTokenScope[] = DEFAULT_SCOPES) {
+    const finalScopes = scopes.length > 0 ? scopes : DEFAULT_SCOPES;
+    this.validateScopes(finalScopes);
 
     const raw = randomBytes(32).toString("hex");
     const plain = ACCESS_TOKEN_PREFIX + raw;
@@ -66,12 +71,17 @@ export class AccessTokenService {
     const tokenHash = this.hash(raw);
 
     const record = await this.options.prisma.accessToken.create({
-      data: { name, tokenHash, tokenPrefix, scopes: JSON.stringify(scopes) },
+      data: {
+        name,
+        tokenHash,
+        tokenPrefix,
+        scopes: JSON.stringify(finalScopes),
+      },
     });
 
     this.cache.set(tokenHash, {
       id: record.id,
-      scopes,
+      scopes: finalScopes,
     });
 
     return {
@@ -79,7 +89,7 @@ export class AccessTokenService {
       name: record.name,
       tokenPrefix: record.tokenPrefix,
       token: plain,
-      scopes,
+      scopes: finalScopes,
       createdAt: record.createdAt.toISOString(),
     };
   }

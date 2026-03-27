@@ -1,7 +1,7 @@
 import { Type } from "typebox";
 import type { AppInstance } from "@/types";
 import type { AccessTokenService } from "./service";
-import type { AccessTokenScope } from "./scopes";
+import { DEFAULT_SCOPES, type AccessTokenScope } from "./scopes";
 import {
   SchemaAccessTokenCreate,
   SchemaAccessTokenCreateResponse,
@@ -31,7 +31,10 @@ export const registerAccessTokenController = (options: RegisterOptions) => {
     },
     async (request) => {
       const { name, scopes } = request.body;
-      return accessTokenService.create(name, scopes as AccessTokenScope[]);
+      return accessTokenService.create(
+        name,
+        (scopes as AccessTokenScope[] | undefined) ?? DEFAULT_SCOPES,
+      );
     },
   );
 

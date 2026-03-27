@@ -2,6 +2,10 @@
   @apply h-full;
 }
 
+.editorArea > div {
+  height: 100%;
+}
+
 .editorArea :global(.w-md-editor) {
   @apply h-full;
 }

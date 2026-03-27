@@ -7,7 +7,7 @@ const SchemaScopes = Type.Array(Type.String(), {
 // 创建 token 请求体
 export const SchemaAccessTokenCreate = Type.Object({
   name: Type.String({ description: "访问令牌备注名称" }),
-  scopes: SchemaScopes,
+  scopes: Type.Optional(SchemaScopes),
 });
 export type SchemaAccessTokenCreateType = Type.Static<
   typeof SchemaAccessTokenCreate

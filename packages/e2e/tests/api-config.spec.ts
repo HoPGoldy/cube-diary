@@ -27,8 +27,9 @@ test.describe("Config API", () => {
     });
     const body = await resp.json();
     expect(body.success).toBe(true);
+    expect(body.code).toBe(200);
     // 确保没有 ERR_IMPORT_ASSERTION_TYPE_MISSING 错误
-    expect(body.code).toBeUndefined();
+    expect(body.message).toBeUndefined();
   });
 
   test("POST /api/config 获取配置列表", async ({ request, jwt }) => {

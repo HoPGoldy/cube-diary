@@ -12,11 +12,14 @@ import { Button, Space, message } from "antd";
 import { LeftOutlined, SaveOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import debounce from "lodash/debounce";
+import { PreviewType } from "@uiw/react-md-editor";
+import { useIsMobile } from "@/layouts/responsive";
 import styles from "./styles.module.css";
 
 const DiaryEdit: FC = () => {
   const params = useParams<{ date: string }>();
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
   const dateStr = params.date!; // YYYYMMDD
   // 解析为 UTC 时区的 0 点时间戳
   const diaryDate = dayjs(dateStr, "YYYYMMDD").startOf("day").valueOf();
@@ -114,7 +117,11 @@ const DiaryEdit: FC = () => {
           className={`flex-1 ${styles.editorArea}`}
           data-testid="diary-editor-area"
         >
-          <Editor value={content} onChange={onContentChange} />
+          <Editor
+            value={content}
+            onChange={onContentChange}
+            preview={(isMobile ? "edit" : "live") as PreviewType}
+          />
         </div>
       </div>
     );
