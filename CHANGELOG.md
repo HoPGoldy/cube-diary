@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.2.0](https://github.com/HoPGoldy/cube-diary/compare/v3.1.2...v3.2.0) (2026-03-27)
+
+
+### Features
+
+* add scope selection for access token creation ([e73bff1](https://github.com/HoPGoldy/cube-diary/commit/e73bff152d13fedb2cf81e13464fe75b49e4b462))
+
+
+### Bug Fixes
+
+* diary editor e2e ([abfa752](https://github.com/HoPGoldy/cube-diary/commit/abfa752ba7d633a23482a54fb53247b215a5cb6e))
+
 ## [3.1.2](https://github.com/HoPGoldy/cube-diary/compare/v3.1.1...v3.1.2) (2026-03-19)
 
 
