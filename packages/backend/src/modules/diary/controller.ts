@@ -4,11 +4,13 @@ import {
   SchemaDiaryGetDetailBody,
   SchemaDiaryGetDetailResponse,
   SchemaDiaryUpdateBody,
+  SchemaDiaryUpdateResponse,
   SchemaDiarySearchBody,
   SchemaDiarySearchResponse,
-  SchemaDiaryImportBody,
+  SchemaDiaryImportMultipartBody,
   SchemaDiaryImportResponse,
   SchemaDiaryExportBody,
+  SchemaDiaryExportResponse,
   SchemaDiaryStatisticBody,
   SchemaDiaryStatisticResponse,
 } from "@/types/diary";
@@ -70,6 +72,9 @@ export async function registerDiaryController(options: RegisterOptions) {
         description: "更新或创建日记",
         tags: ["diary"],
         body: SchemaDiaryUpdateBody,
+        response: {
+          200: SchemaDiaryUpdateResponse,
+        },
       },
     },
     async (request) => {
@@ -106,10 +111,12 @@ export async function registerDiaryController(options: RegisterOptions) {
         description: "导入日记",
         tags: ["diary"],
         consumes: ["multipart/form-data"],
+        body: SchemaDiaryImportMultipartBody,
         response: {
           200: SchemaDiaryImportResponse,
         },
       },
+      validatorCompiler: () => () => true,
     },
     async (request) => {
       const body = request.body as any;
@@ -144,6 +151,9 @@ export async function registerDiaryController(options: RegisterOptions) {
         description: "导出日记为 JSON 文件",
         tags: ["diary"],
         body: SchemaDiaryExportBody,
+        response: {
+          200: SchemaDiaryExportResponse,
+        },
       },
     },
     async (request) => {

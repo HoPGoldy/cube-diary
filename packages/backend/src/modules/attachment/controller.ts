@@ -25,10 +25,17 @@ export const registerController = (options: RegisterOptions) => {
         description: "上传文件",
         tags: ["attachment"],
         consumes: ["multipart/form-data"],
+        body: Type.Object({
+          file: Type.String({
+            format: "binary",
+            description: "要上传的文件，最大 512MB",
+          }),
+        }),
         response: {
           200: SchemaAttachmentInfo,
         },
       },
+      validatorCompiler: () => () => true,
     },
     async (request) => {
       const data = (request.body as any)?.file;

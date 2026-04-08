@@ -104,7 +104,6 @@ Returns `{ content, color }` for the specified date (format: `YYYYMMDD`).
 ```bash
 oac <service> post-api-diary-update --body '{
   "dateStr": "20260309",
-  "date": 1773100800000,
   "content": "Today'\''s diary content...",
   "color": null
 }'
@@ -112,22 +111,9 @@ oac <service> post-api-diary-update --body '{
 
 Fields:
 
-- `dateStr` (required): Local date string, format `YYYYMMDD` (primary key)
-- `date` (required): UTC timestamp in milliseconds — use **local date at 00:00 converted to UTC ms** (for sorting/range queries)
+- `dateStr` (required): Local date string, format `YYYYMMDD` (primary key). The server automatically computes the UTC timestamp from this value.
 - `content`: Diary text content
 - `color`: Optional color tag (string or null)
-
-**Date calculation help:**
-
-`dateStr` is the user's local date in `YYYYMMDD` format. `date` is the UTC millisecond timestamp of that local date at midnight. For example, if the user's timezone is `Asia/Shanghai` (UTC+8):
-
-```
-dateStr = "20260309"
-local midnight = 2026-03-09T00:00:00+08:00
-date = 1773064800000  (= Date.UTC equivalent)
-```
-
-Use `date -j -f "%Y%m%d" "20260309" "+%s"` on macOS (or `node -e`) to compute the timestamp, then multiply by 1000.
 
 ### Search Diaries
 
@@ -208,12 +194,10 @@ Multipart form-data with `file` (JSON) and `config` JSON string:
 # 1. Check if today already has content
 oac <service> post-api-diary-get-detail --body '{"dateStr":"20260327"}'
 
-# 2. Write or update (compute date timestamp for today)
+# 2. Write or update (only dateStr is required, server computes the timestamp)
 oac <service> post-api-diary-update --body '{
   "dateStr": "20260327",
-  "date": 1774656000000,
-  "content": "Today I learned about oac...",
-  "color": null
+  "content": "Today I learned about oac..."
 }'
 ```
 

@@ -102,6 +102,17 @@ export type SchemaDiaryImportBodyType = Type.Static<
   typeof SchemaDiaryImportBody
 >;
 
+export const SchemaDiaryImportMultipartBody = Type.Object({
+  file: Type.String({ format: "binary", description: "要导入的 JSON 文件" }),
+  config: Type.String({
+    description:
+      "导入配置 JSON 字符串，包含 existOperation(cover|merge|skip), dateKey, dateFormatter, contentKey, colorKey",
+  }),
+});
+export type SchemaDiaryImportMultipartBodyType = Type.Static<
+  typeof SchemaDiaryImportMultipartBody
+>;
+
 export const SchemaDiaryImportResponse = Type.Object({
   insertCount: Type.Number({ description: "新增日记数量" }),
   updateCount: Type.Number({ description: "更新日记数量" }),
@@ -143,4 +154,20 @@ export const SchemaDiaryExportBody = Type.Object({
 });
 export type SchemaDiaryExportBodyType = Type.Static<
   typeof SchemaDiaryExportBody
+>;
+
+export const SchemaDiaryExportResponse = Type.Array(
+  Type.Record(Type.String(), Type.Union([Type.String(), Type.Null()]), {
+    description: "导出的日记对象，字段名由请求参数决定",
+  }),
+);
+export type SchemaDiaryExportResponseType = Type.Static<
+  typeof SchemaDiaryExportResponse
+>;
+
+export const SchemaDiaryUpdateResponse = Type.Object({
+  success: Type.Boolean({ description: "操作是否成功" }),
+});
+export type SchemaDiaryUpdateResponseType = Type.Static<
+  typeof SchemaDiaryUpdateResponse
 >;
