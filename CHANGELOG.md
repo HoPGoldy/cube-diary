@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.2.1](https://github.com/HoPGoldy/cube-diary/compare/v3.2.0...v3.2.1) (2026-04-08)
+
+
+### Bug Fixes
+
+* improve OpenAPI schemas for multipart and response endpoints ([9103033](https://github.com/HoPGoldy/cube-diary/commit/91030332bb536ac27d69cc5285f5815e2d791ebb))
+
 ## [3.2.0](https://github.com/HoPGoldy/cube-diary/compare/v3.1.2...v3.2.0) (2026-03-27)
 
 
