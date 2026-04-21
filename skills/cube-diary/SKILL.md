@@ -136,7 +136,9 @@ oac <service> post-api-diary-statistic --body '{}'
 
 Returns `{ diaryCount, diaryLength }`.
 
-### Upload Attachment
+### Insert Attachment into Diary
+
+Upload a file and embed it into diary content using the returned `id`:
 
 ```bash
 oac <service> post-api-attachments-upload
@@ -144,13 +146,26 @@ oac <service> post-api-attachments-upload
 
 File upload via multipart/form-data. Max size: 512MB. Returns file metadata including `id`.
 
-### Get Attachment Download URL
+Once uploaded, embed the attachment in diary content using the format:
 
-```bash
-oac <service> get-api-attachments-request-file-id --params '{"fileId":"<id>"}'
+```
+![filename.png](:api-attachment:<id>)
 ```
 
-Returns `{ url }` — a signed download URL accessible without authentication.
+Example:
+
+```
+![image.png](:api-attachment:6e194670-3498-4648-a4d3-a115a760fa6a)
+```
+
+Then write it into the diary entry:
+
+```bash
+oac <service> post-api-diary-update --body '{
+  "dateStr": "20260421",
+  "content": "Today'\''s photo:\n\n![image.png](:api-attachment:6e194670-3498-4648-a4d3-a115a760fa6a)"
+}'
+```
 
 ### Export Diaries
 
