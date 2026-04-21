@@ -4,6 +4,16 @@
 export const DATE_FORMATTER = "YYYY-MM-DD HH:mm:ss";
 
 /**
+ * 应用名称
+ */
+export const APP_NAME = "Cube Diary";
+
+/**
+ * 应用副标题
+ */
+export const APP_SUBTITLE = "记录你的生活";
+
+/**
  * 固定分页条数
  */
 export const DEFAULT_PAGE_SIZE = 15;

@@ -6,7 +6,7 @@ import { login } from "../../store/user";
 import { messageError } from "@/utils/message";
 import { KeyOutlined } from "@ant-design/icons";
 import { useLoginSuccess } from "./use-login-success";
-import { THEME_BUTTON_COLOR } from "@/config";
+import { APP_NAME, APP_SUBTITLE, THEME_BUTTON_COLOR } from "@/config";
 import { usePageTitle } from "@/store/global";
 
 export const LoginPage = () => {
@@ -42,8 +42,8 @@ export const LoginPage = () => {
     if (e.key === "Enter") onPasswordSubmit();
   };
 
-  const appTitle = "Cube Note";
-  const appSubTitle = "记录你的生活";
+  const appTitle = APP_NAME;
+  const appSubTitle = APP_SUBTITLE;
 
   return (
     <div className="h-screen w-screen bg-gray-100 dark:bg-neutral-800 flex flex-col justify-center items-center dark:text-gray-100">

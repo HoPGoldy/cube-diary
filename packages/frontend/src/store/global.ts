@@ -1,5 +1,6 @@
 import { atom, useSetAtom } from "jotai";
 import { useEffect } from "react";
+import { APP_NAME } from "@/config";
 
 export const getIsMobile = () => {
   const screenWidth =
@@ -26,13 +27,13 @@ export const usePageTitle = (title: string) => {
 
   useEffect(() => {
     setCurrentPageTitle(title);
-    document.title = title + " - Cube Note";
+    document.title = title + " - " + APP_NAME;
   }, [title]);
 
   useEffect(() => {
     return () => {
       setCurrentPageTitle("");
-      document.title = "Cube Note";
+      document.title = APP_NAME;
     };
   }, []);
 };
