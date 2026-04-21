@@ -90,28 +90,21 @@ export const AccessTokenModal: FC<Props> = ({ open, onClose }) => {
       title: "权限范围",
       dataIndex: "scopes",
       key: "scopes",
-      render: (scopes: string[]) =>
-        scopes?.map((s: string) => {
-          const label = scopeOptions.find((o) => o.value === s)?.label ?? s;
-          return (
-            <Tag key={s} style={{ marginBottom: 2 }}>
-              {label}
-            </Tag>
-          );
-        }),
-    },
-    {
-      title: "创建时间",
-      dataIndex: "createdAt",
-      key: "createdAt",
-      render: (val: string) => new Date(val).toLocaleDateString(),
+      render: (scopes: string[]) => (
+        <Space size={[4, 4]} wrap>
+          {scopes?.map((s: string) => {
+            const label = scopeOptions.find((o) => o.value === s)?.label ?? s;
+            return <Tag key={s}>{label}</Tag>;
+          })}
+        </Space>
+      ),
     },
     {
       title: "最后使用",
       dataIndex: "lastUsedAt",
       key: "lastUsedAt",
       render: (val: string | null) =>
-        val ? new Date(val).toLocaleDateString() : <Tag>从未使用</Tag>,
+        val ? new Date(val).toLocaleDateString() : "从未使用",
     },
     {
       title: "操作",
@@ -140,7 +133,7 @@ export const AccessTokenModal: FC<Props> = ({ open, onClose }) => {
         title="访问令牌管理"
         onCancel={onClose}
         footer={null}
-        width={700}
+        width={1000}
       >
         <Flex vertical gap={12}>
           <Flex justify="flex-end">
