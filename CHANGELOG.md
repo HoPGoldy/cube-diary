@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.3.0](https://github.com/HoPGoldy/cube-diary/compare/v3.2.2...v3.3.0) (2026-04-21)
+
+
+### Features
+
+* hide username label in header ([06d9edb](https://github.com/HoPGoldy/cube-diary/commit/06d9edb912602dc02f386ecd0bf7c26888f60cd1))
+* improve access token modal UI ([8d7f903](https://github.com/HoPGoldy/cube-diary/commit/8d7f90393db857f682100408e24e5107556c85ad))
+
+
+### Bug Fixes
+
+* expose /docs/json in production ([276fabf](https://github.com/HoPGoldy/cube-diary/commit/276fabff238814c4809715baa65ad86447b75d46))
+
 ## [3.2.2](https://github.com/HoPGoldy/cube-diary/compare/v3.2.1...v3.2.2) (2026-04-21)
 
 ## [3.2.1](https://github.com/HoPGoldy/cube-diary/compare/v3.2.0...v3.2.1) (2026-04-08)
