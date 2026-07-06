@@ -13,8 +13,12 @@ import {
   Typography,
   Alert,
 } from "antd";
-import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 import {
+  ACCESS_TOKEN_SCOPES,
+  ACCESS_TOKEN_SCOPE_LABELS,
+  DEFAULT_ACCESS_TOKEN_SCOPES,
+  type AccessTokenScope,
   useAccessTokenList,
   useCreateAccessToken,
   useDeleteAccessToken,
@@ -34,6 +38,8 @@ export const AccessTokenModal: FC<Props> = ({ open, onClose }) => {
 
   const [createVisible, setCreateVisible] = useState(false);
   const [newTokenVisible, setNewTokenVisible] = useState(false);
+  const [scopeVisible, setScopeVisible] = useState(false);
+  const [selectedScopes, setSelectedScopes] = useState<AccessTokenScope[]>([]);
   const [newToken, setNewToken] = useState<{
     name: string;
     token: string;
@@ -43,12 +49,11 @@ export const AccessTokenModal: FC<Props> = ({ open, onClose }) => {
 
   const tokenList = listResp?.data || [];
 
-  const scopeOptions = [
-    { label: "读取日记", value: "diary:read" },
-    { label: "写入日记", value: "diary:write" },
-    { label: "导出日记", value: "diary:export" },
-    { label: "导入日记", value: "diary:import" },
-  ];
+  // 直接复用 shared-types 中的枚举和标签，避免前端硬编码一份 scope 定义。
+  const scopeOptions = ACCESS_TOKEN_SCOPES.map((scope) => ({
+    label: ACCESS_TOKEN_SCOPE_LABELS[scope],
+    value: scope,
+  }));
 
   const handleCreate = async () => {
     const values = await form.validateFields();
@@ -74,6 +79,15 @@ export const AccessTokenModal: FC<Props> = ({ open, onClose }) => {
     queryClient.invalidateQueries({ queryKey: ["access-tokens"] });
   };
 
+  const handleShowScopes = (scopes: AccessTokenScope[]) => {
+    setSelectedScopes(scopes ?? []);
+    setScopeVisible(true);
+  };
+
+  const getScopeLabel = (scope: AccessTokenScope) => {
+    return ACCESS_TOKEN_SCOPE_LABELS[scope];
+  };
+
   const columns = [
     {
       title: "名称",
@@ -87,19 +101,6 @@ export const AccessTokenModal: FC<Props> = ({ open, onClose }) => {
       render: (val: string) => <Typography.Text code>{val}...</Typography.Text>,
     },
     {
-      title: "权限范围",
-      dataIndex: "scopes",
-      key: "scopes",
-      render: (scopes: string[]) => (
-        <Space size={[4, 4]} wrap>
-          {scopes?.map((s: string) => {
-            const label = scopeOptions.find((o) => o.value === s)?.label ?? s;
-            return <Tag key={s}>{label}</Tag>;
-          })}
-        </Space>
-      ),
-    },
-    {
       title: "最后使用",
       dataIndex: "lastUsedAt",
       key: "lastUsedAt",
@@ -109,19 +110,31 @@ export const AccessTokenModal: FC<Props> = ({ open, onClose }) => {
     {
       title: "操作",
       key: "action",
+      width: 120,
       render: (_: any, record: any) => (
-        <Popconfirm
-          title="确认删除该访问令牌？"
-          description="删除后无法恢复，使用该访问令牌的服务接入将立即失效。"
-          onConfirm={() => handleDelete(record.id)}
-          okText="删除"
-          cancelText="取消"
-          okButtonProps={{ danger: true }}
-        >
-          <Button type="link" danger size="small" icon={<DeleteOutlined />}>
-            删除
+        <Space size={0}>
+          <Button
+            type="link"
+            size="small"
+            onClick={() =>
+              handleShowScopes(record.scopes as AccessTokenScope[])
+            }
+          >
+            权限
           </Button>
-        </Popconfirm>
+          <Popconfirm
+            title="确认删除该访问令牌？"
+            description="删除后无法恢复，使用该访问令牌的服务接入将立即失效。"
+            onConfirm={() => handleDelete(record.id)}
+            okText="删除"
+            cancelText="取消"
+            okButtonProps={{ danger: true }}
+          >
+            <Button type="link" danger size="small">
+              删除
+            </Button>
+          </Popconfirm>
+        </Space>
       ),
     },
   ];
@@ -133,7 +146,7 @@ export const AccessTokenModal: FC<Props> = ({ open, onClose }) => {
         title="访问令牌管理"
         onCancel={onClose}
         footer={null}
-        width={1000}
+        width={880}
       >
         <Flex vertical gap={12}>
           <Flex justify="flex-end">
@@ -171,7 +184,7 @@ export const AccessTokenModal: FC<Props> = ({ open, onClose }) => {
         <Form
           form={form}
           layout="vertical"
-          initialValues={{ scopes: ["diary:read", "diary:write"] }}
+          initialValues={{ scopes: DEFAULT_ACCESS_TOKEN_SCOPES }}
         >
           <Form.Item
             label="备注名称"
@@ -188,6 +201,29 @@ export const AccessTokenModal: FC<Props> = ({ open, onClose }) => {
             <Checkbox.Group options={scopeOptions} />
           </Form.Item>
         </Form>
+      </Modal>
+
+      <Modal
+        open={scopeVisible}
+        title="权限范围"
+        onCancel={() => setScopeVisible(false)}
+        footer={
+          <Button type="primary" onClick={() => setScopeVisible(false)}>
+            关闭
+          </Button>
+        }
+      >
+        <Flex vertical gap={12}>
+          <Space size={[4, 4]} wrap>
+            {selectedScopes.map((scope) => {
+              const label = getScopeLabel(scope);
+              return <Tag key={scope}>{label}</Tag>;
+            })}
+          </Space>
+          <Typography.Text type="secondary">
+            权限范围无法修改，需要修改请新增并替换 key
+          </Typography.Text>
+        </Flex>
       </Modal>
 
       {/* 展示新生成的访问令牌（仅一次） */}

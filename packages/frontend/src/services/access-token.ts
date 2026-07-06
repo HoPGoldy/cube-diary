@@ -1,9 +1,22 @@
 import { requestDelete, requestGet, requestPost } from "./base";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import {
+  ACCESS_TOKEN_SCOPES,
+  ACCESS_TOKEN_SCOPE_LABELS,
+  DEFAULT_ACCESS_TOKEN_SCOPES,
+} from "@shared-types/access-token";
 import type {
+  AccessTokenScope,
   SchemaAccessTokenCreateResponseType,
   SchemaAccessTokenListType,
 } from "@shared-types/access-token";
+
+export {
+  ACCESS_TOKEN_SCOPES,
+  ACCESS_TOKEN_SCOPE_LABELS,
+  DEFAULT_ACCESS_TOKEN_SCOPES,
+};
+export type { AccessTokenScope };
 
 export const useAccessTokenList = () => {
   return useQuery({
@@ -14,7 +27,7 @@ export const useAccessTokenList = () => {
 
 export const useCreateAccessToken = () => {
   return useMutation({
-    mutationFn: (data: { name: string; scopes: string[] }) =>
+    mutationFn: (data: { name: string; scopes: AccessTokenScope[] }) =>
       requestPost<SchemaAccessTokenCreateResponseType>("access-tokens", data),
   });
 };
