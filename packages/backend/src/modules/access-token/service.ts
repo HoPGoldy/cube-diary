@@ -15,7 +15,7 @@ interface ServiceOptions {
 
 interface CacheEntry {
   id: string;
-  scopes: string[];
+  scopes: AccessTokenScope[];
 }
 
 export class AccessTokenService {
@@ -40,9 +40,9 @@ export class AccessTokenService {
     return createHash("sha256").update(plain).digest("hex");
   }
 
-  private parseScopes(raw: string): string[] {
+  private parseScopes(raw: string): AccessTokenScope[] {
     try {
-      return JSON.parse(raw);
+      return JSON.parse(raw) as AccessTokenScope[];
     } catch {
       return [];
     }

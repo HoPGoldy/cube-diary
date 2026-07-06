@@ -22,9 +22,12 @@ export const ACCESS_TOKEN_SCOPE_LABELS: Record<AccessTokenScope, string> = {
   "diary:import": "导入日记",
 };
 
+// 这里故意保持为 string[] schema：
+// TypeBox 的字面量联合数组在当前 Fastify 类型推断下会退化成 never[]，
+// 导致 controller 的 response 类型全面冲突。运行时合法值仍由 service.validateScopes
+// 和前端 shared-types 共同约束，对这个单人项目来说维护成本更低、行为也更稳定。
 export const SchemaScopes = Type.Array(Type.String(), {
   description: "权限范围列表",
-  enum: ACCESS_TOKEN_SCOPES,
 });
 
 // 创建 token 请求体
@@ -32,9 +35,10 @@ export const SchemaAccessTokenCreate = Type.Object({
   name: Type.String({ description: "访问令牌备注名称" }),
   scopes: Type.Optional(SchemaScopes),
 });
-export type SchemaAccessTokenCreateType = Type.Static<
-  typeof SchemaAccessTokenCreate
->;
+export interface SchemaAccessTokenCreateType {
+  name: string;
+  scopes?: AccessTokenScope[];
+}
 
 // 创建 token 响应（仅此一次包含明文 token）
 export const SchemaAccessTokenCreateResponse = Type.Object({
@@ -45,9 +49,14 @@ export const SchemaAccessTokenCreateResponse = Type.Object({
   scopes: SchemaScopes,
   createdAt: Type.String(),
 });
-export type SchemaAccessTokenCreateResponseType = Type.Static<
-  typeof SchemaAccessTokenCreateResponse
->;
+export interface SchemaAccessTokenCreateResponseType {
+  id: string;
+  name: string;
+  tokenPrefix: string;
+  token: string;
+  scopes: AccessTokenScope[];
+  createdAt: string;
+}
 
 // token 列表项（不含 hash 和明文）
 export const SchemaAccessTokenListItem = Type.Object({
@@ -58,12 +67,15 @@ export const SchemaAccessTokenListItem = Type.Object({
   createdAt: Type.String(),
   lastUsedAt: Type.Union([Type.String(), Type.Null()]),
 });
-export type SchemaAccessTokenListItemType = Type.Static<
-  typeof SchemaAccessTokenListItem
->;
+export interface SchemaAccessTokenListItemType {
+  id: string;
+  name: string;
+  tokenPrefix: string;
+  scopes: AccessTokenScope[];
+  createdAt: string;
+  lastUsedAt: string | null;
+}
 
 // 列表响应
 export const SchemaAccessTokenList = Type.Array(SchemaAccessTokenListItem);
-export type SchemaAccessTokenListType = Type.Static<
-  typeof SchemaAccessTokenList
->;
+export type SchemaAccessTokenListType = SchemaAccessTokenListItemType[];

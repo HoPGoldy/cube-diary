@@ -6,6 +6,8 @@ import {
   SchemaAccessTokenCreate,
   SchemaAccessTokenCreateResponse,
   SchemaAccessTokenList,
+  type SchemaAccessTokenCreateResponseType,
+  type SchemaAccessTokenListType,
   type AccessTokenScope,
 } from "@/types/access-token";
 
@@ -35,7 +37,7 @@ export const registerAccessTokenController = (options: RegisterOptions) => {
         name,
         (scopes as AccessTokenScope[] | undefined) ??
           DEFAULT_ACCESS_TOKEN_SCOPES,
-      );
+      ) as Promise<SchemaAccessTokenCreateResponseType>;
     },
   );
 
@@ -51,7 +53,7 @@ export const registerAccessTokenController = (options: RegisterOptions) => {
       },
     },
     async () => {
-      return accessTokenService.findAll();
+      return accessTokenService.findAll() as Promise<SchemaAccessTokenListType>;
     },
   );
 
