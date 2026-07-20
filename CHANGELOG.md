@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.3.1](https://github.com/HoPGoldy/cube-diary/compare/v3.3.0...v3.3.1) (2026-07-20)
+
+
+### Bug Fixes
+
+* require admin for access token management ([5dcd169](https://github.com/HoPGoldy/cube-diary/commit/5dcd169890cc318becf3e00c5b54cda14004a153))
+* resolve access token typing ([8240008](https://github.com/HoPGoldy/cube-diary/commit/82400081f42d8b70bc9289d9748b6a563dfd4bc5))
+
 ## [3.3.0](https://github.com/HoPGoldy/cube-diary/compare/v3.2.2...v3.3.0) (2026-04-21)
 
 
