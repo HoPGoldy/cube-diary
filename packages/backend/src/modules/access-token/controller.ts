@@ -22,6 +22,9 @@ export const registerAccessTokenController = (options: RegisterOptions) => {
   server.post(
     "/access-tokens",
     {
+      config: {
+        requireAdmin: true,
+      },
       schema: {
         description: "创建访问令牌（明文仅返回一次）",
         tags: ["access-token"],
@@ -44,6 +47,9 @@ export const registerAccessTokenController = (options: RegisterOptions) => {
   server.get(
     "/access-tokens",
     {
+      config: {
+        requireAdmin: true,
+      },
       schema: {
         description: "列出所有访问令牌",
         tags: ["access-token"],
@@ -60,6 +66,9 @@ export const registerAccessTokenController = (options: RegisterOptions) => {
   server.delete(
     "/access-tokens/:id",
     {
+      config: {
+        requireAdmin: true,
+      },
       schema: {
         description: "删除访问令牌",
         tags: ["access-token"],
