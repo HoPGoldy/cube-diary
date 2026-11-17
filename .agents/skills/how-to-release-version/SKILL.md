@@ -1,5 +1,5 @@
 ---
-name: how-to-release
+name: how-to-release-version
 description: 当用户要求发布新版本、打 release、打 tag 或推 Docker 镜像时使用。
 ---
 
